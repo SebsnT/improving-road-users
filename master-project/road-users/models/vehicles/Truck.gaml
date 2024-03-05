@@ -16,3 +16,5 @@ species truck parent: base_vehicle {
 
 /* Insert your model definition here */
 
+
+
