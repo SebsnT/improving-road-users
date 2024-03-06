@@ -8,12 +8,6 @@
 
 model Road
 
-global
-{
-}
-
-/* Insert your model definition here */
-
 species road skills: [road_skill] {
 	rgb color <- #white;
 	
@@ -21,7 +15,5 @@ species road skills: [road_skill] {
 		draw shape color: color end_arrow: 1;
 	}
 }
-
-species intersection skills: [intersection_skill];
 
 

@@ -8,10 +8,10 @@
 
 model VehicleAdapter
 
-import "Bicycle.gaml"
-import "Car.gaml"
-import "../Pedestrian.gaml"
-import "Truck.gaml"
+import "../models/Bicycle.gaml"
+import "../models/Car.gaml"
+import "../models/Pedestrian.gaml"
+import "../models/Truck.gaml"
 
 /* Insert your model definition here */
 

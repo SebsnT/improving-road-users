@@ -8,7 +8,8 @@
 
 model CityAdapter
 
-import "City.gaml"
+import "../models/Road.gaml"
+import "../models/Intersection.gaml"
 
 global
 {
@@ -32,9 +33,6 @@ experiment Simple type: gui
 	{
 		return list(road);
 	}
-	
-
-	
 
 	output
 	{
