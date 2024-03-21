@@ -42,5 +42,3 @@ species bicycle skills: [driving]  {
 	
 }
 
-/* Insert your model definition here */
-

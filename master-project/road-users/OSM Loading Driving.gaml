@@ -11,15 +11,16 @@ model OSMdata_to_shapefile
  
 global{
 	
-	string city <- "graz";
+	string city <- "graz2";
 	
 	string read_file <- "./includes/osm/" + city + ".osm";
 	
 	string write_roads_file <-"./includes/"+ city + "_roads.shp";
 	string write_nodes_file <-"./includes/"+ city + "_nodes.shp";
+	string write_footways_file <-"./includes/"+ city + "_footways.shp";
 	
 	//map used to filter the object to build from the OSM file according to attributes. for an exhaustive list, see: http://wiki.openstreetmap.org/wiki/Map_Features
-	map filtering <- map(["highway"::["primary", "secondary", "tertiary", "motorway", "living_street","residential", "unclassified"]]);
+	map filtering <- map(["highway"::["primary", "secondary", "tertiary", "living_street","residential", "unclassified", "footway"]]);
 	
 	//OSM file to load
 	file<geometry> osmfile <-  file<geometry>(osm_file(read_file, filtering))  ;
@@ -37,12 +38,16 @@ global{
 		loop geom over: osmfile {
 			if (shape covers geom) {
 				string highway_str <- string(geom get ("highway"));
+				string footway_str <- string(geom get ("footway"));
 				if (length(geom.points) = 1 ) {
 					if ( highway_str != nil ) {
 						string crossing <- string(geom get ("crossing"));
+						
+
 						create intersection with: [shape ::geom, type:: highway_str, crossing::crossing] {
 							nodes_map[location] <- self;
 						}
+		
 					}
 				} else {
 					string oneway <- string(geom get ("oneway"));
@@ -53,6 +58,11 @@ global{
 						if lanes < 1 {lanes <- 1;} //default value for the lanes attribute
 						if maxspeed = 0 {maxspeed <- 50.0;} //default value for the maxspeed attribute
 					}
+					string _footway <- string(geom get ("footway"));
+						
+						create footway with:[shape ::geom, type:: footway_str, footway::_footway]{
+						}
+						
 				}	
 			}
 		}
@@ -84,7 +94,8 @@ global{
 		
 		//Save all the road agents inside the file with the path written, using the with: facet to make a link between attributes and columns of the resulting shapefiles. 
 		save road to: write_roads_file attributes:["lanes"::self.lanes, "maxspeed"::maxspeed, "oneway"::oneway] ;
-		save intersection to: write_nodes_file attributes:["type"::type, "crossing"::crossing] ;
+		save intersection to: write_nodes_file attributes:["type"::type, "crossing"::crossing];
+		save footway to: write_footways_file  attributes:["type"::type, "footway"::footway];
 		write "road and node shapefile saved";
 	}
 }
@@ -109,6 +120,15 @@ species intersection {
 		draw square(3) color: #red ;
 	}
 } 
+
+species footway {
+	string type;
+	string footway;
+	aspect base { 
+		draw color: #grey ;
+	}
+}
+
 	
 
 experiment fromOSMtoShapefiles type: gui {
@@ -117,6 +137,7 @@ experiment fromOSMtoShapefiles type: gui {
 			graphics "world" {
 				draw world.shape.contour;
 			}
+			species footway aspect: base refresh: false;
 			species road aspect: base_ligne  refresh: false  ;
 			species intersection aspect: base   refresh: false ;
 		}

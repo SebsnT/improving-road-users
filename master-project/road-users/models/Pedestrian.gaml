@@ -12,5 +12,3 @@ species pedestrian skills:[pedestrian]{
 	
 }
 
-/* Insert your model definition here */
-

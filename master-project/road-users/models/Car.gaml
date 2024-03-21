@@ -36,10 +36,7 @@ species car skills: [driving]{
 		do drive;
 	}
 	aspect base {
-		draw rectangle(vehicle_length, lane_width * num_lanes_occupied) 
-				color: color rotate: heading border: #black;
-			draw triangle(lane_width * num_lanes_occupied) 
-				 color: #white rotate: heading + 90 border: #black;
+		draw triangle(1.0) color: color rotate: heading + 90 border: #black;
 	}
 }
 

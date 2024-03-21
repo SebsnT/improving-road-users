@@ -10,6 +10,7 @@ model CityAdapter
 
 import "../models/Road.gaml"
 import "../models/Intersection.gaml"
+import "../models/Footway.gaml"
 
 global
 {
@@ -32,6 +33,11 @@ experiment Simple type: gui
 	list<road> get_road
 	{
 		return list(road);
+	}
+	
+	list<footway> get_footway
+	{
+		return list(footway);
 	}
 
 	output
