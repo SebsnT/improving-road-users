@@ -13,8 +13,6 @@ global {
 	// the width of a vehicle is specified using num_lanes_occupied
 	int lane_width <- 1;
 	list<intersection> non_deadend_nodes;
-	
-	
 }
 
 species road skills: [road_skill] {
@@ -103,7 +101,17 @@ species intersection skills: [intersection_skill] {
 		} else {
 			draw circle(1) color: color;
 		}
+		
+		switch traffic_signal_type { 
+        	match "crossing" {draw circle(1) color:#black;}
+        	match "give_way" {draw triangle(3) color:#red;} 
+        	match "stop" {draw hexagon(3) color:#red;} 
+        	match "bus_stop" {draw circle(1) color:#white;} 
+			match "" {draw circle(1) color:#white;} 
+		}
 	}
+
+
 }
 
 
