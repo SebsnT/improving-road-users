@@ -9,7 +9,7 @@
 model Footway
 
 species footway {
-	rgb color <- #grey;
+	rgb color <- #red;
 	
 	aspect base {
 		draw shape color: color;
