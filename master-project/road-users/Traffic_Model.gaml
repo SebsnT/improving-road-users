@@ -7,7 +7,6 @@
 
 model TrafficModel
 
-import "./models/city/Road.gaml"
 import "./models/city/Footway.gaml"
 import "./models/city/Building.gaml"
 
