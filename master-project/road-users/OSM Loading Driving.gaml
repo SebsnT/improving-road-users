@@ -1,17 +1,9 @@
-/**
-* Name: OSM Loading Driving
-* Author: Patrick Taillandier
-* Description: Model to show how to import OSM Files, using them to create agents for a road network, and saving the different agents in shapefiles. 
-* The first goal of this model is to prepare data for the driving skill models.
-* Tags:  load_file, gis, shapefile, save_file, osm
-*/
-
 
 model OSMdata_to_shapefile 
  
 global{
 	
-	string city <- "graz";
+	string city <- "graz2";
 	
 	string read_file <- "./includes/osm/" + city + ".osm";
 	
@@ -31,20 +23,19 @@ global{
 	graph the_graph; 
 	map<point, intersection> nodes_map;
 	
-	
-
 	init {
 		write "OSM file loaded: " + length(osmfile) + " geometries";
-		
+
 		//from the OSM file, creation of the selected agents
 		loop geom over: osmfile {
+
 			if (shape covers geom) {
 				string highway_str <- string(geom get ("highway"));
 				
 				if (length(geom.points) = 1 ) {
 					if ( highway_str != nil ) {
 						string crossing <- string(geom get ("crossing"));
-						write highway_str;
+						// write highway_str;
 
 						create intersection with: [shape ::geom, type:: highway_str, crossing::crossing] {
 							nodes_map[location] <- self;
@@ -53,9 +44,7 @@ global{
 					}
 				} else {
 					if(highway_str = "footway"){
-						create footway with: [shape ::geom, type:: highway_str] {
-							
-						}
+						create footway with: [shape ::geom, type:: highway_str];
 					} else {
 					
 					string oneway <- string(geom get ("oneway"));
@@ -69,10 +58,11 @@ global{
 						}
 					
 					}
-						
+		
 				}	
 			}
 		}
+
 		
 	
 		write "Road and node agents created";
@@ -105,12 +95,12 @@ global{
 		save road to: write_roads_file attributes:["lanes"::self.lanes, "maxspeed"::maxspeed, "oneway"::oneway] ;
 		save intersection to: write_nodes_file attributes:["type"::type, "crossing"::crossing];
 		save footway to: write_footways_file  attributes:["type"::type, "footway"::footway];
-		write "road and node shapefile saved";
+		write "road and node and footway shapefile saved";
 	}
 }
 	
 
-species road{
+species road {
 	rgb color <- #black;
 	string type;
 	string oneway;
@@ -138,7 +128,11 @@ species footway {
 	}
 }
 
-	
+species building_agent
+{
+	string building_str;
+}
+
 
 experiment fromOSMtoShapefiles type: gui {
 	output {
@@ -148,7 +142,7 @@ experiment fromOSMtoShapefiles type: gui {
 			}
 			species footway aspect: base_line refresh: false;
 			species road aspect: base_line  refresh: false  ;
-			species intersection aspect: base   refresh: false ;
+			species intersection aspect: base refresh: false ;
 		}
 	}
 }

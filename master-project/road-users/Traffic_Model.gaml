@@ -5,13 +5,11 @@
 * Tags: 
 */
 
-
-
-
 model TrafficModel
 
 import "./models/city/Road.gaml"
 import "./models/city/Footway.gaml"
+import "./models/city/Building.gaml"
 
 import "./models/Vehicles.gaml"
 import "./models/Pedestrian.gaml"
@@ -32,9 +30,11 @@ global {
 	shape_file nodes_shape_file <- shape_file("includes/" + city + "/" + "nodes.shp");
 	shape_file roads_shape_file <- shape_file("includes/" + city + "/" + "roads.shp");
 	shape_file footway_shape_file <- shape_file("includes/" + city + "/" + "footways.shp");
+	shape_file building_shape_file <- shape_file("includes/" + city + "/" + "buildings.shp");
 	
 	geometry shape <- envelope(roads_shape_file);
 	graph road_network;
+	graph footway_network;
 	list<intersection> non_deadend_nodes;
 	
 	// for speed charts 
@@ -66,21 +66,13 @@ global {
 			}
 		}
 		
+		
 		write "Creating Intersections";
 		
 		create intersection from: nodes_shape_file 
 			with: [is_traffic_signal::(read("type") = "traffic_signals"), traffic_signal_type::(read("type"))] {
 			time_to_change <- traffic_light_interval;
 		}
-		
-		
-		
-
-		// Create a graph representing the road network, with road lengths as weights
-		map edge_weights <- road as_map (each::each.shape.perimeter);
-		road_network <- as_driving_graph(road, intersection) with_weights edge_weights;
-		
-		
 		
 		
 		// Initialize the traffic lights
@@ -93,14 +85,22 @@ global {
 		create footway from: footway_shape_file;
 		
 		
+		write "Creating Buildings";
+	
+		create building from: building_shape_file;
+		
+		
 		write "Creating Vehicles";
 			
 		create car number: num_cars with: (location: one_of(road).location);
 		create truck number: num_trucks with: (location: one_of(road).location);
 		create bicycle number: num_bicycles with: (location: one_of(road).location);
 		
+		
 		write "Creating Pedestrians";
+		
 		create pedestrian number: num_pedestrians with: (location: one_of(footway).location);
+		
 	}
 
 }
@@ -113,6 +113,7 @@ experiment city type: gui {
 			species road aspect: base;
 			species intersection aspect: base;
 			species footway aspect: base;
+			species building aspect: base;
 			
 			// Agents
 			species car aspect: base;
@@ -121,9 +122,6 @@ experiment city type: gui {
 			species pedestrian aspect: base;
 			}
 			
-	
-	
-
 	
 //		display car_speed_chart type: 2d {
 //      		chart "Average speed" type: series size: {1, 1} position: {0, 0} x_label: "Cycle" y_label: "Average speed km/h" {
