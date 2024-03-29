@@ -14,9 +14,11 @@ import "./city/Road.gaml"
 
 species base_vehicle skills: [driving] {
 	
+	// Create a graph representing the road network, with road lengths as weights
 	graph road_network;
 	init{
-		road_network <- as_driving_graph(road, intersection);
+		map edge_weights <- road as_map (each::each.shape.perimeter);
+		road_network <- as_driving_graph(road, intersection) with_weights edge_weights;
 	}
 	
 	rgb color;
