@@ -8,16 +8,33 @@
 
 model Pedestrian
 
+import "./city/Footway.gaml"
+import "./city/Building.gaml"
+
 species pedestrian skills:[pedestrian]{
 	
 	rgb color <- #green;
-	point current_target;
+	
+	graph footway_network;
+	init{
+		footway_network <- as_edge_graph(footway);
+		write footway_network;
+	}
+	
+	reflex move {
+		if (final_waypoint = nil) {
+			//do compute_virtual_path pedestrian_graph: footway_network target: one_of(footway);
+		}
+		do walk ;
+	}	
 	
 	aspect base {
 		draw triangle(1.0) color: color rotate: heading + 90 border: #black;
 		
-		
 	}
 	
+		
 }
+
+
 
