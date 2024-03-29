@@ -8,7 +8,7 @@
 
 model Footway
 
-species footway {
+species footway skills: [pedestrian_road]{
 	rgb color <- #red;
 	
 	aspect base {
