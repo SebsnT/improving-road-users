@@ -1,5 +1,5 @@
 /**
-* Name: Intersection
+* Name: Road
 * Based on the internal empty template. 
 * Author: Sebastian
 * Tags: 

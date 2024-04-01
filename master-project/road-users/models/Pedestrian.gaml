@@ -18,12 +18,12 @@ species pedestrian skills:[pedestrian]{
 	graph footway_network;
 	init{
 		footway_network <- as_edge_graph(footway);
-		write footway_network;
+		
 	}
 	
 	reflex move {
 		if (final_waypoint = nil) {
-			//do compute_virtual_path pedestrian_graph: footway_network target: one_of(footway);
+			// do compute_virtual_path pedestrian_graph: footway_network target: one_of(footway);
 		}
 		do walk ;
 	}	

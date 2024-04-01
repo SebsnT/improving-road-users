@@ -18,10 +18,10 @@ global {
 	
 	string city <- "graz2";
 	
-	int num_cars <- 100;
-	int num_trucks <- 10;
-	int num_bicycles <- 100;
-	int num_pedestrians <- 100;
+	int num_cars;
+	int num_trucks;
+	int num_bicycles;
+	int num_pedestrians;
 	
 	float traffic_light_interval parameter: 'Traffic light interval' init: 30#s;
 	float step <- 0.2#s;
@@ -105,6 +105,17 @@ global {
 }
 
 experiment city type: gui {
+	
+	action _init_{
+		create simulation with:[
+			city::"graz2",
+			num_cars::100,
+			num_trucks::10,
+			num_bicycles::100,
+			num_pedestrians::100
+		];
+	}
+	
 	output synchronized: true {
 		display map type: 2d background: #grey {
 			
