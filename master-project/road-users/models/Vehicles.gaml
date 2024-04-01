@@ -1,5 +1,5 @@
 /**
-* Name: BaseVehicle
+* Name: Vehicles
 * Based on the internal empty template. 
 * Author: Sebastian
 * Tags: 
@@ -13,12 +13,16 @@ import "./city/Road.gaml"
 
 
 species base_vehicle skills: [driving] {
+	intersection target;
 	
 	// Create a graph representing the road network, with road lengths as weights
 	graph road_network;
 	init{
 		map edge_weights <- road as_map (each::each.shape.perimeter);
 		road_network <- as_driving_graph(road, intersection) with_weights edge_weights;
+		
+		proba_respect_priorities <- 1.0;
+		proba_respect_stops <- [1.0];
 	}
 	
 	rgb color;
@@ -28,7 +32,6 @@ species base_vehicle skills: [driving] {
     
     
     reflex select_next_path when: current_path = nil {
-		// A path that forms a cycle
 		do compute_path graph: road_network target: one_of(intersection);
 	}
 	
@@ -36,11 +39,32 @@ species base_vehicle skills: [driving] {
 		do drive;
 	}
 	
+	point compute_position {
+		// Shifts the position of the vehicle perpendicularly to the road,
+		// in order to visualize different lanes
+		if (current_road != nil) {
+			float dist <- (road(current_road).num_lanes - current_lane -
+				mean(range(num_lanes_occupied - 1)) - 0.5) * lane_width;
+			if violating_oneway {
+				dist <- -dist;
+			}
+		 	point shift_pt <- {cos(heading + 90) * dist, sin(heading + 90) * dist};	
+		
+			return location + shift_pt;
+		} else {
+			return {0, 0};
+		}
+	}
+	
 	aspect base {
-		draw rectangle(vehicle_length, lane_width * num_of_lanes_occupied) 
-				color: color rotate: heading border: #black;
+		if (current_road != nil) {
+			point pos <- compute_position();
+				
+			draw rectangle(vehicle_length, lane_width * num_lanes_occupied) 
+				at: pos color: color rotate: heading border: #black;
 			draw triangle(lane_width * num_lanes_occupied) 
-				 color: #white rotate: heading + 90 border: #black;
+				at: pos color: #white rotate: heading + 90 border: #black;
+		}
 	}
 }
 
