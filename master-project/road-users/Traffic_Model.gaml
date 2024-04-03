@@ -132,27 +132,28 @@ experiment city type: gui {
 			species pedestrian aspect: base;
 			}
 			
-	
-//		display car_speed_chart type: 2d {
-//      		chart "Average speed" type: series size: {1, 1} position: {0, 0} x_label: "Cycle" y_label: "Average speed km/h" {
-//        	data "Car" value: car_avg_speed color: #red;
-//        	data "Truck" value: truck_avg_speed color: #blue;
-//        	data "Bicycle" value: bicycle_avg_speed color: #yellow;
-//        	data "Pedestrian" value: pedestrian_avg_speed color: #green;
-//      	}
-//
-//    }
+/*	
+		display car_speed_chart type: 2d {
+      		chart "Average speed" type: series size: {1, 1} position: {0, 0} x_label: "Cycle" y_label: "Average speed km/h" {
+        	data "Car" value: car_avg_speed color: #red;
+        	data "Truck" value: truck_avg_speed color: #blue;
+        	data "Bicycle" value: bicycle_avg_speed color: #yellow;
+        	data "Pedestrian" value: pedestrian_avg_speed color: #green;
+      	}
+    }
+*/
    
-    	
-//    	monitor "Average car speed" value: car_avg_speed with_precision 2 color: #red;
-//    	monitor "Average truck speed" value: truck_avg_speed with_precision 2 color: #blue;
-//    	monitor "Average bicycle speed" value: bicycle_avg_speed with_precision 2 color: #yellow;
-//    	monitor "Average pedestrian speed" value: pedestrian_avg_speed with_precision 2 color: #green;
+/*   	
+    	monitor "Average car speed" value: car_avg_speed with_precision 2 color: #red;
+    	monitor "Average truck speed" value: truck_avg_speed with_precision 2 color: #blue;
+    	monitor "Average bicycle speed" value: bicycle_avg_speed with_precision 2 color: #yellow;
+    	monitor "Average pedestrian speed" value: pedestrian_avg_speed with_precision 2 color: #green;
 
-// 		monitor "Number of cars" value: num_cars;
-//		monitor "Number of trucks" value: num_trucks;
-//		monitor "Number of bicycles" value: num_bicycles;
-//		monitor "Number of pedestrians" value: num_pedestrians;
+ 		monitor "Number of cars" value: num_cars;
+		monitor "Number of trucks" value: num_trucks;
+		monitor "Number of bicycles" value: num_bicycles;
+		monitor "Number of pedestrians" value: num_pedestrians;
+*/
 	}
 }
 
