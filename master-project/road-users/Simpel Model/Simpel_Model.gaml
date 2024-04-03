@@ -8,10 +8,9 @@
 
 model SimpleModel
 
-import "../models/city/Footway.gaml"
 import "../models/Vehicles.gaml"
 
-import "Simple_Road_Agents.gaml"
+import "Simple_Agents.gaml"
 
 
 global {
@@ -36,7 +35,22 @@ global {
 	//graph used for the shortest path computation
 	graph road_network;
 	
-	graph pedestrian_network;
+	
+	
+	// for speed charts 
+	// multiply with 3.6 to convert to km/h
+	
+	list<float> car_speed_list -> {car collect (each.speed * 3.6)}; // for speed chart
+	list<float> truck_speed_list -> {truck collect (each.speed * 3.6)}; // for speed chart
+	list<float> bicycles_speed_list -> {bicycle collect (each.speed * 3.6)}; // for speed chart
+	list<float> pedestrian_speed_list -> {pedestrian collect (each.speed * 3.6)}; // for speed chart
+	
+	// calculate average speed
+	
+	float car_avg_speed -> {mean(car_speed_list)}; // average speed stats
+	float truck_avg_speed -> {mean(truck_speed_list)}; // average speed stats
+	float bicycle_avg_speed -> {mean(bicycles_speed_list)}; // average speed stats
+	float pedestrian_avg_speed -> {mean(pedestrian_speed_list)}; // average speed stats
 	
 	
 	// constants for road creation
@@ -59,7 +73,9 @@ global {
 	float x_right_intersection <- size_environment/2;
 	
 	
+	//TODO give_way
 	
+	//TODO stop sign
 	
 
 	init {
@@ -206,7 +222,6 @@ global {
 			do initialize;
 			}
 			
-		pedestrian_network <- as_edge_graph(footway_edge);
 
 		create car number: num_cars with: (location: one_of(intersection).location);
 		//create truck number: num_trucks;
@@ -215,38 +230,6 @@ global {
 
 	}
 }
-
-
-
-
-
-	species pedestrian skills:[moving]{
-		
-	point target;
-	rgb color <- #green;
-	int staying_counter;
-	
-	reflex new_target when: target = nil {
-		target <- any_location_in (one_of(footway_node));
-
-	}
-	
-	reflex move when: target != nil{
-	do goto target: target on: pedestrian_network;
-	if (location = target) {
-	    target <- nil;
-		} 
-    }
-
-	
-	aspect base {
-		draw triangle(1.0) color: color rotate: heading + 90 border: #black;
-		
-	}
-	
-}
-
-
 
 
 experiment test_city  type: gui {
@@ -274,5 +257,15 @@ experiment test_city  type: gui {
 			species footway_node aspect: base;
 	    	species footway_edge aspect: base;
 		}
+/*
+		display car_speed_chart type: 2d {
+      		chart "Average speed" type: series size: {1, 1} position: {0, 0} x_label: "Cycle" y_label: "Average speed km/h" {
+        	data "Car" value: car_avg_speed color: #red;
+        	data "Truck" value: truck_avg_speed color: #blue;
+        	data "Bicycle" value: bicycle_avg_speed color: #yellow;
+        	data "Pedestrian" value: pedestrian_avg_speed color: #green;
+      		}
+    	}
+*/
 	}
 }
