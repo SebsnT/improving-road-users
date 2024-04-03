@@ -11,7 +11,6 @@ model Vehicles
 import "./city/Road.gaml"
 
 
-
 species base_vehicle skills: [driving] {
 	intersection target;
 	
@@ -55,6 +54,13 @@ species base_vehicle skills: [driving] {
 			return {0, 0};
 		}
 	}
+	
+	//TODO calculate critical gap
+	
+	//TODO react to pedestrian -> reflex 
+	
+	//TODO speeding
+	
 	
 	aspect base {
 		if (current_road != nil) {

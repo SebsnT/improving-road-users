@@ -94,6 +94,15 @@ species intersection skills: [intersection_skill] {
 			}
 		}
 	}
+	
+	 //TODO crossing reflex
+	 
+	 
+	 //TODO give_way reflex
+	 
+	 
+	 //TODO stop reflex
+	 
 
 	aspect base {
 		if (is_traffic_signal) {
