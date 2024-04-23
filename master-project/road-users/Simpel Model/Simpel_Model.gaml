@@ -8,7 +8,7 @@
 
 model SimpleModel
 
-import "../models/Vehicles.gaml"
+import "Simple_Vehicles.gaml"
 
 import "Simple_Agents.gaml"
 
@@ -86,8 +86,8 @@ global {
 			
 		// Middle line
 		create intersection with: (location: {left_border, y_middle_road}); 
-		create intersection with: (location: {x_left_intersection,y_middle_road }, is_traffic_signal: true);
-		create intersection with: (location: {x_right_intersection, y_middle_road }, is_traffic_signal: true);
+		create intersection with: (location: {x_left_intersection,y_middle_road }, is_traffic_signal: true, traffic_signal_type:"traffic_signals");
+		create intersection with: (location: {x_right_intersection, y_middle_road }, is_traffic_signal: true, traffic_signal_type:"traffic_signals");
 		create intersection with: (location: {right_border, y_middle_road });
 		
 		// Upper Horizontal lines
@@ -107,31 +107,31 @@ global {
 		//----------------------------------------------------------------------
 		
 		// Connect Middle line
-		create road with:(num_lanes:2, maxspeed: 50#km/#h, shape:line([intersection[0],intersection[1]]));
-		create road with:(num_lanes:2, maxspeed: 50#km/#h, shape:line([intersection[1],intersection[0]]));
+		create road with:(num_lanes:1, maxspeed: 50#km/#h, shape:line([intersection[0],intersection[1]]));
+		create road with:(num_lanes:1, maxspeed: 50#km/#h, shape:line([intersection[1],intersection[0]]));
 		
-		create road with:(num_lanes:2, maxspeed: 50#km/#h, shape:line([intersection[1],intersection[2]]));
-		create road with:(num_lanes:2, maxspeed: 50#km/#h, shape:line([intersection[2],intersection[1]]));
+		create road with:(num_lanes:1, maxspeed: 50#km/#h, shape:line([intersection[1],intersection[2]]));
+		create road with:(num_lanes:1, maxspeed: 50#km/#h, shape:line([intersection[2],intersection[1]]));
 		
-		create road with:(num_lanes:2, maxspeed: 50#km/#h, shape:line([intersection[2],intersection[3]]));
-		create road with:(num_lanes:2, maxspeed: 50#km/#h, shape:line([intersection[3],intersection[2]]));
+		create road with:(num_lanes:1, maxspeed: 50#km/#h, shape:line([intersection[2],intersection[3]]));
+		create road with:(num_lanes:1, maxspeed: 50#km/#h, shape:line([intersection[3],intersection[2]]));
 	
 		// Connect upper lines to lower
-		create road with:(num_lanes:2, maxspeed: 50#km/#h, shape:line([intersection[4],intersection[1]]));
-		create road with:(num_lanes:2, maxspeed: 50#km/#h, shape:line([intersection[1],intersection[4]]));
+		create road with:(num_lanes:1, maxspeed: 50#km/#h, shape:line([intersection[4],intersection[1]]));
+		create road with:(num_lanes:1, maxspeed: 50#km/#h, shape:line([intersection[1],intersection[4]]));
 		
-		create road with:(num_lanes:2, maxspeed: 50#km/#h, shape:line([intersection[5],intersection[2]]));
-		create road with:(num_lanes:2, maxspeed: 50#km/#h, shape:line([intersection[2],intersection[5]]));
+		create road with:(num_lanes:1, maxspeed: 50#km/#h, shape:line([intersection[5],intersection[2]]));
+		create road with:(num_lanes:1, maxspeed: 50#km/#h, shape:line([intersection[2],intersection[5]]));
 		
 		// Connect lower lines to lower
-		create road with:(num_lanes:2, maxspeed: 50#km/#h, shape:line([intersection[6],intersection[1]]));
-		create road with:(num_lanes:2, maxspeed: 50#km/#h, shape:line([intersection[1],intersection[6]]));
+		create road with:(num_lanes:1, maxspeed: 50#km/#h, shape:line([intersection[6],intersection[1]]));
+		create road with:(num_lanes:1, maxspeed: 50#km/#h, shape:line([intersection[1],intersection[6]]));
 		
-		create road with:(num_lanes:2, maxspeed: 50#km/#h, shape:line([intersection[7],intersection[2]]));
-		create road with:(num_lanes:2, maxspeed: 50#km/#h, shape:line([intersection[2],intersection[7]]));
+		create road with:(num_lanes:1, maxspeed: 50#km/#h, shape:line([intersection[7],intersection[2]]));
+		create road with:(num_lanes:1, maxspeed: 50#km/#h, shape:line([intersection[2],intersection[7]]));
 		
-		create road with:(num_lanes:2, maxspeed: 50#km/#h, shape:line([intersection[6],intersection[7]]));
-		create road with:(num_lanes:2, maxspeed: 50#km/#h, shape:line([intersection[7],intersection[6]]));
+		create road with:(num_lanes:1, maxspeed: 50#km/#h, shape:line([intersection[6],intersection[7]]));
+		create road with:(num_lanes:1, maxspeed: 50#km/#h, shape:line([intersection[7],intersection[6]]));
 		
 		
 		//Connect Lowest line
@@ -140,17 +140,6 @@ global {
 		
 		create road with:(num_lanes:2, maxspeed: 50#km/#h, shape:line([intersection[9],intersection[7]]));
 		create road with:(num_lanes:2, maxspeed: 50#km/#h, shape:line([intersection[7],intersection[9]]));
-		
-		
-		// Connect ends (for torus)
-		//create road with:(num_lanes:2, maxspeed: 50#km/#h, shape:line([intersection[4],intersection[8]]));
-		//create road with:(num_lanes:2, maxspeed: 50#km/#h, shape:line([intersection[8],intersection[4]]));
-		
-		//create road with:(num_lanes:2, maxspeed: 50#km/#h, shape:line([intersection[5],intersection[9]]));
-		//create road with:(num_lanes:2, maxspeed: 50#km/#h, shape:line([intersection[9],intersection[5]]));
-		
-		//create road with:(num_lanes:2, maxspeed: 50#km/#h, shape:line([intersection[0],intersection[3]]));
-		//create road with:(num_lanes:2, maxspeed: 50#km/#h, shape:line([intersection[3],intersection[0]]));
 
 		//build the graph from the roads and intersections
 		road_network <- as_driving_graph(road,intersection);
@@ -224,9 +213,23 @@ global {
 			
 
 		create car number: num_cars with: (location: one_of(intersection).location);
-		//create truck number: num_trucks;
-		//create bicycle number: num_bicycles;
-		create pedestrian number: num_pedestrians with: (location: one_of(footway_edge).location);
+		//create truck number: num_trucks with: (location: one_of(intersection).location);
+		//create bicycle number: num_bicycles with: (location: one_of(intersection).location);
+		create pedestrian number: num_pedestrians with: (location: footway_edge[6].location);
+		
+		
+		
+		ask footway_edge {
+
+			agent closest_road <- road closest_to(self);
+				
+			if(self overlaps closest_road){
+				self.color <- #red;
+				self.is_crossing <- true;
+			}
+		}
+
+		
 
 	}
 }
@@ -236,10 +239,10 @@ experiment test_city  type: gui {
 	
 	action _init_{
 		create simulation with:[
-			num_cars::10,
+			num_cars::5,
 			//num_trucks::10
 			//num_bicycles::100,
-			num_pedestrians::10
+			num_pedestrians::1
 		];
 	}
 
@@ -247,13 +250,13 @@ experiment test_city  type: gui {
 		display city type: 2d background: #grey axes: false{
 
 			species road aspect: base;
-			species intersection aspect: base;
+			species intersection aspect: test;
+			
 			species car aspect: base;
-			//species truck aspect: base;
-			//species bicycle aspect: base;
+			species truck aspect: base;
+			species bicycle aspect: base;
 			species pedestrian aspect: base;
 			
-			//species footway aspect: base;
 			species footway_node aspect: base;
 	    	species footway_edge aspect: base;
 		}

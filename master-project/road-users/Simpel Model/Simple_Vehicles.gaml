@@ -8,7 +8,7 @@
 
 model Vehicles
 
-import "./city/Road.gaml"
+import "Simple_Road.gaml"
 
 
 species base_vehicle skills: [driving] {
@@ -42,8 +42,6 @@ species base_vehicle skills: [driving] {
 	reflex commute when: current_path != nil {
 		do drive;
 	}
-	
-	
 
 	point compute_position {
 		// Shifts the position of the vehicle perpendicularly to the road,
@@ -62,6 +60,24 @@ species base_vehicle skills: [driving] {
 		}
 	}
 	
+	// testing puposes for dead ends only
+	reflex dead_end when: distance_to_goal < 2 {
+		
+		if(final_target != nil and current_target = final_target and length(intersection(final_target).roads_out) <= 1 ){
+			do unregister;
+			create species (self) with:(location: one_of(
+				intersection[0],intersection[3],
+				intersection[4],intersection[5],
+				intersection[8],intersection[9]
+			).location);
+			do die;
+		}
+	}
+	/* 
+	reflex pedestrian_on_road when: distance_to() {
+		write "x";
+	}
+	*/
 
 	
 	//TODO calculate critical gap

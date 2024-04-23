@@ -132,7 +132,7 @@ experiment city type: gui {
 			species pedestrian aspect: base;
 			}
 			
-/*	
+	/* 
 		display car_speed_chart type: 2d {
       		chart "Average speed" type: series size: {1, 1} position: {0, 0} x_label: "Cycle" y_label: "Average speed km/h" {
         	data "Car" value: car_avg_speed color: #red;

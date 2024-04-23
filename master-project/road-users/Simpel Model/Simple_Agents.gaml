@@ -8,6 +8,7 @@
 
 model SimpleAgents
 
+
 global {
 	graph pedestrian_network;
 	
@@ -40,14 +41,17 @@ species footway_node parent: graph_node edge_species: footway_edge{
 }
 	
 species footway_edge skills: [pedestrian_road] parent: base_edge {
-	rgb color <- #red;
+	rgb color <- #black;
+	bool is_crossing <- false;
   		
-	aspect base {	
+	aspect base {
 		draw shape color: color;
 	}
+	
+	
 }
 	
-species pedestrian skills:[moving]{
+species pedestrian skills:[moving, pedestrian]{
 		
 	point target;
 	rgb color <- #green;
@@ -59,13 +63,14 @@ species pedestrian skills:[moving]{
 		
 	}
 	
-	
+	/* 
 	reflex move when: target != nil{
 		do goto target: target on: pedestrian_network;
 		if (location = target) {
 			target <- nil;
 		} 
 	}
+	*/
 	
 	//TODO calculate critical gap
 	
