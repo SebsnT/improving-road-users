@@ -11,9 +11,17 @@ model Pedestrian
 import "./city/Footway.gaml"
 import "./city/Building.gaml"
 
-species pedestrian skills:[pedestrian]{
+species pedestrian skills:[moving]{
 	
 	rgb color <- #green;
+	point target;
+	int staying_counter;
+	
+	reflex new_target when: target = nil {
+	target <- point(one_of(building));
+		
+	}
+	
 	
 	graph footway_network;
 	init{
@@ -21,20 +29,17 @@ species pedestrian skills:[pedestrian]{
 		
 	}
 	
-	reflex move {
-		if (final_waypoint = nil) {
-			// do compute_virtual_path pedestrian_graph: footway_network target: one_of(footway);
-		}
-		do walk ;
+	reflex move when: target != nil{
+		do goto target: target on: footway_network;
+		if (location = target) {
+			target <- nil;
+		} 
 	}	
 	
 	aspect base {
 		draw triangle(1.0) color: color rotate: heading + 90 border: #black;
 		
 	}
-	
 		
 }
-
-
 

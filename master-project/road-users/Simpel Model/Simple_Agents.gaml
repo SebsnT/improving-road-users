@@ -19,7 +19,7 @@ global {
 }
 
 species footway_node parent: graph_node edge_species: footway_edge{
-	rgb color <- #black;
+	rgb color <- #blue;
 	// rgb label_color <- #white;
 		 
 	geometry shape <- circle (1);
@@ -34,7 +34,7 @@ species footway_node parent: graph_node edge_species: footway_edge{
     }
   		
 	aspect base {	
-		draw shape color: color;
+		draw shape color: #blue;
 		//draw number color: label_color;
 	}
 		
@@ -45,7 +45,13 @@ species footway_edge skills: [pedestrian_road] parent: base_edge {
 	bool is_crossing <- false;
   		
 	aspect base {
-		draw shape color: color;
+		
+		if(is_crossing){
+			draw shape color: #red;
+		} else {
+			draw shape color: color;
+		}
+
 	}
 	
 	
@@ -63,14 +69,18 @@ species pedestrian skills:[moving, pedestrian]{
 		
 	}
 	
-	/* 
+	
 	reflex move when: target != nil{
 		do goto target: target on: pedestrian_network;
 		if (location = target) {
 			target <- nil;
-		} 
+		}
 	}
-	*/
+	 
+	action jaywalk {
+		
+	}
+	
 	
 	//TODO calculate critical gap
 	

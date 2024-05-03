@@ -85,7 +85,7 @@ global {
 		//----------------------------------------------------------------------
 			
 		// Middle line
-		create intersection with: (location: {left_border, y_middle_road}); 
+		create intersection with: (location: {left_border, y_middle_road}, is_traffic_signal: true, traffic_signal_type:"crossing"); 
 		create intersection with: (location: {x_left_intersection,y_middle_road }, is_traffic_signal: true, traffic_signal_type:"traffic_signals");
 		create intersection with: (location: {x_right_intersection, y_middle_road }, is_traffic_signal: true, traffic_signal_type:"traffic_signals");
 		create intersection with: (location: {right_border, y_middle_road });
@@ -215,22 +215,19 @@ global {
 		create car number: num_cars with: (location: one_of(intersection).location);
 		//create truck number: num_trucks with: (location: one_of(intersection).location);
 		//create bicycle number: num_bicycles with: (location: one_of(intersection).location);
-		create pedestrian number: num_pedestrians with: (location: footway_edge[6].location);
+		create pedestrian number: num_pedestrians with: (location:one_of(footway_edge).location);
 		
-		
-		
+		/*
 		ask footway_edge {
 
 			agent closest_road <- road closest_to(self);
 				
 			if(self overlaps closest_road){
-				self.color <- #red;
 				self.is_crossing <- true;
 			}
 		}
-
+		*/
 		
-
 	}
 }
 
@@ -239,10 +236,10 @@ experiment test_city  type: gui {
 	
 	action _init_{
 		create simulation with:[
-			num_cars::5,
-			//num_trucks::10
-			//num_bicycles::100,
-			num_pedestrians::1
+			num_cars::1
+			//,num_trucks::10
+			//,num_bicycles::100
+			,num_pedestrians::1
 		];
 	}
 

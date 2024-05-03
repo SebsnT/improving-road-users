@@ -127,7 +127,7 @@ species intersection skills: [intersection_skill] {
 	}
 	
 	aspect test {
-		if (is_traffic_signal) {
+		if (is_traffic_signal and traffic_signal_type ="traffic_signals") {
 			
 			// left
 			draw circle(1) color: traffic_light_color at:{location.x - 8, location.y + 3};

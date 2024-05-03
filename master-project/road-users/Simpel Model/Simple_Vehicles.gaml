@@ -36,7 +36,12 @@ species base_vehicle skills: [driving] {
     
     
     reflex select_next_path when: current_path = nil {
-		do compute_path graph: road_network target: one_of(intersection);
+		do compute_path graph: road_network target: 
+		one_of(
+			intersection[0], intersection[3],
+			intersection[4],intersection[5],
+			intersection[8],intersection[9]
+		);
 	}
 	
 	reflex commute when: current_path != nil {

@@ -16,6 +16,7 @@ import "./models/Pedestrian.gaml"
 
 global {
 	
+	// declare name of shape file here
 	string city <- "graz2";
 	
 	int num_cars;
