@@ -13,26 +13,19 @@ import "./models/city/Building.gaml"
 import "./models/Vehicles.gaml"
 import "./models/Pedestrian.gaml"
 
+import "./utils/variables/global_vars.gaml"
+
 
 global {
-	
-	// declare name of shape file here
-	string city <- "graz2";
 	
 	int num_cars;
 	int num_trucks;
 	int num_bicycles;
 	int num_pedestrians;
 	
-	float traffic_light_interval parameter: 'Traffic light interval' init: 30#s;
-	float step <- 0.2#s;
+	string city;
 	
-	shape_file nodes_shape_file <- shape_file("includes/" + city + "/" + "nodes.shp");
-	shape_file roads_shape_file <- shape_file("includes/" + city + "/" + "roads.shp");
-	shape_file footway_shape_file <- shape_file("includes/" + city + "/" + "footways.shp");
-	shape_file building_shape_file <- shape_file("includes/" + city + "/" + "buildings.shp");
-	
-	geometry shape <- envelope(roads_shape_file);
+	geometry shape <- envelope(ROADS_SHAPE_FILE);
 	graph road_network;
 	graph footway_network;
 	list<intersection> non_deadend_nodes;
@@ -55,7 +48,7 @@ global {
 		
 		write "Creating Roads";
 		
-		create road from: roads_shape_file with: [num_lanes::int(read("lanes"))] {
+		create road from: ROADS_SHAPE_FILE with: [num_lanes::int(read("lanes"))] {
 			// Create another road in the opposite direction
 			create road {
 				num_lanes <- myself.num_lanes;
@@ -69,7 +62,7 @@ global {
 		
 		write "Creating Intersections";
 		
-		create intersection from: nodes_shape_file 
+		create intersection from: NODES_SHAPE_FILE 
 			with: [is_traffic_signal::(read("type") = "traffic_signals"), traffic_signal_type::(read("type"))] {
 			time_to_change <- traffic_light_interval;
 		}
@@ -82,12 +75,12 @@ global {
 		
 		write "Creating Footways";
 	
-		create footway from: footway_shape_file;
+		create footway from: FOOTWAY_SHAPE_FILE;
 		
 		
 		write "Creating Buildings";
 	
-		create building from: building_shape_file;
+		create building from: BUILDING_SHAPE_FILE;
 		
 		
 		write "Creating Vehicles";
@@ -109,11 +102,11 @@ experiment city type: gui {
 	
 	action _init_{
 		create simulation with:[
-			city::"graz2",
-			num_cars::100,
-			num_trucks::10,
-			num_bicycles::100,
-			num_pedestrians::100
+			city::CITY,
+			num_cars::NUM_CARS,
+			num_trucks::NUM_TRUCKS,
+			num_bicycles::NUM_BICYCLES,
+			num_pedestrians::NUM_PEDESTRIANS
 		];
 	}
 	

@@ -13,6 +13,8 @@ global {
 	// the width of a vehicle is specified using num_lanes_occupied
 	int lane_width <- 1;
 	list<intersection> non_deadend_nodes;
+	list<intersection> end_nodes;
+	list<intersection> spawn_nodes;
 }
 
 species road skills: [road_skill] {
@@ -49,6 +51,14 @@ species intersection skills: [intersection_skill] {
 			}
 		}
 	}
+	
+	action declare_end_nodes (list<intersection> nodes){
+		end_nodes <- nodes;
+	}
+	
+	action declare_spawn_nodes (list<intersection> nodes){
+		spawn_nodes <- nodes;
+	}
 
 	action compute_crossing {
 		if (length(roads_in) >= 2) {
@@ -71,7 +81,8 @@ species intersection skills: [intersection_skill] {
 			}
 		}
 	}
-
+	
+	
 	action to_green {
 		stop[0] <- ways2;
 		traffic_light_color <- #green;

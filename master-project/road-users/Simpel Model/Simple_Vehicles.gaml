@@ -23,8 +23,8 @@ species base_vehicle skills: [driving] {
 		right_side_driving <- true;
 		num_lanes_occupied <- 1;
 		
-		min_safety_distance <- 1 #m;
-		min_security_distance <- 1 #m;
+		min_safety_distance <- 2 #m;
+		min_security_distance <- 2 #m;
 		
 		proba_respect_priorities <- 1.0;
 		proba_respect_stops <- [1.0];
@@ -38,9 +38,7 @@ species base_vehicle skills: [driving] {
     reflex select_next_path when: current_path = nil {
 		do compute_path graph: road_network target: 
 		one_of(
-			intersection[0], intersection[3],
-			intersection[4],intersection[5],
-			intersection[8],intersection[9]
+			end_nodes
 		);
 	}
 	
@@ -71,9 +69,7 @@ species base_vehicle skills: [driving] {
 		if(final_target != nil and current_target = final_target and length(intersection(final_target).roads_out) <= 1 ){
 			do unregister;
 			create species (self) with:(location: one_of(
-				intersection[0],intersection[3],
-				intersection[4],intersection[5],
-				intersection[8],intersection[9]
+				spawn_nodes
 			).location);
 			do die;
 		}

@@ -1,11 +1,11 @@
 /**
-* Name: UnsignalizedCrossing
+* Name: SignalizedCrossing
 * Based on the internal empty template. 
 * Author: Sebastian
 * Tags: 
 */
 
-model UnsignalizedCrossing
+model SignalizedCrossing
 
 import "../utils/variables/test_vars.gaml"
 
@@ -18,7 +18,7 @@ global {
 	
 	int num_cars;
 	int num_pedestrians;
-	
+
 	float car_avg_speed -> {mean(car collect (each.speed * 3.6))}; // average speed stats
 	float pedestrian_avg_speed -> {mean(pedestrian collect (each.speed * 3.6))}; // average speed stats
 	
@@ -26,9 +26,9 @@ global {
 	init {
 		
 		// intersections
-		create intersection with: (location: {x_left_border, y_road}, traffic_signal_type:"");
-		create intersection with: (location: {x_middle, y_road}, is_traffic_signal: true, traffic_signal_type:"crossing");
-		create intersection with: (location: {x_right_border, y_road}, traffic_signal_type:"");
+		create intersection with: (location: {x_left_border, 	y_road}, traffic_signal_type:"");
+		create intersection with: (location: {x_middle, 	y_road}, is_traffic_signal: true, traffic_signal_type:"traffic_signals");
+		create intersection with: (location: {x_right_border, 	y_road}, traffic_signal_type:"");
 		
 		// roads
 		create road with:(num_lanes:1, maxspeed: 50#km/#h, shape:line([intersection[0],intersection[1]]));
@@ -36,12 +36,12 @@ global {
 		
 		// footways
 		create footway_node with: (location: {x_left_border,	y_above_road}, list_connected_index:[1], number:"0");
-		create footway_node with: (location: {x_middle,		y_above_road}, list_connected_index:[0,2,4], number:"1");
+		create footway_node with: (location: {x_middle,	y_above_road}, list_connected_index:[0,2,4], number:"1");
 		create footway_node with: (location: {x_right_border,	y_above_road}, list_connected_index:[1], number:"2");
 		
 		
 		create footway_node with: (location: {x_left_border,	y_below_road}, list_connected_index:[4], number:"3");
-		create footway_node with: (location: {x_middle,		y_below_road}, list_connected_index:[1,3,5], number:"4");
+		create footway_node with: (location: {x_middle,	y_below_road}, list_connected_index:[1,3,5], number:"4");
 		create footway_node with: (location: {x_right_border,	y_below_road}, list_connected_index:[4], number:"5");
 		
 		//build the graph from the roads and intersections

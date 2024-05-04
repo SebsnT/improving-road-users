@@ -1,12 +1,12 @@
 /**
-* Name: Jaywalk
+* Name: StopSign
 * Based on the internal empty template. 
 * Author: Sebastian
 * Tags: 
 */
 
 
-model Jaywalk
+model StopSign
 
 
 import "../utils/variables/test_vars.gaml"
@@ -16,33 +16,26 @@ import "../Simpel Model/Simple_Vehicles.gaml"
 import "../Simpel Model/Simple_Agents.gaml"
 
 global {
-	geometry shape <- square(size_environment);
-	
 	int num_cars;
-	int num_pedestrians;
 	
 	float car_avg_speed -> {mean(car collect (each.speed * 3.6))}; // average speed stats
-	float pedestrian_avg_speed -> {mean(pedestrian collect (each.speed * 3.6))}; // average speed stats
-	
 	
 	init {
 		
 		// intersections
-		create intersection with: (location: {x_left_border, y_road}, traffic_signal_type:"");
-		create intersection with: (location: {x_middle, y_road}, is_traffic_signal: true, traffic_signal_type:"crossing");
-		create intersection with: (location: {x_right_border, y_road}, traffic_signal_type:"");
+		create intersection with: (location: {x_left_border, 	y_road}, traffic_signal_type:"");
+		create intersection with: (location: {x_middle, 		y_road}, traffic_signal_type:"");
+		create intersection with: (location: {x_right_border, 	y_road}, traffic_signal_type:"");
+		
+		create intersection with: (location: {x_middle, 		y_road + 5}, is_traffic_signal: true, traffic_signal_type:"stop");
+		create intersection with: (location: {x_middle, 		y_road + 100},traffic_signal_type:"");
 		
 		// roads
 		create road with:(num_lanes:1, maxspeed: 50#km/#h, shape:line([intersection[0],intersection[1]]));
 		create road with:(num_lanes:1, maxspeed: 50#km/#h, shape:line([intersection[1],intersection[2]]));
 		
-		// footways
-		create footway_node with: (location: {x_left_border,	y_above_road}, list_connected_index:[1], number:"0");
-		create footway_node with: (location: {x_right_border,	y_above_road}, list_connected_index:[0], number:"1");
-		
-		
-		create footway_node with: (location: {x_left_border,	y_below_road}, list_connected_index:[3], number:"2");
-		create footway_node with: (location: {x_right_border,	y_below_road}, list_connected_index:[2], number:"3");
+		create road with:(num_lanes:1, maxspeed: 50#km/#h, shape:line([intersection[4],intersection[3]]));
+		create road with:(num_lanes:1, maxspeed: 50#km/#h, shape:line([intersection[3],intersection[1]]));
 		
 		//build the graph from the roads and intersections
 		graph road_network <- as_driving_graph(road,intersection);
@@ -50,21 +43,19 @@ global {
 		//for traffic light, initialize their counter value (synchronization of traffic lights)
 		ask intersection where each.is_traffic_signal {
 			do initialize;
-			do declare_spawn_nodes([intersection[0]]);
+			do declare_spawn_nodes([intersection[0],intersection[4]]);
 			do declare_end_nodes([intersection[2]]);
 		}
 			
-		create car number: num_cars with: (location: intersection[0].location);
-		create pedestrian number: num_pedestrians with: (location: one_of(footway_edge[0],footway_edge[1]).location);
+		create car number: num_cars with: (location: one_of(intersection[0],intersection[4]).location);
 	}		
 }
 
-experiment cross_road_jaywalk  type: gui {
+experiment stop_sign type: gui {
 	
 	action _init_{
 		create simulation with:[
-			num_cars::10
-			,num_pedestrians::10
+			num_cars::15
 		];
 	}
 
@@ -75,7 +66,6 @@ experiment cross_road_jaywalk  type: gui {
 			species intersection aspect: test;
 			
 			species car aspect: base;
-			species pedestrian aspect: base;
 			
 			species footway_node aspect: base;
 	    	species footway_edge aspect: base;
@@ -84,6 +74,8 @@ experiment cross_road_jaywalk  type: gui {
 		display car_speed_chart type: 2d {
       		chart "Average speed" type: series size: {1, 1} position: {0, 0} x_label: "Cycle" y_label: "Average speed km/h" {
         	data "Car" value: car_avg_speed color: #red;
+        	data "Truck" value: truck_avg_speed color: #blue;
+        	data "Bicycle" value: bicycle_avg_speed color: #yellow;
         	data "Pedestrian" value: pedestrian_avg_speed color: #green;
       		}
     	}

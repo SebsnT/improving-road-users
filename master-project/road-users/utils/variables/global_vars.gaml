@@ -9,6 +9,27 @@
 model global_vars
 
 global {
+	
+	// environment and simulation
+	float step <- 0.2#s;
+	float traffic_light_interval parameter: 'Traffic light interval' init: 30#s;
+	float lane_width <- 1.0;
+	float size_environment <- 1#km;
+	
+	// declare name of shape file here
+	string CITY <- "graz2";
+	
+	// shape file names
+	shape_file NODES_SHAPE_FILE <- shape_file("../includes/" + CITY + "/" + "nodes.shp");
+	shape_file ROADS_SHAPE_FILE <- shape_file("../includes/" + CITY + "/" + "roads.shp");
+	shape_file FOOTWAY_SHAPE_FILE <- shape_file("../includes/" + CITY + "/" + "footways.shp");
+	shape_file BUILDING_SHAPE_FILE <- shape_file("../includes/" + CITY + "/" + "buildings.shp");
+	
+	int NUM_CARS <- 10;
+	int NUM_TRUCKS <- 10;
+	int NUM_BICYCLES <- 10;
+	int NUM_PEDESTRIANS <- 10;
+	
 	//bicycle
 	float BICYCLE_LENGTH <- 1.9#m;
 	float BICYCLE_WIDTH <- 0.7#m;
@@ -22,6 +43,7 @@ global {
 	float CAR_MAXSPEED <- 14 #m/#s;
 	float CAR_ACCELERATION_RATE <- 3.4#m/#s;
 	float CAR_DECELERATION_RATE <- 1.0#m/#s;
+	float CAR_PROBA_BLOCK_NODE <- 1.0; 
 	
 	//truck
 	float TRUCK_LENGTH <- 4.0#m;
@@ -40,6 +62,6 @@ global {
 	//driver
 	float COLLISION_AVOIDANCE_DURATION <- 0.7#s;
 	float REACTION_TIME <- 1.8#s;
-	
 }
+
 
