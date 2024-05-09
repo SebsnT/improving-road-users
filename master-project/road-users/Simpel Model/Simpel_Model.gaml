@@ -10,9 +10,10 @@ model SimpleModel
 
 import "Simple_Vehicles.gaml"
 
-import "Simple_Agents.gaml"
+import "Simple_Pedestrians.gaml"
 
-import "../utils/global_vars.gaml"
+import "../utils/variables/global_vars.gaml"
+
 
 
 global {
@@ -135,55 +136,55 @@ global {
 		//----------------------------------------------------------------------
 			
 		// Top nodes
-		create footway_node with: (location: {x_left_intersection - 5 ,upper_border}, list_connected_index:[1, 6], number:"0");
-		create footway_node with: (location: {x_left_intersection + 5 ,upper_border}, list_connected_index:[0, 8], number:"1");
+		create footway_node with: (location: {x_left_intersection - 5 ,upper_border}, list_connected_index:[1, 6], label:"0");
+		create footway_node with: (location: {x_left_intersection + 5 ,upper_border}, list_connected_index:[0, 8], label:"1");
 		
-		create footway_node with: (location: {size_environment/2 - 5 ,upper_border}, list_connected_index:[3, 10], number:"2");
-		create footway_node with: (location: {size_environment/2 + 5 ,upper_border}, list_connected_index:[2, 12], number:"3");
+		create footway_node with: (location: {size_environment/2 - 5 ,upper_border}, list_connected_index:[3, 10], label:"2");
+		create footway_node with: (location: {size_environment/2 + 5 ,upper_border}, list_connected_index:[2, 12], label:"3");
 		
 		
 		// Middle nodes
 		
-		create footway_node with: (location: {left_border, y_above_middle_road}, list_connected_index:[5, 6], number:"4");
-		create footway_node with: (location: {left_border, y_under_middle_road}, list_connected_index:[4, 7], number:"5");
+		create footway_node with: (location: {left_border, y_above_middle_road}, list_connected_index:[5, 6], label:"4");
+		create footway_node with: (location: {left_border, y_under_middle_road}, list_connected_index:[4, 7], label:"5");
 		
-		create footway_node with: (location: {x_left_intersection - 5, y_above_middle_road}, list_connected_index:[0, 4, 7, 8], number:"6");
-		create footway_node with: (location: {x_left_intersection - 5, y_under_middle_road}, list_connected_index:[5, 6, 9, 16], number:"7");
+		create footway_node with: (location: {x_left_intersection - 5, y_above_middle_road}, list_connected_index:[0, 4, 7, 8], label:"6");
+		create footway_node with: (location: {x_left_intersection - 5, y_under_middle_road}, list_connected_index:[5, 6, 9, 16], label:"7");
 		
-		create footway_node with: (location: {x_left_intersection + 5, y_above_middle_road}, list_connected_index:[1, 6, 9, 10], number:"8");
-		create footway_node with: (location: {x_left_intersection + 5, y_under_middle_road}, list_connected_index:[7, 8, 11, 18 ], number:"9");
+		create footway_node with: (location: {x_left_intersection + 5, y_above_middle_road}, list_connected_index:[1, 6, 9, 10], label:"8");
+		create footway_node with: (location: {x_left_intersection + 5, y_under_middle_road}, list_connected_index:[7, 8, 11, 18 ], label:"9");
 		
-		create footway_node with: (location: {x_right_intersection - 5, y_above_middle_road}, list_connected_index:[2, 8, 11, 12], number:"10");
-		create footway_node with: (location: {x_right_intersection - 5, y_under_middle_road}, list_connected_index:[9, 10, 13, 20], number:"11");
+		create footway_node with: (location: {x_right_intersection - 5, y_above_middle_road}, list_connected_index:[2, 8, 11, 12], label:"10");
+		create footway_node with: (location: {x_right_intersection - 5, y_under_middle_road}, list_connected_index:[9, 10, 13, 20], label:"11");
 		
-		create footway_node with: (location: {x_right_intersection + 5,	y_above_middle_road}, list_connected_index:[3, 10, 13, 14], number:"12");
-		create footway_node with: (location: {x_right_intersection + 5,	y_under_middle_road}, list_connected_index:[11, 12, 15, 22], number:"13");
+		create footway_node with: (location: {x_right_intersection + 5,	y_above_middle_road}, list_connected_index:[3, 10, 13, 14], label:"12");
+		create footway_node with: (location: {x_right_intersection + 5,	y_under_middle_road}, list_connected_index:[11, 12, 15, 22], label:"13");
 		
-		create footway_node with: (location: {right_border , y_above_middle_road}, list_connected_index:[12, 15], number:"14");
-		create footway_node with: (location: {right_border , y_under_middle_road}, list_connected_index:[13, 14], number:"15");
+		create footway_node with: (location: {right_border , y_above_middle_road}, list_connected_index:[12, 15], label:"14");
+		create footway_node with: (location: {right_border , y_under_middle_road}, list_connected_index:[13, 14], label:"15");
 		
 		
 		// Lower Nodes
 		
-		create footway_node with: (location: {x_left_intersection - 5, y_above_lower_road}, list_connected_index:[7, 17, 17, 18], number:"16");
-		create footway_node with: (location: {x_left_intersection - 5, y_under_lower_road}, list_connected_index:[16, 19, 24], number:"17");
+		create footway_node with: (location: {x_left_intersection - 5, y_above_lower_road}, list_connected_index:[7, 17, 17, 18], label:"16");
+		create footway_node with: (location: {x_left_intersection - 5, y_under_lower_road}, list_connected_index:[16, 19, 24], label:"17");
 		
-		create footway_node with: (location: {x_left_intersection + 5, y_above_lower_road}, list_connected_index:[9, 16, 19, 20], number:"18");
-		create footway_node with: (location: {x_left_intersection + 5, y_under_lower_road}, list_connected_index:[17,18, 21, 25], number:"19");
+		create footway_node with: (location: {x_left_intersection + 5, y_above_lower_road}, list_connected_index:[9, 16, 19, 20], label:"18");
+		create footway_node with: (location: {x_left_intersection + 5, y_under_lower_road}, list_connected_index:[17,18, 21, 25], label:"19");
 		
-		create footway_node with: (location: {x_right_intersection - 5, y_above_lower_road}, list_connected_index:[11, 18, 21, 22], number:"20");
-		create footway_node with: (location: {x_right_intersection - 5, y_under_lower_road}, list_connected_index:[19, 20, 23, 26], number:"21");
+		create footway_node with: (location: {x_right_intersection - 5, y_above_lower_road}, list_connected_index:[11, 18, 21, 22], label:"20");
+		create footway_node with: (location: {x_right_intersection - 5, y_under_lower_road}, list_connected_index:[19, 20, 23, 26], label:"21");
 		
-		create footway_node with: (location: {x_right_intersection + 5, y_above_lower_road}, list_connected_index:[13, 20, 23], number:"22");
-		create footway_node with: (location: {x_right_intersection + 5, y_under_lower_road}, list_connected_index:[21, 22, 27], number:"23");
+		create footway_node with: (location: {x_right_intersection + 5, y_above_lower_road}, list_connected_index:[13, 20, 23], label:"22");
+		create footway_node with: (location: {x_right_intersection + 5, y_under_lower_road}, list_connected_index:[21, 22, 27], label:"23");
 		
 		
 		// Lowest nodes
-		create footway_node with: (location: {x_left_intersection - 5, lower_border}, list_connected_index:[17, 25], number:"24");
-		create footway_node with: (location: {x_left_intersection + 5, lower_border}, list_connected_index:[19, 24], number:"25");
+		create footway_node with: (location: {x_left_intersection - 5, lower_border}, list_connected_index:[17, 25], label:"24");
+		create footway_node with: (location: {x_left_intersection + 5, lower_border}, list_connected_index:[19, 24], label:"25");
 		
-		create footway_node with: (location: {x_right_intersection - 5, lower_border}, list_connected_index:[21, 27], number:"26");
-		create footway_node with: (location: {x_right_intersection + 5, lower_border}, list_connected_index:[23, 26], number:"27");
+		create footway_node with: (location: {x_right_intersection - 5, lower_border}, list_connected_index:[21, 27], label:"26");
+		create footway_node with: (location: {x_right_intersection + 5, lower_border}, list_connected_index:[23, 26], label:"27");
 		
 		
 		//for traffic light, initialize their counter value (synchronization of traffic lights)
@@ -240,7 +241,7 @@ experiment test_city  type: gui {
 		display city type: 2d background: #grey axes: false{
 
 			species road aspect: base;
-			species intersection aspect: test;
+			species intersection aspect: simple;
 			
 			species car aspect: base;
 			species truck aspect: base;

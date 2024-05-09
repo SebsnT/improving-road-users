@@ -9,10 +9,13 @@
 model Vehicles
 
 import "Simple_Road.gaml"
+import "../utils/variables/vehicle_vars.gaml"
 
 
 species base_vehicle skills: [driving] {
 	intersection target;
+	int lane_width <- 1;
+	rgb color;
 	
 	// Create a graph representing the road network, with road lengths as weights
 	graph road_network;
@@ -20,20 +23,16 @@ species base_vehicle skills: [driving] {
 		map edge_weights <- road as_map (each::each.shape.perimeter);
 		road_network <- as_driving_graph(road, intersection) with_weights edge_weights;
 		
-		right_side_driving <- true;
-		num_lanes_occupied <- 1;
+		right_side_driving <- RIGHT_SIDE_DRIVING;
 		
-		min_safety_distance <- 2 #m;
-		min_security_distance <- 2 #m;
+		min_safety_distance <- MIN_SAFETY_DISTANCE;
+		min_security_distance <- MIN_SECURITY_DISTANCE;
 		
-		proba_respect_priorities <- 1.0;
-		proba_respect_stops <- [1.0];
+		proba_respect_priorities <- PROBA_RESPECT_PRIORITIES;
+		proba_respect_stops <- PROBA_RESPECT_STOPS;
+		
+		speed_coeff <- SPEED_COEFF;
 	}
-	
-	rgb color;
-	
-	int lane_width;
-    
     
     reflex select_next_path when: current_path = nil {
 		do compute_path graph: road_network target: 
@@ -117,10 +116,12 @@ species bicycle parent: base_vehicle  {
 
 	init {
 		// TODO research vehicle parameters
-		vehicle_length <- 1.75 #m;
-		max_speed <- 50 #km / #h;
-		max_acceleration <- 3.5;
-		num_lanes_occupied <- 1;
+		num_lanes_occupied <- BICYCLES_LANE_OCCUPIED;
+		vehicle_length <- BICYCLE_LENGTH;
+		
+		max_speed <- BICYCLE_MAXSPEED;
+		max_acceleration <- BICYCLE_ACCELERATION_RATE;
+		max_deceleration <- BICYCLE_DECELERATION_RATE;
 	}
 }
 
@@ -133,9 +134,12 @@ species truck parent: base_vehicle {
 
 	init {
 		// TODO research vehicle parameters
-		vehicle_length <- 10.0 #m;
-		max_speed <- 50 #km / #h;
-		max_acceleration <- 3.5;
+		num_lanes_occupied <- TRUCK_LANE_OCCUPIED;
+		vehicle_length <- TRUCK_LENGTH;
+		
+		max_speed <- TRUCK_MAXSPEED;
+		max_acceleration <- TRUCK_ACCELERATION_RATE;
+		max_deceleration <- TRUCK_DECELERATION_RATE;
 	}
 }
 
@@ -147,9 +151,12 @@ species car parent: base_vehicle{
 	
 	init {
 		// TODO research vehicle parameters
-		vehicle_length <- 4.0 #m;
-		max_speed <- 50 #km / #h;
-		max_acceleration <- 3.5;
+		num_lanes_occupied <- CAR_LANE_OCCUPIED;
+		vehicle_length <- CAR_LENGTH;
+		
+		max_speed <- CAR_MAXSPEED;
+		max_acceleration <- CAR_ACCELERATION_RATE;
+		max_deceleration <- CAR_DECELERATION_RATE;
 	}
 
 }

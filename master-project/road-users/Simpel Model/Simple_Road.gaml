@@ -1,39 +1,49 @@
 /**
-* Name: Road
+* Name: Simpel_Road
 * Based on the internal empty template. 
 * Author: Sebastian
 * Tags: 
 */
 
 
-model Road
+model Simpel_Road
 
 global {
-	// This is for visualization purposes only, 
-	// the width of a vehicle is specified using num_lanes_occupied
-	int lane_width <- 1;
 	list<intersection> non_deadend_nodes;
+	
 	list<intersection> end_nodes;
 	list<intersection> spawn_nodes;
+	
+	bool show_numbers;
 }
 
 species road skills: [road_skill] {
 	rgb color <- #white;
 	string oneway;
+	string number;
 
 	aspect base {
 		draw shape color: color end_arrow: 1;
+		if(show_numbers) {
+			draw number color:#red;
+		}
 	}
 }
 
 species intersection skills: [intersection_skill] {
 	rgb color;
+	string number;
+	
 	bool is_traffic_signal;
 	string traffic_signal_type;
+	
+	float distance_from_center;
 	float time_to_change <- 30#s;
 	float counter <- rnd(time_to_change);
+	
 	list<road> ways1;
 	list<road> ways2;
+	
 	bool is_green;
 	rgb traffic_light_color;
 	rgb opposite_color;
@@ -137,7 +147,7 @@ species intersection skills: [intersection_skill] {
 		}
 	}
 	
-	aspect test {
+	aspect simple {
 		if (is_traffic_signal and traffic_signal_type ="traffic_signals") {
 			
 			// left
@@ -153,10 +163,14 @@ species intersection skills: [intersection_skill] {
 			// top
 			draw circle(1) color: opposite_color at:{location.x - 3, location.y - 8};	
 			
-			
-			//draw circle(1) color: color_fire;
+			if(show_numbers) {
+				draw number color: #red;
+			}
 		} else {
 			draw circle(1) color: color;
+			if(show_numbers) {
+				draw number color: #red;
+			}
 		}
 		
 		switch traffic_signal_type { 
