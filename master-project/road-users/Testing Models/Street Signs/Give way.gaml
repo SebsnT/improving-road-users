@@ -8,14 +8,13 @@
 
 model Giveway
 
-import "../utils/variables/test_vars.gaml"
+import "../../utils/variables/global_vars_testing.gaml"
 
-import "../Simpel Model/Simple_Vehicles.gaml"
+import "../../Simpel Model/Simple_Vehicles.gaml"
 
-import "../Simpel Model/Simple_Agents.gaml"
+import "../../Simpel Model/Simple_Pedestrians.gaml"
 
 global {
-	geometry shape <- square(size_environment);
 	
 	int num_cars;
 	
@@ -24,12 +23,12 @@ global {
 	init {
 		
 		// intersections
-		create intersection with: (location: {x_left_border, 	y_road}, traffic_signal_type:"");
-		create intersection with: (location: {x_middle, 		y_road}, traffic_signal_type:"");
-		create intersection with: (location: {x_right_border, 	y_road}, traffic_signal_type:"");
+		create intersection with: (location: {x_left_border, 	y_middle}, traffic_signal_type:"");
+		create intersection with: (location: {x_middle, 		y_middle}, traffic_signal_type:"");
+		create intersection with: (location: {x_right_border, 	y_middle}, traffic_signal_type:"");
 		
-		create intersection with: (location: {x_middle, 		y_road + 5}, is_traffic_signal: true, traffic_signal_type:"give_way");
-		create intersection with: (location: {x_middle, 		y_road + 100},traffic_signal_type:"");
+		create intersection with: (location: {x_middle, 		y_middle + 5}, is_traffic_signal: true, traffic_signal_type:"give_way");
+		create intersection with: (location: {x_middle, 		y_middle + 100},traffic_signal_type:"");
 		
 		// roads
 		create road with:(num_lanes:1, maxspeed: 50#km/#h, shape:line([intersection[0],intersection[1]]));
@@ -48,7 +47,7 @@ global {
 			do declare_end_nodes([intersection[2]]);
 		}
 			
-		create car number: num_cars with: (location: one_of(intersection[0],intersection[4]).location);
+		create car number: num_cars with: (location: one_of(spawn_nodes).location);
 	}		
 }
 
@@ -64,7 +63,7 @@ experiment give_way  type: gui {
 		display city type: 2d background: #grey axes: false{
 
 			species road aspect: base;
-			species intersection aspect: test;
+			species intersection aspect: simple;
 			
 			species car aspect: base;
 			
