@@ -10,6 +10,7 @@ model Pedestrian
 
 import "./city/Footway.gaml"
 import "./city/Building.gaml"
+import "../utils/variables/pedestrian_vars.gaml"
 
 species pedestrian skills:[moving]{
 	
@@ -18,15 +19,12 @@ species pedestrian skills:[moving]{
 	int staying_counter;
 	
 	reflex new_target when: target = nil {
-	target <- point(one_of(building));
-		
+		target <- point(one_of(building));
 	}
-	
 	
 	graph footway_network;
 	init{
-		footway_network <- as_edge_graph(footway);
-		
+		footway_network <- as_edge_graph(footway);	
 	}
 	
 	reflex move when: target != nil{
