@@ -3,7 +3,7 @@ model OSMdata_to_shapefile
  
 global{
 	
-	string city <- "graz2";
+	string city <- "graz";
 	
 	string read_file <- "./includes/osm/" + city + ".osm";
 	

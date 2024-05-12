@@ -31,9 +31,9 @@ global {
 	float SPEED_COEFF <- 1.1;
 	
 	//car
-	int CAR_LANE_OCCUPIED <- 2;
-	float CAR_LENGTH <- 4.5#m;
-	float CAR_MAXSPEED <- 100 #km/#h;
+	int CAR_LANE_OCCUPIED <- 1;
+	float CAR_LENGTH <- 4.5 #m;
+	float CAR_MAXSPEED <- 50 #km/#h;
 	float CAR_ACCELERATION_RATE <- 2.55 #m/#s;
 	float CAR_DECELERATION_RATE <- 4.2 #m/#s;
 	float CAR_PROBA_BLOCK_NODE <- 1.0; 
@@ -46,9 +46,9 @@ global {
 	float BICYCLE_DECELERATION_RATE <- 5.0 #m/#s;
 	
 	//truck
-	int TRUCK_LANE_OCCUPIED <- 2;
+	int TRUCK_LANE_OCCUPIED <- 1;
 	float TRUCK_LENGTH <- 13.0 #m;
-	float TRUCK_MAXSPEED <- 100 #km/#h;
+	float TRUCK_MAXSPEED <- 50 #km/#h;
 	float TRUCK_ACCELERATION_RATE <- 1 #m/#s;
 	float TRUCK_DECELERATION_RATE <- 0.875 #m/#s;
 }

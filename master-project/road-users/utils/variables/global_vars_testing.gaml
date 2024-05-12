@@ -10,21 +10,17 @@ model gobal_vars_testing
 
 global {
 	// show numbers of objects
-	bool show_numbers <- false;
-	
-	// show footway nodes
+	bool show_intersection_numbers <- true;
+	bool show_road_numbers <- true;
+	bool show_footway_numbers <- true;
+	bool show_crossing_numbers <- true;
+
+	// show the circles that represent footway nodes
 	bool show_footway_nodes <- false;
 	
 	// environment and simulation
 	float step <- 0.2#s;
-	float traffic_light_interval parameter: 'Traffic light interval' init: 30#s;
-	float lane_width <- 1.0;
 	float size_environment <- 300#m;
-	float distance_to_intersection <- 8#m;
-	
-	//driver
-	float COLLISION_AVOIDANCE_DURATION <- 0.7#s;
-	float REACTION_TIME <- 1.8#s;
 			
 	// constants for building test environments
 	float x_left_border <- 50.0;
