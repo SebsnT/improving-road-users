@@ -8,6 +8,8 @@
 
 model Road
 
+import "../../utils/variables/road_vars.gaml"
+
 global {
 	// This is for visualization purposes only, 
 	// the width of a vehicle is specified using num_lanes_occupied
@@ -28,7 +30,7 @@ species intersection skills: [intersection_skill] {
 	rgb color;
 	bool is_traffic_signal;
 	string traffic_signal_type;
-	float time_to_change <- 30#s;
+	float time_to_change <- TRAFFIC_LIGHT_INTERVAL;
 	float counter <- rnd(time_to_change);
 	list<road> ways1;
 	list<road> ways2;

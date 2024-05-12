@@ -14,7 +14,7 @@ import "../utils/variables/vehicle_vars.gaml"
 
 species base_vehicle skills: [driving] {
 	intersection target;
-	float lane_width <- 1.0;
+	rgb color;
 	
 	// Create a graph representing the road network, with road lengths as weights
 	graph road_network;
