@@ -64,7 +64,7 @@ global {
 		
 		create intersection from: NODES_SHAPE_FILE 
 			with: [is_traffic_signal::(read("type") = "traffic_signals"), traffic_signal_type::(read("type"))] {
-			time_to_change <- traffic_light_interval;
+			
 		}
 		
 		

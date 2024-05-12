@@ -43,8 +43,12 @@ global {
 		//for traffic light, initialize their counter value (synchronization of traffic lights)
 		ask intersection where each.is_traffic_signal {
 			do initialize;
+		}
+		
+		ask intersection {
 			do declare_spawn_nodes([intersection[0],intersection[4]]);
 			do declare_end_nodes([intersection[2]]);
+			do set_priority_roads();
 		}
 			
 		create car number: num_cars with: (location: one_of(spawn_nodes).location);

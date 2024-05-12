@@ -36,6 +36,7 @@ global {
 		
 		create road with:(num_lanes:1, maxspeed: 50#km/#h, shape:line([intersection[4],intersection[3]]));
 		create road with:(num_lanes:1, maxspeed: 50#km/#h, shape:line([intersection[3],intersection[1]]));
+		create road with:(num_lanes:1, maxspeed: 50#km/#h, shape:line([intersection[1],intersection[3]]));
 		
 		//build the graph from the roads and intersections
 		graph road_network <- as_driving_graph(road,intersection);
@@ -43,8 +44,12 @@ global {
 		//for traffic light, initialize their counter value (synchronization of traffic lights)
 		ask intersection where each.is_traffic_signal {
 			do initialize;
+		}
+		
+		ask intersection {
 			do declare_spawn_nodes([intersection[0],intersection[4]]);
 			do declare_end_nodes([intersection[2]]);
+			do set_priority_roads();
 		}
 			
 		create car number: num_cars with: (location: one_of(spawn_nodes).location);
@@ -70,12 +75,14 @@ experiment give_way  type: gui {
 			species footway_node aspect: base;
 	    	species footway_edge aspect: base;
 		}
-
+	/* 
 		display car_speed_chart type: 2d {
       		chart "Average speed" type: series size: {1, 1} position: {0, 0} x_label: "Cycle" y_label: "Average speed km/h" {
         	data "Car" value: car_avg_speed color: #red;
       		}
     	}
+    	*/
+    	
 	}
 }
 
