@@ -16,6 +16,8 @@ species base_vehicle skills: [driving] {
 	intersection target;
 	int lane_width <- 1;
 	rgb color;
+	bool is_stopping <- false;
+	float counter <- 5#sec;
 	
 	// Create a graph representing the road network, with road lengths as weights
 	graph road_network;
@@ -32,6 +34,8 @@ species base_vehicle skills: [driving] {
 		proba_respect_stops <- PROBA_RESPECT_STOPS;
 		
 		speed_coeff <- SPEED_COEFF;
+		time_headway <- 1#s;
+		politeness_factor <-1.0;
 	}
     
     reflex select_next_path when: current_path = nil {
@@ -73,26 +77,21 @@ species base_vehicle skills: [driving] {
 			do die;
 		}
 	}
-	/* 
-	reflex pedestrian_on_road when: distance_to() {
-		write "x";
-	}
-	*/
 
 	
 	//TODO calculate critical gap
 	
-	//TODO react to pedestrian -> reflex 
 	
-	//TODO speeding
-	/*
-	reflex stop_before_crossing {
-		if(current_target != nil and intersection(current_target).is_green = false ){
-			write "test";
+	reflex stop_at_stop_sign when: current_target != nil and intersection(current_target).traffic_signal_type != nil and intersection(current_target).traffic_signal_type = "stop"{
+		if(distance_to_current_target <= 2){
+			
+			self.speed <-0.0;
+			
+			ask intersection closest_to(self) {
+				do wait_to_cross();
+			}
 		}
 	}
-	*/
-	
 	aspect base {
 		if (current_road != nil) {
 			point pos <- compute_position();
@@ -115,7 +114,6 @@ species bicycle parent: base_vehicle  {
 	float num_of_lanes_occupied <- 0.5;
 
 	init {
-		// TODO research vehicle parameters
 		num_lanes_occupied <- BICYCLES_LANE_OCCUPIED;
 		vehicle_length <- BICYCLE_LENGTH;
 		
@@ -133,7 +131,6 @@ species truck parent: base_vehicle {
 	float num_of_lanes_occupied <- 1.0;
 
 	init {
-		// TODO research vehicle parameters
 		num_lanes_occupied <- TRUCK_LANE_OCCUPIED;
 		vehicle_length <- TRUCK_LENGTH;
 		
@@ -150,13 +147,13 @@ species car parent: base_vehicle{
 	int lane_width <- 1;
 	
 	init {
-		// TODO research vehicle parameters
 		num_lanes_occupied <- CAR_LANE_OCCUPIED;
 		vehicle_length <- CAR_LENGTH;
 		
 		max_speed <- CAR_MAXSPEED;
 		max_acceleration <- CAR_ACCELERATION_RATE;
 		max_deceleration <- CAR_DECELERATION_RATE;
+		speed_coeff <- 1.1;
 	}
 
 }

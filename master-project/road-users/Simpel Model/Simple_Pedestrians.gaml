@@ -154,7 +154,7 @@ species footway_edge skills: [pedestrian_road] parent: base_edge {
 			
 			if(intersects_with_crossing != nil){
 				ask intersection(intersects_with_crossing){
-					do block_roads_in();
+					do wait_to_cross();
 				}
 			}
 			
