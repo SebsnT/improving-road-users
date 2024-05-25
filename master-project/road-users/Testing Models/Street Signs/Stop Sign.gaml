@@ -1,12 +1,12 @@
 /**
-* Name: StopSign
+* Name: Stop_Sign
 * Based on the internal empty template. 
 * Author: Sebastian
 * Tags: 
 */
 
 
-model StopSign
+model Stop_Sign
 
 
 import "../../utils/variables/global_vars_testing.gaml"
@@ -36,6 +36,7 @@ global {
 		
 		create road with:(num_lanes:1, maxspeed: 50#km/#h, shape:line([intersection[4],intersection[3]]));
 		create road with:(num_lanes:1, maxspeed: 50#km/#h, shape:line([intersection[3],intersection[1]]));
+		create road with:(num_lanes:1, maxspeed: 50#km/#h, shape:line([intersection[1],intersection[3]]));
 		
 		//build the graph from the roads and intersections
 		graph road_network <- as_driving_graph(road,intersection);
@@ -48,7 +49,7 @@ global {
 		ask intersection {
 			do declare_spawn_nodes([intersection[0],intersection[4]]);
 			do declare_end_nodes([intersection[2]]);
-			do set_priority_roads();
+			do setup_env();
 		}
 			
 		create car number: num_cars with: (location: one_of(spawn_nodes).location);

@@ -49,7 +49,7 @@ global {
 		ask intersection {
 			do declare_spawn_nodes([intersection[0],intersection[4]]);
 			do declare_end_nodes([intersection[2]]);
-			do set_priority_roads();
+			do setup_env();
 		}
 			
 		create car number: num_cars with: (location: one_of(spawn_nodes).location);

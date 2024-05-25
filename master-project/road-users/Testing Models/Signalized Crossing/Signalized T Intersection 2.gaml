@@ -32,13 +32,13 @@ global {
 		create intersection with: (location: {x_right_border,	y_middle}, traffic_signal_type:"");
 		
 		// 	Top and bottom intersection	
-		create intersection with: (location: {x_middle, 		y_bottom_border}, traffic_signal_type:"");
+		create intersection with: (location: {x_middle, 		y_top_border}, traffic_signal_type:"");
 		
 		// Intersections around crossing streets
 		create intersection with: (location: {x_middle - 5, 	y_middle}, traffic_signal_type:"crossing");
 		create intersection with: (location: {x_middle + 5, 	y_middle}, traffic_signal_type:"crossing");
 		
-		create intersection with: (location: {x_middle, 		y_middle + 5}, traffic_signal_type:"crossing");
+		create intersection with: (location: {x_middle, 		y_middle - 5}, traffic_signal_type:"crossing");
 		
 		// roads
 		create road with:(num_lanes:1, maxspeed: 50#km/#h, shape:line([intersection[0],intersection[4]]));
@@ -73,8 +73,8 @@ global {
 		create footway_node with: (location: {x_right_border,	y_below_middle}, list_connected_index:[6]);
 		
 		// bottom nodes
-		create footway_node with: (location: {x_middle - 5,		y_bottom_border}, list_connected_index:[5]);
-		create footway_node with: (location: {x_middle + 5,		y_bottom_border}, list_connected_index:[6]);
+		create footway_node with: (location: {x_middle - 5,		y_top_border}, list_connected_index:[5]);
+		create footway_node with: (location: {x_middle + 5,		y_top_border}, list_connected_index:[6]);
 		
 		//build the graph from the roads and intersections
 		graph road_network <- as_driving_graph(road,intersection);

@@ -55,14 +55,7 @@ global {
 		create road with:(num_lanes:1, maxspeed: 50#km/#h, shape:line([intersection[1],intersection[8]]));
 		create road with:(num_lanes:1, maxspeed: 50#km/#h, shape:line([intersection[8],intersection[4]]));
 		
-		// test
-		/*
-		create road with:(num_lanes:1, maxspeed: 50#km/#h, shape:line([intersection[1],intersection[5]]));
-		create road with:(num_lanes:1, maxspeed: 50#km/#h, shape:line([intersection[1],intersection[7]]));
 		
-		create road with:(num_lanes:1, maxspeed: 50#km/#h, shape:line([intersection[6],intersection[1]]));
-		create road with:(num_lanes:1, maxspeed: 50#km/#h, shape:line([intersection[8],intersection[1]]));
-		 */
 		// footways
 		 
 		create footway_node with: (location: {x_left_border,	y_above_middle}, list_connected_index:[1]);
@@ -93,8 +86,7 @@ global {
 			do initialize;
 			do declare_spawn_nodes([intersection[0],intersection[3]]);
 			do declare_end_nodes([intersection[2], intersection[4] ]);
-			//do build_attached_points();
-			//do initialize_connected_nodes();
+			do setup_env();
 		}
 		
 		
@@ -108,7 +100,7 @@ experiment singalized_cross_intersection  type: gui {
 	
 	action _init_{
 		create simulation with:[
-			num_cars::10
+			num_cars::5
 			//,num_pedestrians::10
 		];
 	}
