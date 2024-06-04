@@ -69,7 +69,7 @@ experiment give_way  type: gui {
 	
 	action _init_{
 		create simulation with:[
-			num_cars::15
+			num_cars::25
 		];
 	}
 

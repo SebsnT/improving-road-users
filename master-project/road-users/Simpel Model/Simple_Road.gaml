@@ -26,16 +26,24 @@ species road skills: [road_skill] {
 	rgb label_color <- #red;
 	string oneway;
 	string number;
+	bool coming_from_main_road <- false;
 
 	init {
 		number <- string(number_of_road);
 		number_of_road <- number_of_road + 1;
 	}
+	
+	
+	action set_coming_from_main_road {
+			if(intersection(source_node).priority_roads != []){
+				self.coming_from_main_road <- true;
+		}
+	}
 
 	aspect base {
 		draw shape color: color end_arrow: 1;
 		if (show_road_numbers) {
-			draw number color: label_color font: font("Helvetica", 15, #plain);
+			draw number color: label_color font: font("Helvetica", 15, #plain) at: location + {rnd(0),rnd(3)};
 		}
 
 	}

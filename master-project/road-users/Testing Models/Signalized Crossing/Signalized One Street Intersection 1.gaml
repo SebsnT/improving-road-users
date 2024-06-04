@@ -70,7 +70,7 @@ global {
 		}
 			
 		create car number: num_cars with: (location: one_of(spawn_nodes).location);
-		create pedestrian number: num_pedestrians with: (location: one_of(footway_edge[0],footway_edge[1],footway_edge[3],footway_edge[4]).location);
+		create pedestrian number: num_pedestrians with: (location: one_of(footway_edge[0],footway_edge[2],footway_edge[4],footway_edge[7]).location);
 	}		
 }
 
@@ -79,7 +79,7 @@ experiment signalized_one_street_1  type: gui {
 	action _init_{
 		create simulation with:[
 			num_cars::10
-			//,num_pedestrians::10
+			,num_pedestrians::20
 		];
 	}
 

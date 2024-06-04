@@ -32,6 +32,7 @@ global {
 		
 		create intersection with: (location: {x_middle, 		y_middle - 5}, is_traffic_signal: true, traffic_signal_type:"stop");
 		create intersection with: (location: {x_middle, 		y_middle - 100},traffic_signal_type:"");
+
 		
 		// roads
 		create road with:(num_lanes:1, maxspeed: 50#km/#h, shape:line([intersection[0],intersection[1]]));
@@ -69,7 +70,7 @@ experiment stop_sign_intersection type: gui {
 	
 	action _init_{
 		create simulation with:[
-			num_cars::15
+			num_cars::20
 		];
 	}
 

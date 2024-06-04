@@ -26,21 +26,21 @@ global {
 		// intersections
 		
 		// Middle Intersections
-		create intersection with: (location: {x_left_border, 	y_middle}, traffic_signal_type:"", number:"0");
-		create intersection with: (location: {x_middle, 	 	y_middle}, is_traffic_signal: true, traffic_signal_type:"traffic_signals", number:"1");
-		create intersection with: (location: {x_right_border,	y_middle}, traffic_signal_type:"", number:"2");
+		create intersection with: (location: {x_left_border, 	y_middle}, traffic_signal_type:"");
+		create intersection with: (location: {x_middle, 	 	y_middle}, is_traffic_signal: true, traffic_signal_type:"traffic_signals");
+		create intersection with: (location: {x_right_border,	y_middle}, traffic_signal_type:"");
 		
 		// 	Top and bottom intersection	
-		create intersection with: (location: {x_middle, y_top_border}, traffic_signal_type:"", number:"3"); 
-		create intersection with: (location: {x_middle, y_bottom_border}, traffic_signal_type:"", number:"4");
+		create intersection with: (location: {x_middle, 		y_top_border}, traffic_signal_type:""); 
+		create intersection with: (location: {x_middle, 		y_bottom_border}, traffic_signal_type:"");
 		
 		// Intersections around crossing streets
-		create intersection with: (location: {x_middle - 5, y_middle}, traffic_signal_type:"crossing", number:"5");
-		create intersection with: (location: {x_middle + 5, y_middle}, traffic_signal_type:"crossing", number:"6");
+		create intersection with: (location: {x_middle - 5, 	y_middle}, traffic_signal_type:"crossing");
+		create intersection with: (location: {x_middle + 5, 	y_middle}, traffic_signal_type:"crossing");
 		
 		
-		create intersection with: (location: {x_middle, y_middle - 5}, traffic_signal_type:"crossing", number:"7");
-		create intersection with: (location: {x_middle, y_middle + 5}, traffic_signal_type:"crossing", number:"8");
+		create intersection with: (location: {x_middle, 		y_middle - 5}, traffic_signal_type:"crossing");
+		create intersection with: (location: {x_middle, 		y_middle + 5}, traffic_signal_type:"crossing");
 		
 		// roads
 		// horizontal drive
@@ -100,7 +100,7 @@ experiment singalized_cross_intersection  type: gui {
 	
 	action _init_{
 		create simulation with:[
-			num_cars::5
+			num_cars::10
 			//,num_pedestrians::10
 		];
 	}
