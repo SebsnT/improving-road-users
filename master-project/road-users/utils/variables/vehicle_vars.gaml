@@ -18,14 +18,17 @@ global {
 	
 	// right or left side driving
 	bool RIGHT_SIDE_DRIVING <- true;
+	int LANE_WIDTH <- 1;
 	
 	// Min distances
-	float MIN_SAFETY_DISTANCE <- 1.5 #m;
-	float MIN_SECURITY_DISTANCE <- 1.5#m;
+	float MIN_SAFETY_DISTANCE <- 2 #m;
+	float MIN_SECURITY_DISTANCE <- 2#m;
 	
 	// Probabilites to respect norms
-	float PROBA_RESPECT_PRIORITIES <- 1.0;
-	list<float> PROBA_RESPECT_STOPS <- [1.0,1.0,1.0,1.0,1.0,1.0,1.0];
+	float POLITENESS_FACTOR <- 0.95;
+	float PROBA_RESPECT_PRIORITIES <- 0.95;
+	list<float> PROBA_RESPECT_STOPS <- [0.95];
+	float TIME_HEADWAY <- 1#s;
 	
 	// Percentage that drivers are willing to drive over the speed limit (1.1 means 10 percent)
 	float SPEED_COEFF <- 1.10;

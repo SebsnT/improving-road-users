@@ -10,6 +10,15 @@ model global_vars
 
 global {
 	
+	// show numbers of objects
+	bool show_intersection_numbers <- true;
+	bool show_road_numbers <- true;
+	bool show_footway_numbers <- false;
+	bool show_crossing_numbers <- false;
+
+	// show the circles that represent footway nodes
+	bool show_footway_nodes <- false;
+	
 	// environment and simulation
 	float step <- 0.2#s;
 	float size_environment <- 1#km;
