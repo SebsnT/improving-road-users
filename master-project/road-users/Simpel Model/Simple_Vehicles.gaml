@@ -60,7 +60,9 @@ species base_vehicle skills: [driving] {
 	reflex dead_end when: distance_to_goal < 2 {
 		if (final_target != nil and current_target = final_target and length(intersection(final_target).roads_out) <= 1) {
 			do unregister;
-			create species(self) with: (location: one_of(spawn_nodes).location);
+			if(spawn_nodes != []){
+				create species(self) with: (location: one_of(spawn_nodes).location);
+			}
 			do die;
 		} }
 

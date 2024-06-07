@@ -43,7 +43,7 @@ global {
 	
 	//bicycle
 	int BICYCLES_LANE_OCCUPIED <- 1;
-	float BICYCLE_LENGTH <- 1.73 #m;
+	float BICYCLE_LENGTH <- 1.75 #m;
 	float BICYCLE_MAXSPEED <- 25 #km/#h;
 	float BICYCLE_ACCELERATION_RATE <- 0.5 #m/#s;
 	float BICYCLE_DECELERATION_RATE <- 5.0 #m/#s;

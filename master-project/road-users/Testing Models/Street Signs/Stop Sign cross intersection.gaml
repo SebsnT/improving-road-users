@@ -66,7 +66,7 @@ global {
 	}		
 }
 
-experiment stop_sign_intersection type: gui {
+experiment stop_sign_cross_intersection type: gui {
 	
 	action _init_{
 		create simulation with:[

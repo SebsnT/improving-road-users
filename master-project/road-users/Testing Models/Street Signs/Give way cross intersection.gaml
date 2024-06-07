@@ -65,7 +65,7 @@ global {
 	}		
 }
 
-experiment give_way  type: gui {
+experiment give_way_cross_intersection  type: gui {
 	
 	action _init_{
 		create simulation with:[

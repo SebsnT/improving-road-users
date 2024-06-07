@@ -71,10 +71,11 @@ global {
 		create pedestrian number: num_pedestrians with: (location: one_of(footway_edge[0], footway_edge[1], footway_edge[3], footway_edge[4]).location);
 	} }
 
-experiment stop_sign_cross_intersection type: gui {
+experiment stop_sign_cross_intersection_all_way type: gui {
 
 	action _init_ {
-		create simulation with: [num_cars::20
+		create simulation with: [
+			num_cars::10
 		//,num_pedestrians::10
 ];
 	}

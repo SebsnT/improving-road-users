@@ -51,7 +51,7 @@ global {
 		create car number: num_cars with: (location: one_of(spawn_nodes).location);
 	} }
 
-experiment stop_sign type: gui {
+experiment stop_sign_free_drive type: gui {
 
 	action _init_ {
 		create simulation with: [num_cars::15];

@@ -7,6 +7,7 @@
 model Simpel_Road
 
 import "../utils/variables/road_vars.gaml"
+import "./Simple_Vehicles.gaml"
 
 global {
 	list<intersection> end_nodes;
@@ -27,23 +28,53 @@ species road skills: [road_skill] {
 	string oneway;
 	string number;
 	bool coming_from_main_road <- false;
+	float traffic_density;
+	float road_occupied;
+	float all_segments_length;
 
 	init {
 		number <- string(number_of_road);
 		number_of_road <- number_of_road + 1;
+		
+	}
+
+	action set_coming_from_main_road {
+		if (intersection(source_node).priority_roads != []) {
+			self.coming_from_main_road <- true;
+		}
+
+	}
+
+	action calculate_road_occupied(list vehicles) {
+		write vehicles;
+		float occupied;
+		loop v over: vehicles  {
+				 occupied <- occupied + base_vehicle(v).vehicle_length;
+		}
+		
+		 road_occupied <- occupied / all_segments_length; 
 	}
 	
+	 action setup_roads {
+		do set_all_segments_length();
+	}
 	
-	action set_coming_from_main_road {
-			if(intersection(source_node).priority_roads != []){
-				self.coming_from_main_road <- true;
+	action set_all_segments_length{
+		loop s over: to_list(segment_lengths) {
+			all_segments_length <- all_segments_length + float(s);
 		}
+			
+		
+	}
+
+	reflex calculate_traffic_density when: all_agents != nil and all_agents !=[] {
+		do calculate_road_occupied(all_agents);
 	}
 
 	aspect base {
 		draw shape color: color end_arrow: 1;
 		if (show_road_numbers) {
-			draw number color: label_color font: font("Helvetica", 15, #plain) at: location + {rnd(0),rnd(3)};
+			draw number color: label_color font: font("Helvetica", 15, #plain) at: location + {rnd(0), rnd(3)};
 		}
 
 	}
@@ -215,6 +246,7 @@ species intersection skills: [intersection_skill] {
 		do set_priority_nodes();
 		do set_priority_roads();
 		do set_traffic_signal_connected_crossings();
+		
 	}
 
 	// Declare where vehicles spawn and despawn
