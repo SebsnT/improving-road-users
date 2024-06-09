@@ -4,15 +4,13 @@
 * Author: Sebastian
 * Tags: 
 */
-
-
 model road_vars
 
 global {
-	float TRAFFIC_LIGHT_INTERVAL <- 30#s;
-	
-	float TIME_TO_UNBLOCK <- 1#s;
-	
+
+	// road
+	float TRAFFIC_LIGHT_INTERVAL <- 30 #s;
+	float TIME_TO_UNBLOCK <- 1 #s;
 	float road_width <- 8.0;
 	float lane_width <- 4.0;
 }
