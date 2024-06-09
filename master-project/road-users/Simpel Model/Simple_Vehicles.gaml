@@ -14,6 +14,8 @@ species base_vehicle skills: [driving] {
 	rgb color;
 	bool is_stopping <- false;
 	float counter <- 5 #sec;
+	bool despawn_vehicles;
+	string fuel_type;
 
 	// Create a graph representing the road network, with road lengths as weights
 	graph road_network;
@@ -57,12 +59,13 @@ species base_vehicle skills: [driving] {
 	}
 
 	// testing puposes for dead ends only
-	reflex dead_end when: distance_to_goal < 2 {
+	reflex dead_end when: distance_to_goal < 2 and despawn_vehicles {
 		if (final_target != nil and current_target = final_target and length(intersection(final_target).roads_out) <= 1) {
 			do unregister;
-			if(spawn_nodes != []){
+			if (spawn_nodes != []) {
 				create species(self) with: (location: one_of(spawn_nodes).location);
 			}
+
 			do die;
 		} }
 
@@ -87,16 +90,16 @@ species base_vehicle skills: [driving] {
 
 	} }
 
-species bicycle parent: base_vehicle {
-	rgb color <- #yellow;
+species car parent: base_vehicle {
+	rgb color <- #red;
 
-	init {
+	init { 
 		lane_width <- LANE_WIDTH;
-		num_lanes_occupied <- BICYCLES_LANE_OCCUPIED;
-		vehicle_length <- BICYCLE_LENGTH;
-		max_speed <- BICYCLE_MAXSPEED;
-		max_acceleration <- BICYCLE_ACCELERATION_RATE;
-		max_deceleration <- BICYCLE_DECELERATION_RATE;
+		num_lanes_occupied <- CAR_LANE_OCCUPIED;
+		vehicle_length <- rnd(CAR_MIN_LENGTH, CAR_MAX_LENGTH, 1.0);
+		max_speed <- CAR_MAXSPEED;
+		max_acceleration <- CAR_ACCELERATION_RATE;
+		max_deceleration <- CAR_DECELERATION_RATE;
 		speed_coeff <- SPEED_COEFF;
 	}
 
@@ -108,7 +111,7 @@ species truck parent: base_vehicle {
 	init {
 		lane_width <- LANE_WIDTH;
 		num_lanes_occupied <- TRUCK_LANE_OCCUPIED;
-		vehicle_length <- TRUCK_LENGTH;
+		vehicle_length <- one_of(TRUCK_POWER_DRIVE_LENGTH,TRUCK_POWER_HEAVY_TRAILER);
 		max_speed <- TRUCK_MAXSPEED;
 		max_acceleration <- TRUCK_ACCELERATION_RATE;
 		max_deceleration <- TRUCK_DECELERATION_RATE;
@@ -117,19 +120,22 @@ species truck parent: base_vehicle {
 
 }
 
-species car parent: base_vehicle {
-	rgb color <- #red;
+species bicycle parent: base_vehicle {
+	rgb color <- #yellow;
 
 	init {
 		lane_width <- LANE_WIDTH;
-		num_lanes_occupied <- CAR_LANE_OCCUPIED;
-		vehicle_length <- CAR_LENGTH;
-		max_speed <- CAR_MAXSPEED;
-		max_acceleration <- CAR_ACCELERATION_RATE;
-		max_deceleration <- CAR_DECELERATION_RATE;
-		speed_coeff <- SPEED_COEFF;
+		num_lanes_occupied <- BICYCLES_LANE_OCCUPIED;
+		vehicle_length <- BICYCLE_LENGTH;
+		max_speed <- rnd(BICYCLE_MIN_SPEED, BICYCLE_MAX_SPEED, 1.0 #km/ #h);
+		max_acceleration <- rnd(BICYCLE_MIN_ACCLERATION, BICYCLE_MAX_ACCLERATION, 1.0 #m/ #s);
+		max_deceleration <- rnd(BICYCLE_MIN_ACCLERATION, BICYCLE_MAX_ACCLERATION, 1.0 #m/ #s);
 	}
 
 }
+
+
+
+
 
 

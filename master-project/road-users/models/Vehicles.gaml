@@ -95,13 +95,12 @@ species bicycle parent: base_vehicle  {
 	rgb color <- #yellow;
 	
 	init {
-		// TODO research vehicle parameters
 		num_lanes_occupied <- BICYCLES_LANE_OCCUPIED;
 		vehicle_length <- BICYCLE_LENGTH;
 		
-		max_speed <- BICYCLE_MAXSPEED;
-		max_acceleration <- BICYCLE_ACCELERATION_RATE;
-		max_deceleration <- BICYCLE_DECELERATION_RATE;
+		max_speed <- rnd(10.0, 30.0, 1.0) #km/#h;
+		max_acceleration <- rnd(BICYCLE_MIN_ACCLERATION, BICYCLE_MAX_ACCLERATION, 1.0 #m/ #s);
+		max_deceleration <- rnd(BICYCLE_MIN_ACCLERATION, BICYCLE_MAX_ACCLERATION, 1.0 #m/ #s);
 	}
 }
 
@@ -110,9 +109,8 @@ species truck parent: base_vehicle {
 	rgb color <- #blue;
 
 	init {
-		// TODO research vehicle parameters
 		num_lanes_occupied <- TRUCK_LANE_OCCUPIED;
-		vehicle_length <- TRUCK_LENGTH;
+		vehicle_length <- one_of(TRUCK_POWER_DRIVE_LENGTH,TRUCK_POWER_HEAVY_TRAILER);
 		
 		max_speed <- TRUCK_MAXSPEED;
 		max_acceleration <- TRUCK_ACCELERATION_RATE;
@@ -125,9 +123,8 @@ species car parent: base_vehicle{
 	rgb color <- #red;
 	
 	init {
-		// TODO research vehicle parameters
 		num_lanes_occupied <- CAR_LANE_OCCUPIED;
-		vehicle_length <- CAR_LENGTH;
+		vehicle_length <- rnd(CAR_MIN_LENGTH, CAR_MAX_LENGTH, 1.0);
 		
 		max_speed <- CAR_MAXSPEED;
 		max_acceleration <- CAR_ACCELERATION_RATE;

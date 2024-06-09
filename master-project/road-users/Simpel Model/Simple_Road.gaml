@@ -16,6 +16,7 @@ global {
 	// bool to show number of objects
 	bool show_road_numbers;
 	bool show_intersection_numbers;
+	bool measure_density;
 
 	// bool to keep track of number of objects
 	int number_of_road <- 0;
@@ -29,13 +30,11 @@ species road skills: [road_skill] {
 	string number;
 	bool coming_from_main_road <- false;
 	float traffic_density;
-	float road_occupied;
 	float all_segments_length;
 
 	init {
 		number <- string(number_of_road);
 		number_of_road <- number_of_road + 1;
-		
 	}
 
 	action set_coming_from_main_road {
@@ -45,30 +44,32 @@ species road skills: [road_skill] {
 
 	}
 
-	action calculate_road_occupied(list vehicles) {
-		write vehicles;
+	action calculate_road_occupied (list vehicles) {
 		float occupied;
-		loop v over: vehicles  {
-				 occupied <- occupied + base_vehicle(v).vehicle_length;
+		loop v over: vehicles {
+			occupied <- occupied + base_vehicle(v).vehicle_length;
 		}
-		
-		 road_occupied <- occupied / all_segments_length; 
+
+		traffic_density <- occupied / all_segments_length;
 	}
-	
-	 action setup_roads {
+
+	action setup_roads {
 		do set_all_segments_length();
 	}
-	
-	action set_all_segments_length{
+
+	action set_all_segments_length {
 		loop s over: to_list(segment_lengths) {
 			all_segments_length <- all_segments_length + float(s);
 		}
-			
-		
+
 	}
 
-	reflex calculate_traffic_density when: all_agents != nil and all_agents !=[] {
+	reflex calculate_traffic_density when: all_agents != nil and all_agents != [] and measure_density = true {
 		do calculate_road_occupied(all_agents);
+	}
+
+	reflex reset_traffic_density when: all_agents = [] {
+		traffic_density <- 0.0;
 	}
 
 	aspect base {
@@ -246,7 +247,6 @@ species intersection skills: [intersection_skill] {
 		do set_priority_nodes();
 		do set_priority_roads();
 		do set_traffic_signal_connected_crossings();
-		
 	}
 
 	// Declare where vehicles spawn and despawn

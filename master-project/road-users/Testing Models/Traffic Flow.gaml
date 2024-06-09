@@ -17,6 +17,7 @@ global {
 	float car_avg_speed -> {mean(car collect (each.speed)) * 3.6}; // average speed stats
 	float truck_avg_speed -> {mean(truck collect (each.speed)) * 3.6}; // average speed stats
 	float bicycle_avg_speed -> {mean(bicycle collect (each.speed)) * 3.6}; // average speed stats
+	float traffic_flow -> {0.0}; 
 	float size_environment <- 360 #m;
 
 	reflex stop_simulation when: length(car) = 0 and length(truck) = 0 and length(bicycle) = 0 {
@@ -87,16 +88,9 @@ experiment straight_road type: gui {
 
 		}
 
-		// TODO traffic density
-
 		// TODO traffic flow
 
 		//monitor "Average car speed" value: car_avg_speed with_precision 2 color: #red;
-		//monitor "Average truck speed" value: truck_avg_speed with_precision 2 color: #blue;
-
-		//monitor "Average bicycle speed" value: bicycle_avg_speed with_precision 2 color: #yellow;
-
-		//monitor "Average car speed" value: mean(car_avg_speed) with_precision 2 color: #red;
 
 	}
 

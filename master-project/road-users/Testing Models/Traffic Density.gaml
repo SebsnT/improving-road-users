@@ -4,10 +4,7 @@
 * Author: PC
 * Tags: 
 */
-
-
 model TrafficDensity
-
 
 import "../utils/variables/global_vars_testing.gaml"
 import "../Simpel Model/Simple_Vehicles.gaml"
@@ -20,7 +17,15 @@ global {
 	float car_avg_speed -> {mean(car collect (each.speed)) * 3.6}; // average speed stats
 	float truck_avg_speed -> {mean(truck collect (each.speed)) * 3.6}; // average speed stats
 	float bicycle_avg_speed -> {mean(bicycle collect (each.speed)) * 3.6}; // average speed stats
+	float traffic_densiy -> {mean(road collect (each.traffic_density))}; // average traffic density
 	float size_environment <- 360 #m;
+
+	// vehicles should not despawn as to test density
+	bool despawn_vehciles -> false;
+
+	// set distances to zero to test if density can reach 100
+	float MIN_SAFETY_DISTANCE <- 0.0 #m;
+	float MIN_SECURITY_DISTANCE <- 0.0 #m;
 
 	reflex stop_simulation when: length(car) = 0 and length(truck) = 0 and length(bicycle) = 0 {
 		do pause;
@@ -28,38 +33,35 @@ global {
 
 	init {
 
-		// intersections
+	// intersections
 		create intersection with: (location: {x_left_border, y_middle}, traffic_signal_type: "");
 		create intersection with: (location: {size_environment - 10, y_middle}, traffic_signal_type: "");
-		create intersection with: (location: {x_left_border, y_middle + 10}, traffic_signal_type: "");
-		create intersection with: (location: {size_environment - 10, y_middle + 10}, traffic_signal_type: "");
-		create intersection with: (location: {x_left_border, y_middle + 20}, traffic_signal_type: "");
-		create intersection with: (location: {size_environment - 10, y_middle + 20}, traffic_signal_type: "");
 
 		// roads
 		create road with: (num_lanes: 1, maxspeed: 50 #km / #h, shape: line([intersection[0], intersection[1]]));
-		create road with: (num_lanes: 1, maxspeed: 50 #km / #h, shape: line([intersection[2], intersection[3]]));
-		create road with: (num_lanes: 1, maxspeed: 50 #km / #h, shape: line([intersection[4], intersection[5]]));
 
 		//build the graph from the roads and intersections
 		graph road_network <- as_driving_graph(road, intersection);
 		ask intersection {
 			do initialize;
-			do declare_spawn_nodes([]);
-			do declare_end_nodes([intersection[1], intersection[3], intersection[5]]);
+			do declare_spawn_nodes([intersection[0]]);
+			do declare_end_nodes([intersection[1]
+			//, intersection[3], intersection[5]
+]);
+		}
+
+		ask road {
+			do setup_roads();
 		}
 
 		create car number: num_cars with: (location: intersection[0].location);
-		create truck number: num_trucks with: (location: intersection[2].location);
-		create bicycle number: num_bicycles with: (location: intersection[4].location);
-		
-		save [] to: "../data/testing/average_speed_test.csv" format: "csv" rewrite: true;
+		save [] to: "../data/testing/traffic_density_test.csv" format: "csv" rewrite: true;
 	} }
 
-experiment straight_road type: gui {
+experiment traffic_density type: gui {
 
 	action _init_ {
-		create simulation with: [num_cars::1, num_trucks::1, num_bicycles::1];
+		create simulation with: [num_cars::100];
 	}
 
 	output synchronized: true {
@@ -79,29 +81,17 @@ experiment straight_road type: gui {
 				write time color: #red;
 			}
 
-			chart "Average speed" type: series size: {1, 1} position: {0, 0} x_label: "Cycle" y_label: "Average speed km/h" {
-				data "Car" value: car_avg_speed color: #red;
-				data "Truck" value: truck_avg_speed color: #blue;
-				data "Bicycle" value: bicycle_avg_speed color: #yellow;
+			chart "Traffic Density" type: series size: {1, 1} position: {0, 0} x_label: "Cycle" y_label: "Average speed km/h" {
+				data "Traffic Density in percent" value: traffic_densiy * 100 color: #red;
 			}
 
 		}
 
-		// TODO traffic density
-
-		// TODO traffic flow
-
-		//monitor "Average car speed" value: car_avg_speed with_precision 2 color: #red;
-		//monitor "Average truck speed" value: truck_avg_speed with_precision 2 color: #blue;
-
-		//monitor "Average bicycle speed" value: bicycle_avg_speed with_precision 2 color: #yellow;
-
-		//monitor "Average car speed" value: mean(car_avg_speed) with_precision 2 color: #red;
-
+		//monitor "Traffic_density" value: traffic_densiy with_precision 2 color: #red;
 	}
 
 	reflex save_result {
-		save [time, car_avg_speed, truck_avg_speed, bicycle_avg_speed] to: "../data/testing/average_speed_test.csv" format: "csv" rewrite: false;
+		save [time, traffic_densiy] to: "../data/testing/traffic_density_test.csv" format: "csv" rewrite: false;
 	}
 
 }
