@@ -6,8 +6,8 @@
 */
 model Simple_Pedestrians
 
-import "./Simple_Road.gaml"
 import "../utils/variables/pedestrian_vars.gaml"
+import "./Simple_Road.gaml"
 
 global {
 	graph pedestrian_network;
@@ -25,20 +25,23 @@ species pedestrian skills: [moving] {
 	point target;
 	int staying_counter;
 	bool is_crossing;
+	bool is_waiting;
+	float waiting_time <- rnd(1.0, 3.0, 0.1) #s;
+	float waiting_counter <- 0 #s;
+	float walking_speed <- gauss(4, 1) #km / #h;
+	float crossing_speed <- walking_speed * 1.1;
 
 	init {
-		speed <- WALKING_SPEED;
+		speed <- walking_speed;
 	}
 
 	reflex new_target when: target = nil {
 		target <- any_location_in(one_of(footway_edge));
 	}
 
-	// TODO implement that pedestrian stops shortly before crossing
-
-
 	// cross road with higher speed
 	reflex cross_road when: footway_edge(current_edge) != nil and footway_edge(current_edge).intersects_with_crossing != nil and is_crossing = false {
+		is_waiting <- true;
 		is_crossing <- true;
 		do set_speed_for_crossing();
 	}
@@ -49,15 +52,26 @@ species pedestrian skills: [moving] {
 		do set_speed_for_walking();
 	}
 
+	reflex wait_before_crossing when: is_crossing = true and is_waiting = true {
+		speed <- 0.0 #m / #s;
+		waiting_counter <- waiting_counter + step;
+		if (waiting_counter >= waiting_time #s) {
+			waiting_counter <- 0 #s;
+			is_waiting <- false;
+			speed <- crossing_speed;
+		}
+
+	}
+
 	// setters
 	action set_speed_for_crossing {
-		speed <- CROSSING_SPEED;
+		speed <- crossing_speed;
 	}
 
 	action set_speed_for_walking {
-		speed <- WALKING_SPEED;
+		speed <- walking_speed;
 	}
-	
+
 	reflex move when: target != nil {
 		do wander on: pedestrian_network;
 		if (location = target) {
@@ -76,7 +90,6 @@ species pedestrian skills: [moving] {
 	 */
 	}
 
-	//TODO calculate critical gap
 	aspect base {
 		draw triangle(1.0) color: color rotate: heading + 90 border: #black;
 	}
