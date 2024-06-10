@@ -19,9 +19,12 @@ global {
 	float bicycle_avg_speed -> {mean(bicycle collect (each.speed)) * 3.6}; // average speed stats
 	float traffic_densiy -> {mean(road collect (each.traffic_density))}; // average traffic density
 	float size_environment <- 360 #m;
+	
+	// measure density of the road
+	bool measure_density <- true;
 
 	// vehicles should not despawn as to test density
-	bool despawn_vehciles -> false;
+	bool despawn_vehicles -> false;
 
 	// set distances to zero to test if density can reach 100
 	float MIN_SAFETY_DISTANCE <- 0.0 #m;
@@ -45,9 +48,7 @@ global {
 		ask intersection {
 			do initialize;
 			do declare_spawn_nodes([intersection[0]]);
-			do declare_end_nodes([intersection[1]
-			//, intersection[3], intersection[5]
-]);
+			do declare_end_nodes([intersection[1]]);
 		}
 
 		ask road {

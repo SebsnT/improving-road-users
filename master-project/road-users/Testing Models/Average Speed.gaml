@@ -25,7 +25,7 @@ global {
 
 	init {
 
-	// intersections
+		// intersections
 		create intersection with: (location: {x_left_border, y_middle}, traffic_signal_type: "");
 		create intersection with: (location: {size_environment - 10, y_middle}, traffic_signal_type: "");
 		create intersection with: (location: {x_left_border, y_middle + 10}, traffic_signal_type: "");
@@ -83,17 +83,6 @@ experiment straight_road type: gui {
 			}
 
 		}
-
-		// TODO traffic density
-
-		// TODO traffic flow
-
-		//monitor "Average car speed" value: car_avg_speed with_precision 2 color: #red;
-		//monitor "Average truck speed" value: truck_avg_speed with_precision 2 color: #blue;
-
-		//monitor "Average bicycle speed" value: bicycle_avg_speed with_precision 2 color: #yellow;
-
-		//monitor "Average car speed" value: mean(car_avg_speed) with_precision 2 color: #red;
 
 	}
 
