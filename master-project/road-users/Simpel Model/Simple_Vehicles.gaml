@@ -130,7 +130,7 @@ species bicycle parent: base_vehicle {
 	init {
 		lane_width <- LANE_WIDTH;
 		num_lanes_occupied <- BICYCLES_LANE_OCCUPIED;
-		vehicle_length <- BICYCLE_LENGTH;
+		vehicle_length <- rnd(BICYCLE_MIN_LENGTH,BICYCLE_MAX_LENGTH, 1.0 #m);
 		max_speed <- rnd(BICYCLE_MIN_SPEED, BICYCLE_MAX_SPEED, 1.0 #km / #h);
 		max_acceleration <- rnd(BICYCLE_MIN_ACCLERATION, BICYCLE_MAX_ACCLERATION, 1.0 #m / #s);
 		max_deceleration <- rnd(BICYCLE_MIN_ACCLERATION, BICYCLE_MAX_ACCLERATION, 1.0 #m / #s);

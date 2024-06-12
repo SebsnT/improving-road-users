@@ -26,7 +26,8 @@ species pedestrian skills: [moving] {
 	int staying_counter;
 	bool is_crossing;
 	bool is_waiting;
-	float waiting_time <- rnd(1.0, 3.0, 0.1) #s;
+	bool has_waited;
+	float waiting_time <- rnd(MIN_CROSSING_WAITING_TIME, MAX_CROSSING_WAITING_TIME, 0.1) #s;
 	float waiting_counter <- 0 #s;
 	float walking_speed <- gauss(4, 1) #km / #h;
 	float crossing_speed <- walking_speed * 1.1;
@@ -58,6 +59,7 @@ species pedestrian skills: [moving] {
 		if (waiting_counter >= waiting_time #s) {
 			waiting_counter <- 0 #s;
 			is_waiting <- false;
+			has_waited <- true;
 			speed <- crossing_speed;
 		}
 

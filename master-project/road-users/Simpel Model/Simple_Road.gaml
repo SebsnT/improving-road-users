@@ -134,7 +134,10 @@ species intersection skills: [intersection_skill] {
 	}
 
 	action block_roads_in (list<road> roads) {
-		stop <- stop + roads;
+		if!(stop contains roads) {
+			stop <- stop + roads;
+		}
+
 		intersection_blocked <- true;
 	}
 

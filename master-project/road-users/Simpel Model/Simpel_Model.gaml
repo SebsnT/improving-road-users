@@ -265,7 +265,7 @@ global {
 		create pedestrian number: num_pedestrians with: (location: one_of(footway_edge).location);
 	} }
 
-experiment test_city type: gui {
+experiment simple_test_city type: gui {
 
 	action _init_ {
 		create simulation with: [num_cars::NUM_CARS
