@@ -13,7 +13,7 @@ global {
 	bool show_road_numbers <- false;
 	bool show_footway_numbers <- false;
 	bool show_crossing_numbers <- false;
-	bool measure_density <- true;
+	bool measure_density <- false;
 	bool despawn_vehicles <- true;
 
 	// show the circles that represent footway nodes

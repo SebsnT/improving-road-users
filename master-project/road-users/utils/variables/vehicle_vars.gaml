@@ -60,7 +60,9 @@ global {
 	// -------------------------------------------------------
 	//bicycle
 	int BICYCLES_LANE_OCCUPIED <- 1;
-	float BICYCLE_LENGTH <- 1.75 #m;
+	
+	float BICYCLE_MIN_LENGTH <- 1.70 #m;
+	float BICYCLE_MAX_LENGTH <- 1.80 #m;
 
 	// min and max speed
 	float BICYCLE_MIN_SPEED <- 10 #km / #h;
