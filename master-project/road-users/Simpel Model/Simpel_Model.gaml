@@ -8,13 +8,14 @@ model SimpleModel
 
 import "Simple_Vehicles.gaml"
 import "Simple_Pedestrians.gaml"
-import "../utils/variables/global_vars.gaml"
+import "../utils/variables/global_vars_testing.gaml"
 
 global {
 	int num_cars;
 	int num_trucks;
 	int num_bicycles;
 	int num_pedestrians;
+	float size_environment <- 1 #km;
 	geometry shape <- square(1000);
 	graph road_network;
 
@@ -49,8 +50,8 @@ global {
 
 	// Middle line
 
-	// left border
-		create intersection with: (location: {left_border, y_middle_road}, is_traffic_signal: true, traffic_signal_type: "");
+		// left border
+		create intersection with: (location: {left_border, y_middle_road}, traffic_signal_type: "");
 
 		// left traffic light
 		create intersection with: (location: {x_left_intersection, y_middle_road}, is_traffic_signal: true, traffic_signal_type: "traffic_signals");
@@ -85,19 +86,19 @@ global {
 		create intersection with: (location: {x_left_intersection, y_middle_road + 100}, is_traffic_signal: true, traffic_signal_type: "crossing");
 
 		// Lower Horizontal lines
-		create intersection with: (location: {x_left_intersection, y_lower_road});
+		create intersection with: (location: {x_left_intersection, y_lower_road}, traffic_signal_type: "");
 		create intersection with: (location: {x_left_intersection, y_lower_road + 5}, is_traffic_signal: true, traffic_signal_type: "crossing");
-		create intersection with: (location: {x_left_intersection + 5, y_lower_road}, is_traffic_signal: true, traffic_signal_type: "give_way");
-		create intersection with: (location: {x_right_intersection, y_lower_road});
+		create intersection with: (location: {x_left_intersection + 5, y_lower_road}, is_traffic_signal: true, traffic_signal_type: "stop");
+		create intersection with: (location: {x_right_intersection, y_lower_road}, traffic_signal_type: "");
 		create intersection with: (location: {x_right_intersection, y_lower_road - 5}, is_traffic_signal: true, traffic_signal_type: "crossing");
 		create intersection with: (location: {x_right_intersection, y_lower_road + 5}, is_traffic_signal: true, traffic_signal_type: "crossing");
-		create intersection with: (location: {x_right_intersection - 5, y_lower_road}, is_traffic_signal: true, traffic_signal_type: "stop");
+		create intersection with: (location: {x_right_intersection - 5, y_lower_road}, is_traffic_signal: true, traffic_signal_type: "give_way");
 
 		//create intersection with: (location: {x_right_intersection, y_middle_road}, is_traffic_signal: true, traffic_signal_type:"crossing");
 
 		// Lowest Horizontal line
-		create intersection with: (location: {x_left_intersection, lower_border});
-		create intersection with: (location: {x_right_intersection, lower_border});
+		create intersection with: (location: {x_left_intersection, lower_border}, traffic_signal_type: "");
+		create intersection with: (location: {x_right_intersection, lower_border}, traffic_signal_type: "");
 
 		//----------------------------------------------------------------------
 		// Connect Roads
@@ -203,13 +204,12 @@ global {
 		road_network <- as_driving_graph(road, intersection);
 
 		//for traffic light, initialize their counter value (synchronization of traffic lights)
-		ask intersection where each.is_traffic_signal {
-			do initialize;
+		ask intersection  {
 			do setup_env();
 		}
 		
 		ask road {
-			do set_coming_from_main_road();
+			do setup_roads();
 		}
 
 		//----------------------------------------------------------------------
@@ -253,10 +253,10 @@ global {
 		create footway_node with: (location: {x_right_intersection + 5, lower_border}, list_connected_index: [23]);
 
 		//for traffic light, initialize their counter value (synchronization of traffic lights)
-		ask intersection where each.is_traffic_signal {
-			do initialize;
+		ask intersection {
 			do declare_spawn_nodes([intersection[0], intersection[11], intersection[12], intersection[13], intersection[22], intersection[23]]);
 			do declare_end_nodes(spawn_nodes);
+			do setup_env();
 		}
 
 		create car number: num_cars with: (location: one_of(intersection).location);
@@ -268,10 +268,10 @@ global {
 experiment simple_test_city type: gui {
 
 	action _init_ {
-		create simulation with: [num_cars::NUM_CARS
+		create simulation with: [num_cars::50
 		//,num_trucks::10
-		//,num_bicycles::100
-		//,num_pedestrians::1
+		//,num_bicycles::50
+		//,num_pedestrians::10
 ];
 	}
 
