@@ -7,8 +7,8 @@
 model Giveway
 
 import "../../utils/variables/global_vars_testing.gaml"
-import "../../Simpel Model/Simple_Vehicles.gaml"
-import "../../Simpel Model/Simple_Pedestrians.gaml"
+import "../../Simple_Model/Simple_Vehicles.gaml"
+import "../../Simple_Model/Simple_Pedestrians.gaml"
 
 global {
 	int num_cars;

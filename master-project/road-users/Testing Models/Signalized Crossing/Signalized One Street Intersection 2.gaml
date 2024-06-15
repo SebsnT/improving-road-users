@@ -9,9 +9,9 @@ model OneStreetIntersection
 
 import "../../utils/variables/global_vars_testing.gaml"
 
-import "../../Simpel Model/Simple_Vehicles.gaml"
+import "../../Simple_Model/Simple_Vehicles.gaml"
 
-import "../../Simpel Model/Simple_Pedestrians.gaml"
+import "../../Simple_Model/Simple_Pedestrians.gaml"
 
 global {
 	
@@ -55,7 +55,7 @@ global {
 		graph road_network <- as_driving_graph(road,intersection);
 		
 		//for traffic light, initialize their counter value (synchronization of traffic lights)
-		ask intersection where each.is_traffic_signal {
+		ask intersection {
 			do declare_spawn_nodes([intersection[0]]);
 			do declare_end_nodes([intersection[3]]);
 			do setup_env();
