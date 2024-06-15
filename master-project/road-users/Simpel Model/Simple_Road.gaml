@@ -28,20 +28,14 @@ species road skills: [road_skill] {
 	rgb label_color <- #red;
 	string oneway;
 	string number;
-	bool coming_from_main_road <- false;
+	bool leads_to_prioriy_node <- false;
+	bool leads_from_prioriy_node <- false;
 	float traffic_density;
 	float all_segments_length;
 
 	init {
 		number <- string(number_of_road);
 		number_of_road <- number_of_road + 1;
-	}
-
-	action set_coming_from_main_road {
-		if (intersection(source_node).priority_roads != []) {
-			self.coming_from_main_road <- true;
-		}
-
 	}
 
 	action calculate_road_occupied (list vehicles) {
@@ -53,8 +47,18 @@ species road skills: [road_skill] {
 		traffic_density <- occupied / all_segments_length;
 	}
 
-	action setup_roads {
-		do set_all_segments_length();
+	action set_leads_from_prioriy_node {
+		if (intersection(target_node).roads_from_street_signs contains self) {
+			leads_to_prioriy_node <- true;
+		}
+
+	}
+
+	action set_leads_to_prioriy_node {
+		if (intersection(target_node).roads_from_priority_node contains self) {
+			leads_from_prioriy_node <- true;
+		}
+
 	}
 
 	action set_all_segments_length {
@@ -62,6 +66,12 @@ species road skills: [road_skill] {
 			all_segments_length <- all_segments_length + float(s);
 		}
 
+	}
+
+	action setup_roads {
+		do set_all_segments_length();
+		do set_leads_to_prioriy_node();
+		do set_leads_from_prioriy_node();
 	}
 
 	reflex calculate_traffic_density when: all_agents != nil and all_agents != [] and measure_density = true {
@@ -100,20 +110,24 @@ species intersection skills: [intersection_skill] {
 	float blocked_counter <- 0.0;
 	list<road> ways1;
 	list<road> ways2;
+	list<road> roads_to_and_from_street_signs;
+	list<road> roads_to_street_signs;
+	list<road> roads_from_street_signs;
+	list<road> roads_to_priority_node;
+	list<road> roads_from_priority_node;
+	list<road> roads_affected_by_traffic_signal;
 	list<intersection> connected_nodes;
-	list<intersection> adjacent_street_signs;
+	list<intersection> connected_street_signs;
 	list<intersection> connected_crossings;
 	list<intersection> priority_nodes;
-	list<road> adjacent_street_signs_roads;
 	intersection connected_to_traffic_signal;
-	road road_affected_by_traffic_signal;
 
 	init {
 		number <- string(number_of_intersection);
 		number_of_intersection <- number_of_intersection + 1;
 	}
 
-	action initialize {
+	action initialize_traffic_signals {
 		if (traffic_signal_type = "traffic_signals") {
 			do compute_crossing;
 			stop << [];
@@ -123,8 +137,40 @@ species intersection skills: [intersection_skill] {
 				do to_red;
 			}
 
+			if (connected_crossings != []) {
+			// do initialize_crossings_connected_to_traffic_signals();
+			}
+
 		}
 
+	}
+
+	action initialize_crossings_connected_to_traffic_signals {
+		int c <- 0;
+		loop i over: connected_crossings {
+			do set_crossing_ways(i);
+			if (c mod 2 = 0) {
+				i.stop << i.roads_out;
+				i.is_green <- true;
+				i.traffic_light_color <- #green;
+				i.opposite_color <- #red;
+				i.counter <- counter;
+			} else if (c mod 2 = 1) {
+				i.stop << i.roads_in;
+				i.is_green <- false;
+				i.traffic_light_color <- #red;
+				i.opposite_color <- #green;
+				i.counter <- counter;
+			}
+
+			c <- c + 1;
+		}
+
+	}
+
+	action set_crossing_ways (intersection crossing) {
+	// if green
+		crossing.ways2 <- list<road>(crossing.roads_out);
 	}
 
 	// Actions and reflexes related to crossing the road
@@ -133,12 +179,12 @@ species intersection skills: [intersection_skill] {
 		intersection_blocked <- true;
 	}
 
-	action block_roads_in (list<road> roads) {
-		if!(stop contains roads) {
+	action block_roads_to_traffic_sign (list<road> roads) {
+		if (stop = []) {
 			stop <- stop + roads;
+			intersection_blocked <- true;
 		}
 
-		intersection_blocked <- true;
 	}
 
 	action unblock_road {
@@ -181,11 +227,11 @@ species intersection skills: [intersection_skill] {
 	}
 
 	// sets all intersection that are connected to a street sign
-	action set_adjacent_street_signs {
+	action set_connected_street_signs {
 		loop i over: connected_nodes {
-			string type_of_intersection <- intersection(i).traffic_signal_type;
+			string type_of_intersection <- i.traffic_signal_type;
 			if (type_of_intersection = "give_way" or type_of_intersection = "stop") {
-				adjacent_street_signs <- adjacent_street_signs + intersection(i);
+				connected_street_signs <- connected_street_signs + i;
 			}
 
 		}
@@ -193,11 +239,48 @@ species intersection skills: [intersection_skill] {
 	}
 
 	// sets all roads that are coming from or going to a street sign
-	action set_adjacent_street_signs_roads {
-		loop i over: adjacent_street_signs {
-			loop j over: (intersection(i).roads_in + intersection(i).roads_out) {
-				if not (adjacent_street_signs_roads contains road(j)) and (road(j).target_node = self or road(j).source_node = self) {
-					adjacent_street_signs_roads <- adjacent_street_signs_roads + road(j);
+	action set_connected_street_signs_roads {
+		loop i over: connected_street_signs {
+			loop j over: (i.roads_in + i.roads_out) {
+				if not (roads_to_and_from_street_signs contains road(j)) and (road(j).target_node = self or road(j).source_node = self) {
+					roads_to_and_from_street_signs <- roads_to_and_from_street_signs + road(j);
+				}
+
+			}
+
+		}
+
+		do set_roads_to_street_signs();
+		do set_roads_from_street_signs();
+	}
+
+	action set_roads_to_street_signs {
+		loop i over: roads_to_and_from_street_signs {
+			if (intersection(i.source_node) = self) {
+				roads_to_street_signs <- roads_to_street_signs + i;
+			}
+
+		}
+
+	}
+
+	action set_roads_from_street_signs {
+		loop i over: roads_to_and_from_street_signs {
+			if (intersection(i.target_node) = self) {
+				roads_from_street_signs <- roads_from_street_signs + i;
+			}
+
+		}
+
+	}
+
+	// Roads that have priority over other roads
+	action set_priority_roads {
+		if (connected_street_signs != [] and traffic_signal_type != "stop" and traffic_signal_type != "give_way" and traffic_signal_type != "crossing" and traffic_signal_type !=
+		"traffic_signals") {
+			loop r over: roads_in + roads_out {
+				if not (roads_to_street_signs contains road(r)) {
+					priority_roads <- priority_roads + road(r);
 				}
 
 			}
@@ -209,20 +292,36 @@ species intersection skills: [intersection_skill] {
 	// Intersections that has priority rodas
 	action set_priority_nodes {
 		loop i over: connected_nodes {
-			if (intersection(i).priority_roads != []) {
-				priority_nodes <- priority_nodes + intersection(i);
+			if (i.priority_roads != []) {
+				priority_nodes <- priority_nodes + i;
+			}
+
+		}
+
+		do set_roads_to_priority_node();
+		do set_roads_from_priority_node();
+	}
+
+	// set roads leading to nodes that have priority roads
+	action set_roads_to_priority_node {
+		loop i over: priority_nodes {
+			loop j over: i.roads_in {
+				if (road(j).source_node = self) {
+					roads_to_priority_node <- roads_to_priority_node + road(j);
+				}
+
 			}
 
 		}
 
 	}
 
-	// Roads that have priority over other roads
-	action set_priority_roads {
-		if (adjacent_street_signs != []) {
-			loop r over: roads_in + roads_out {
-				if not (adjacent_street_signs_roads contains road(r)) {
-					priority_roads <- priority_roads + road(r);
+	// set roads leading away from nodes that have priority roads
+	action set_roads_from_priority_node {
+		loop i over: priority_nodes {
+			loop j over: i.roads_out {
+				if (road(j).target_node = self) {
+					roads_from_priority_node <- roads_from_priority_node + road(j);
 				}
 
 			}
@@ -234,8 +333,18 @@ species intersection skills: [intersection_skill] {
 	// Crossings related to intersections 
 	action set_traffic_signal_connected_crossings {
 		loop i over: connected_nodes {
-			if (intersection(i).traffic_signal_type = "crossing") {
-				connected_crossings <- connected_crossings + intersection(i);
+			if (i.traffic_signal_type = "crossing" and !(connected_crossings contains i)) {
+				connected_crossings <- connected_crossings + i;
+			}
+
+		}
+
+	}
+
+	action set_road_affected_by_traffic_signal {
+		loop i over: roads_in {
+			if !(roads_from_priority_node contains i) {
+				roads_affected_by_traffic_signal <- roads_affected_by_traffic_signal + road(i);
 			}
 
 		}
@@ -245,11 +354,13 @@ species intersection skills: [intersection_skill] {
 	// Setting up the environemnt for interactions
 	action setup_env {
 		do set_connected_intersections();
-		do set_adjacent_street_signs();
-		do set_adjacent_street_signs_roads();
+		do set_connected_street_signs();
+		do set_connected_street_signs_roads();
 		do set_priority_nodes();
 		do set_priority_roads();
 		do set_traffic_signal_connected_crossings();
+		do set_road_affected_by_traffic_signal();
+		do initialize_traffic_signals();
 	}
 
 	// Declare where vehicles spawn and despawn
@@ -302,7 +413,9 @@ species intersection skills: [intersection_skill] {
 		is_green <- false;
 	}
 
-	reflex dynamic_node when: traffic_signal_type = "traffic_signals" {
+	reflex dynamic_node when: traffic_signal_type = "traffic_signals"
+	//or (traffic_signal_type = "crossing" and is_connected_to_traffic_signal) 
+	{
 		counter <- counter + step;
 		if (counter >= time_to_change) {
 			counter <- 0.0;
@@ -353,19 +466,7 @@ species intersection skills: [intersection_skill] {
 	aspect simple {
 		if (is_traffic_signal and traffic_signal_type = "traffic_signals") {
 
-		// left
-			draw circle(1) color: traffic_light_color at: {location.x - 8, location.y + 3};
-
-			//right
-			draw circle(1) color: traffic_light_color at: {location.x + 8, location.y - 3};
-
-			// bottom
-			draw circle(1) color: opposite_color at: {location.x + 3, location.y + 8};
-
-			// top
-			draw circle(1) color: opposite_color at: {location.x - 3, location.y - 8};
-
-			// Show numbers on the intersection
+		// Show numbers on the intersection
 			if (show_intersection_numbers) {
 				draw number color: label_color font: label_font;
 			}
@@ -380,7 +481,28 @@ species intersection skills: [intersection_skill] {
 
 		switch traffic_signal_type {
 			match "crossing" {
-				draw circle(1) color: #black;
+				if (is_green and is_connected_to_traffic_signal) {
+					draw circle(1) color: #green;
+				} else if (is_connected_to_traffic_signal) {
+					draw circle(1) color: #black;
+				} else {
+					draw circle(1) color: #black;
+				}
+
+			}
+
+			match "traffic_signals" {
+			// left
+				draw circle(1) color: traffic_light_color at: {location.x - 8, location.y + 3};
+
+				//right
+				draw circle(1) color: traffic_light_color at: {location.x + 8, location.y - 3};
+
+				// bottom
+				draw circle(1) color: opposite_color at: {location.x + 3, location.y + 8};
+
+				// top
+				draw circle(1) color: opposite_color at: {location.x - 3, location.y - 8};
 			}
 
 			match "give_way" {
