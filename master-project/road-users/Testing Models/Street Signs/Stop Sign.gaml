@@ -32,11 +32,6 @@ global {
 		//build the graph from the roads and intersections
 		graph road_network <- as_driving_graph(road, intersection);
 
-		//for traffic light, initialize their counter value (synchronization of traffic lights)
-		ask intersection where each.is_traffic_signal {
-			do initialize;
-		}
-
 		ask intersection {
 			do declare_spawn_nodes([intersection[0], intersection[4]]);
 			do declare_end_nodes([intersection[2]]);
@@ -49,7 +44,7 @@ global {
 experiment stop_sign type: gui {
 
 	action _init_ {
-		create simulation with: [num_cars::15];
+		create simulation with: [num_cars::20];
 	}
 
 	output synchronized: true {

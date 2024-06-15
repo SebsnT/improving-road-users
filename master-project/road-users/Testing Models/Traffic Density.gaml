@@ -46,9 +46,9 @@ global {
 		//build the graph from the roads and intersections
 		graph road_network <- as_driving_graph(road, intersection);
 		ask intersection {
-			do initialize;
 			do declare_spawn_nodes([intersection[0]]);
 			do declare_end_nodes([intersection[1]]);
+			do setup_env();
 		}
 
 		ask road {

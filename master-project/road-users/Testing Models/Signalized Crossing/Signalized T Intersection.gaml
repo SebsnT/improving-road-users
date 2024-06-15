@@ -81,7 +81,6 @@ global {
 		
 		//for traffic light, initialize their counter value (synchronization of traffic lights)
 		ask intersection where each.is_traffic_signal {
-			do initialize;
 			do declare_spawn_nodes([intersection[0]]);
 			do declare_end_nodes([intersection[2], intersection[3]]);
 			do setup_env();

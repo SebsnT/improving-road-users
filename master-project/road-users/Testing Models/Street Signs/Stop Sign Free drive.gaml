@@ -15,7 +15,7 @@ global {
 	float car_avg_speed -> {mean(car collect (each.speed * 3.6))}; // average speed stats
 	init {
 
-		// intersections
+	// intersections
 		create intersection with: (location: {x_left_border, y_middle}, traffic_signal_type: "");
 		create intersection with: (location: {x_middle, y_middle}, traffic_signal_type: "");
 		create intersection with: (location: {x_right_border, y_middle}, traffic_signal_type: "");
@@ -32,20 +32,10 @@ global {
 
 		//build the graph from the roads and intersections
 		graph road_network <- as_driving_graph(road, intersection);
-
-		//for traffic light, initialize their counter value (synchronization of traffic lights)
-		ask intersection where each.is_traffic_signal {
-			do initialize;
-		}
-
 		ask intersection {
 			do declare_spawn_nodes([intersection[0], intersection[4]]);
-			do declare_end_nodes([intersection[2],intersection[4]]);
+			do declare_end_nodes([intersection[2], intersection[4]]);
 			do setup_env();
-		}
-		
-		ask road {
-			do set_coming_from_main_road();
 		}
 
 		create car number: num_cars with: (location: one_of(spawn_nodes).location);
