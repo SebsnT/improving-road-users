@@ -73,12 +73,12 @@ species base_vehicle skills: [driving] {
 			do die;
 		} }
 
-	reflex stop_at_stop_sign when: current_target != nil and intersection(current_target).traffic_signal_type != nil and intersection(current_target).traffic_signal_type = "stop"
-	and road(current_road).coming_from_main_road = false {
-		if (distance_to_current_target <= 2) {
-			self.speed <- 0.0;
+	reflex stop_at_stop_sign when: current_target != nil and intersection(current_target).traffic_signal_type != nil and intersection(current_target).traffic_signal_type = "stop" {
+		if (distance_to_current_target <= 1) {
+			
 			ask intersection closest_to (self) {
-				do wait_to_cross();
+				do block_roads_to_traffic_sign(roads_affected_by_traffic_signal);
+				myself.speed <- 0.0;
 			}
 
 		}
@@ -130,7 +130,7 @@ species bicycle parent: base_vehicle {
 	init {
 		lane_width <- LANE_WIDTH;
 		num_lanes_occupied <- BICYCLES_LANE_OCCUPIED;
-		vehicle_length <- rnd(BICYCLE_MIN_LENGTH,BICYCLE_MAX_LENGTH, 1.0 #m);
+		vehicle_length <- rnd(BICYCLE_MIN_LENGTH, BICYCLE_MAX_LENGTH, 1.0 #m);
 		max_speed <- rnd(BICYCLE_MIN_SPEED, BICYCLE_MAX_SPEED, 1.0 #km / #h);
 		max_acceleration <- rnd(BICYCLE_MIN_ACCLERATION, BICYCLE_MAX_ACCLERATION, 1.0 #m / #s);
 		max_deceleration <- rnd(BICYCLE_MIN_ACCLERATION, BICYCLE_MAX_ACCLERATION, 1.0 #m / #s);
