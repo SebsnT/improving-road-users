@@ -12,7 +12,9 @@ import "./Simple_Road.gaml"
 global {
 	graph pedestrian_network;
 	bool show_footway_nodes;
+	bool show_footway_edges;
 	int number_of_footway <- 0;
+	int number_of_footway_edges <- 0;
 
 	init {
 		pedestrian_network <- as_edge_graph(footway_edge);
@@ -133,17 +135,24 @@ species footway_node parent: graph_node edge_species: footway_edge {
 
 species footway_edge skills: [pedestrian_road] parent: base_edge {
 	rgb color <- #black;
+	rgb label_color <- #orange;
 	rgb occupied_color <- #red;
 	bool is_occupied <- false;
 	intersection intersects_with_crossing;
-	
-	action set_intersects_with_crossing {
-		agent closest_road <- (road closest_to (self));
-			if (self overlaps closest_road) {
-				self.intersects_with_crossing <- intersection closest_to (self);
-			}
+	string number;
+
+	init {
+		number <- string(number_of_footway_edges);
+		number_of_footway_edges <- number_of_footway_edges + 1;
 	}
-	
+
+	action set_intersects_with_crossing {
+		if (self overlaps (road closest_to (self))) {
+			self.intersects_with_crossing <- intersection closest_to self;
+		}
+
+	}
+
 	action setup_edges {
 		do set_intersects_with_crossing();
 	}
@@ -156,7 +165,7 @@ species footway_edge skills: [pedestrian_road] parent: base_edge {
 		if (agents_on != []) {
 			is_occupied <- true;
 			if (intersects_with_crossing != nil) {
-				ask intersection(intersects_with_crossing) {
+				ask intersection {
 					do wait_to_cross();
 				}
 
@@ -165,8 +174,11 @@ species footway_edge skills: [pedestrian_road] parent: base_edge {
 		} else {
 			is_occupied <- false;
 			if (intersects_with_crossing != nil) {
-				ask intersection(intersects_with_crossing) {
-					do unblock_road();
+				ask intersection  {
+					if(is_connected_to_traffic_signal = false){
+						do unblock_road();
+					}
+					
 				}
 
 			}
@@ -180,6 +192,10 @@ species footway_edge skills: [pedestrian_road] parent: base_edge {
 			draw shape color: occupied_color;
 		} else {
 			draw shape color: color;
+		}
+		
+		if (show_footway_edges) {
+			draw number color: label_color;
 		}
 
 	}
