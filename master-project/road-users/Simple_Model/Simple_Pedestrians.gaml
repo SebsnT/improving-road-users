@@ -136,6 +136,17 @@ species footway_edge skills: [pedestrian_road] parent: base_edge {
 	rgb occupied_color <- #red;
 	bool is_occupied <- false;
 	intersection intersects_with_crossing;
+	
+	action set_intersects_with_crossing {
+		agent closest_road <- (road closest_to (self));
+			if (self overlaps closest_road) {
+				self.intersects_with_crossing <- intersection closest_to (self);
+			}
+	}
+	
+	action setup_edges {
+		do set_intersects_with_crossing();
+	}
 
 	reflex update_agents_on {
 		agents_on <- pedestrian where (each.current_edge = self);
