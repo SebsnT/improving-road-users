@@ -30,7 +30,7 @@ global {
 	float POLITENESS_FACTOR <- 0.95;
 	float PROBA_RESPECT_PRIORITIES <- 0.95;
 	list<float> PROBA_RESPECT_STOPS <- [0.95];
-	float TIME_HEADWAY <- 1 #s;
+	float TIME_HEADWAY <- 3 #s;
 
 	// Percentage that drivers are willing to drive over the speed limit (1.1 means 10 percent)
 	float SPEED_COEFF <- 1.10;

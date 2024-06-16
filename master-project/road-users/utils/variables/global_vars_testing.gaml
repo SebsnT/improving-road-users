@@ -12,9 +12,9 @@ global {
 	bool show_intersection_numbers <- true;
 
 	// show the circles that represent footway nodes
-	bool show_footway_nodes <- true;
-	bool show_footway_edges <- true;
-	bool show_footway_numbers <- true;
+	bool show_footway_nodes <- false;
+	bool show_footway_edges <- false;
+	bool show_footway_numbers <- false;
 	bool show_road_numbers <- false;
 	bool show_crossing_numbers <- false;
 	bool measure_density <- false;

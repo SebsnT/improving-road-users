@@ -110,6 +110,7 @@ species intersection skills: [intersection_skill] {
 	float blocked_counter <- 0.0;
 	list<road> roads_blocked_when_red;
 	list<road> roads_blocked_when_green;
+	list<road> roads_blocked_when_pedestrian_cross;
 	list<road> roads_to_and_from_street_signs;
 	list<road> roads_to_street_signs;
 	list<road> roads_from_street_signs;
@@ -241,7 +242,17 @@ species intersection skills: [intersection_skill] {
 	// Setters
 	// Actions related to setting up the environment
 	// --------------------------------------------------------
+	
+	
+	action set_roads_blocked_when_pedestrian_cross {
+		loop i over: roads_in {
+			if not (roads_blocked_when_red contains i) {
+				roads_blocked_when_pedestrian_cross << road(i);
+			}
 
+		}
+
+	}
 
 	// creates points used for reference of stopping before intersection
 	action set_crossing_traffic_lights (intersection traffic_light) {
@@ -443,6 +454,7 @@ species intersection skills: [intersection_skill] {
 		do set_priority_roads();
 		do set_traffic_signal_connected_crossings();
 		do set_road_affected_by_traffic_signal();
+		do set_roads_blocked_when_pedestrian_cross();
 		do initialize_traffic_signals();
 	}
 

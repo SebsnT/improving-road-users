@@ -50,7 +50,7 @@ global {
 
 	// Middle line
 
-		// left border
+	// left border
 		create intersection with: (location: {left_border, y_middle_road}, traffic_signal_type: "");
 
 		// left traffic light
@@ -76,11 +76,11 @@ global {
 		create intersection with: (location: {x_right_intersection, y_middle_road + 5}, is_traffic_signal: true, traffic_signal_type: "crossing");
 
 		// right border
-		create intersection with: (location: {right_border, y_middle_road},traffic_signal_type: "");
+		create intersection with: (location: {right_border, y_middle_road}, traffic_signal_type: "");
 
 		// Upper Horizontal lines
-		create intersection with: (location: {x_left_intersection, upper_border},traffic_signal_type: "");
-		create intersection with: (location: {x_right_intersection, upper_border},traffic_signal_type: "");
+		create intersection with: (location: {x_left_intersection, upper_border}, traffic_signal_type: "");
+		create intersection with: (location: {x_right_intersection, upper_border}, traffic_signal_type: "");
 
 		// Middle of the road crossing
 		create intersection with: (location: {x_left_intersection, y_middle_road + 100}, is_traffic_signal: true, traffic_signal_type: "crossing");
@@ -203,15 +203,6 @@ global {
 		//build the graph from the roads and intersections
 		road_network <- as_driving_graph(road, intersection);
 
-		//for traffic light, initialize their counter value (synchronization of traffic lights)
-		ask intersection  {
-			do setup_env();
-		}
-		
-		ask road {
-			do setup_roads();
-		}
-
 		//----------------------------------------------------------------------
 		// Create and Connect Foootways
 		//----------------------------------------------------------------------
@@ -259,6 +250,10 @@ global {
 			do setup_env();
 		}
 
+		ask footway_edge {
+			do setup_edges();
+		}
+
 		create car number: num_cars with: (location: one_of(intersection).location);
 		create truck number: num_trucks with: (location: one_of(intersection).location);
 		create bicycle number: num_bicycles with: (location: one_of(intersection).location);
@@ -271,8 +266,7 @@ experiment simple_test_city type: gui {
 		create simulation with: [num_cars::50
 		//,num_trucks::10
 		//,num_bicycles::50
-		//,num_pedestrians::10
-];
+, num_pedestrians::10];
 	}
 
 	output synchronized: true {
@@ -287,16 +281,16 @@ experiment simple_test_city type: gui {
 			species footway_edge aspect: base;
 		}
 
-		/* 
-		display car_speed_chart type: 2d{
-      		chart "Average speed" type: series size: {1, 1} position: {0, 0} x_label: "Cycle" y_label: "Average speed km/h" {
-        	data "Car" value: car_avg_speed color: #red;
-        	data "Truck" value: truck_avg_speed color: #blue;
-        	data "Bicycle" value: bicycle_avg_speed color: #yellow;
-        	data "Pedestrian" value: pedestrian_avg_speed color: #green;
-      		}
-    	}
-*/
+		display car_speed_chart type: 2d {
+			chart "Average speed" type: series size: {1, 1} position: {0, 0} x_label: "Cycle" y_label: "Average speed km/h" {
+				data "Car" value: car_avg_speed color: #red;
+				data "Truck" value: truck_avg_speed color: #blue;
+				data "Bicycle" value: bicycle_avg_speed color: #yellow;
+				data "Pedestrian" value: pedestrian_avg_speed color: #green;
+			}
+
+		}
+
 	}
 
 }

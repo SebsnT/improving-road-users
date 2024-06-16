@@ -54,10 +54,6 @@ global {
 		}
 
 		// Initialize the traffic lights
-		ask intersection {
-			do initialize;
-		}
-
 		write "Creating Footways";
 		create footway from: FOOTWAY_SHAPE_FILE;
 		write "Creating Buildings";
@@ -74,6 +70,10 @@ experiment city type: gui {
 
 	action _init_ {
 		create simulation with: [city::CITY, num_cars::NUM_CARS, num_trucks::NUM_TRUCKS, num_bicycles::NUM_BICYCLES, num_pedestrians::NUM_PEDESTRIANS];
+		ask intersection {
+			do setup_env();
+		}
+
 	}
 
 	output synchronized: true {

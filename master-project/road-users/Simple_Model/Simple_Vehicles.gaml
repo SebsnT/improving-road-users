@@ -74,7 +74,7 @@ species base_vehicle skills: [driving] {
 		} }
 
 	reflex stop_at_stop_sign when: current_target != nil and intersection(current_target).traffic_signal_type != nil and intersection(current_target).traffic_signal_type = "stop" {
-		if (distance_to_current_target <= 1) {
+		if (distance_to_current_target <= 2) {
 			
 			ask intersection closest_to (self) {
 				do block_roads_to_traffic_sign(roads_affected_by_traffic_signal);

@@ -28,7 +28,7 @@ species pedestrian skills: [moving] {
 	int staying_counter;
 	bool is_crossing;
 	bool is_waiting;
-	bool has_waited;
+	bool waits_for_green;
 	float waiting_time <- rnd(MIN_CROSSING_WAITING_TIME, MAX_CROSSING_WAITING_TIME, 0.1) #s;
 	float waiting_counter <- 0 #s;
 	float walking_speed <- gauss(4, 1) #km / #h;
@@ -44,9 +44,27 @@ species pedestrian skills: [moving] {
 
 	// cross road with higher speed
 	reflex cross_road when: footway_edge(current_edge) != nil and footway_edge(current_edge).intersects_with_crossing != nil and is_crossing = false {
-		is_waiting <- true;
-		is_crossing <- true;
-		do set_speed_for_crossing();
+		intersection intersecting_crossing <- footway_edge(current_edge).intersects_with_crossing;
+		if (intersecting_crossing.is_connected_to_traffic_signal) {
+			if (intersecting_crossing.connected_to_traffic_signal.is_green) {
+				waits_for_green <- true;
+			}
+
+		} else {
+			is_waiting <- true;
+			is_crossing <- true;
+			do set_speed_for_crossing();
+		}
+
+	}
+
+	reflex wait_to_cross_signalized_crossing when: footway_edge(current_edge) != nil and waits_for_green {
+		speed <- 0.0;
+		if not (footway_edge(current_edge).intersects_with_crossing.is_green) {
+			waits_for_green <- false;
+			do set_speed_for_crossing();
+		}
+
 	}
 
 	// reset speed once road is_crossed
@@ -61,7 +79,6 @@ species pedestrian skills: [moving] {
 		if (waiting_counter >= waiting_time #s) {
 			waiting_counter <- 0 #s;
 			is_waiting <- false;
-			has_waited <- true;
 			speed <- crossing_speed;
 		}
 
@@ -138,6 +155,7 @@ species footway_edge skills: [pedestrian_road] parent: base_edge {
 	rgb label_color <- #orange;
 	rgb occupied_color <- #red;
 	bool is_occupied <- false;
+	bool intersects_traffic_signal_crossing;
 	intersection intersects_with_crossing;
 	string number;
 
@@ -149,6 +167,10 @@ species footway_edge skills: [pedestrian_road] parent: base_edge {
 	action set_intersects_with_crossing {
 		if (self overlaps (road closest_to (self))) {
 			self.intersects_with_crossing <- intersection closest_to self;
+			if ((intersection closest_to self).is_connected_to_traffic_signal) {
+				intersects_traffic_signal_crossing <- true;
+			}
+
 		}
 
 	}
@@ -161,7 +183,8 @@ species footway_edge skills: [pedestrian_road] parent: base_edge {
 		agents_on <- pedestrian where (each.current_edge = self);
 	}
 
-	reflex block_node {
+	// TODO handle car driving left or right at intersection
+	reflex block_node when: !intersects_traffic_signal_crossing{
 		if (agents_on != []) {
 			is_occupied <- true;
 			if (intersects_with_crossing != nil) {
@@ -174,11 +197,8 @@ species footway_edge skills: [pedestrian_road] parent: base_edge {
 		} else {
 			is_occupied <- false;
 			if (intersects_with_crossing != nil) {
-				ask intersection  {
-					if(is_connected_to_traffic_signal = false){
-						do unblock_road();
-					}
-					
+				ask intersection {
+					//do unblock_road();
 				}
 
 			}
@@ -193,7 +213,7 @@ species footway_edge skills: [pedestrian_road] parent: base_edge {
 		} else {
 			draw shape color: color;
 		}
-		
+
 		if (show_footway_edges) {
 			draw number color: label_color;
 		}
