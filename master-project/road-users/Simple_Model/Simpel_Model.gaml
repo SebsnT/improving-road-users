@@ -76,11 +76,11 @@ global {
 		create intersection with: (location: {x_right_intersection, y_middle_road + 5}, is_traffic_signal: true, traffic_signal_type: "crossing");
 
 		// right border
-		create intersection with: (location: {right_border, y_middle_road});
+		create intersection with: (location: {right_border, y_middle_road},traffic_signal_type: "");
 
 		// Upper Horizontal lines
-		create intersection with: (location: {x_left_intersection, upper_border});
-		create intersection with: (location: {x_right_intersection, upper_border});
+		create intersection with: (location: {x_left_intersection, upper_border},traffic_signal_type: "");
+		create intersection with: (location: {x_right_intersection, upper_border},traffic_signal_type: "");
 
 		// Middle of the road crossing
 		create intersection with: (location: {x_left_intersection, y_middle_road + 100}, is_traffic_signal: true, traffic_signal_type: "crossing");
