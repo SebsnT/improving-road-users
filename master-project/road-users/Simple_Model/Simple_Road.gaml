@@ -108,8 +108,8 @@ species intersection skills: [intersection_skill] {
 	float time_to_unblock <- TIME_TO_UNBLOCK;
 	float counter <- rnd(time_to_change);
 	float blocked_counter <- 0.0;
-	list<road> ways1;
-	list<road> ways2;
+	list<road> roads_blocked_when_red;
+	list<road> roads_blocked_when_green;
 	list<road> roads_to_and_from_street_signs;
 	list<road> roads_to_street_signs;
 	list<road> roads_from_street_signs;
@@ -138,7 +138,7 @@ species intersection skills: [intersection_skill] {
 				float angle_dest <- last(pts2) direction_to rd.location;
 				float ang <- abs(angle_dest - ref_angle);
 				if (ang > 45 and ang < 135) or (ang > 225 and ang < 315) {
-					ways2 << road(rd);
+					roads_blocked_when_green << road(rd);
 				}
 
 			}
@@ -146,8 +146,8 @@ species intersection skills: [intersection_skill] {
 		}
 
 		loop rd over: roads_in {
-			if not (rd in ways2) {
-				ways1 << road(rd);
+			if not (rd in roads_blocked_when_green) {
+				roads_blocked_when_red << road(rd);
 			}
 
 		}
@@ -190,14 +190,14 @@ species intersection skills: [intersection_skill] {
 
 	// Traffic lights
 	action to_green {
-		stop <- stop + ways2;
+		stop <- stop + roads_blocked_when_green;
 		traffic_light_color <- #green;
 		opposite_color <- #red;
 		is_green <- true;
 	}
 
 	action to_red {
-		stop <- stop + ways1;
+		stop <- stop + roads_blocked_when_red;
 		traffic_light_color <- #red;
 		opposite_color <- #green;
 		is_green <- false;
@@ -245,7 +245,7 @@ species intersection skills: [intersection_skill] {
 
 	// creates points used for reference of stopping before intersection
 	action set_crossing_traffic_lights (intersection traffic_light) {
-		loop i over: traffic_light.ways1 {
+		loop i over: traffic_light.roads_blocked_when_red {
 			intersection current_intersection <- intersection(i.source_node);
 			do set_crossing_ways(current_intersection, traffic_light);
 			current_intersection.is_green <- !traffic_light.is_green;
@@ -254,7 +254,7 @@ species intersection skills: [intersection_skill] {
 			current_intersection.counter <- traffic_light.counter;
 		}
 
-		loop i over: traffic_light.ways2 {
+		loop i over: traffic_light.roads_blocked_when_green {
 			intersection current_intersection <- intersection(i.source_node);
 			do set_crossing_ways(current_intersection, traffic_light);
 			current_intersection.is_green <- traffic_light.is_green;
@@ -270,11 +270,9 @@ species intersection skills: [intersection_skill] {
 	}
 
 	action set_crossing_ways (intersection crossing, intersection traffic_light) {
-		write crossing;
-		write traffic_light;
 		loop i over: crossing.roads_in {
 			if (road(i).source_node != traffic_light) {
-				crossing.ways1 << road(i);
+				crossing.roads_blocked_when_red << road(i);
 			}
 
 		}
