@@ -31,6 +31,7 @@ species road skills: [road_skill] {
 	bool leads_to_prioriy_node <- false;
 	bool leads_from_prioriy_node <- false;
 	float traffic_density;
+	float traffic_density_per_km;
 	float all_segments_length;
 
 	init {
@@ -44,6 +45,7 @@ species road skills: [road_skill] {
 			occupied <- occupied + base_vehicle(v).vehicle_length;
 		}
 
+		traffic_density_per_km <- length(vehicles) / (all_segments_length / 1000);
 		traffic_density <- occupied / all_segments_length;
 	}
 
@@ -242,8 +244,6 @@ species intersection skills: [intersection_skill] {
 	// Setters
 	// Actions related to setting up the environment
 	// --------------------------------------------------------
-	
-	
 	action set_roads_blocked_when_pedestrian_cross {
 		loop i over: roads_in {
 			if not (roads_blocked_when_red contains i) {

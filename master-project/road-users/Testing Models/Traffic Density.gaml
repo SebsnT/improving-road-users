@@ -18,8 +18,9 @@ global {
 	float truck_avg_speed -> {mean(truck collect (each.speed)) * 3.6}; // average speed stats
 	float bicycle_avg_speed -> {mean(bicycle collect (each.speed)) * 3.6}; // average speed stats
 	float traffic_densiy -> {mean(road collect (each.traffic_density))}; // average traffic density
-	float size_environment <- 360 #m;
-	
+	float traffic_density_per_km -> {sum(road collect (each.traffic_density_per_km))}; // traffic density per km road segment
+	float size_environment <- 1060 #m;
+
 	// measure density of the road
 	bool measure_density <- true;
 
@@ -59,7 +60,7 @@ global {
 		save [] to: "../data/testing/traffic_density_test.csv" format: "csv" rewrite: true;
 	} }
 
-experiment traffic_density type: gui {
+experiment traffic_density_experiment type: gui {
 
 	action _init_ {
 		create simulation with: [num_cars::100];
@@ -77,13 +78,20 @@ experiment traffic_density type: gui {
 			species footway_edge aspect: base;
 		}
 
-		display car_speed_chart type: 2d {
+		display car_density_percentage type: 2d {
 			graphics "my new layer" {
 				write time color: #red;
 			}
 
-			chart "Traffic Density" type: series size: {1, 1} position: {0, 0} x_label: "Cycle" y_label: "Average speed km/h" {
+			chart "Traffic Density Percentage" type: series size: {1, 1} position: {0, 0} x_label: "Cycle" y_label: "Density in percent (%)" {
 				data "Traffic Density in percent" value: traffic_densiy * 100 color: #red;
+			}
+
+		}
+
+		display car_density_per_km type: 2d {
+			chart "Traffic Density Per Km" type: series size: {1, 1} position: {0, 0} x_label: "Cycle" y_label: "Density per km" {
+				data "Traffic Density in percent" value: traffic_density_per_km color: #blue;
 			}
 
 		}
@@ -92,7 +100,7 @@ experiment traffic_density type: gui {
 	}
 
 	reflex save_result {
-		save [time, traffic_densiy] to: "../data/testing/traffic_density_test.csv" format: "csv" rewrite: false;
+	//save [time, traffic_densiy] to: "../data/testing/traffic_density_test.csv" format: "csv" rewrite: false;
 	}
 
 }
