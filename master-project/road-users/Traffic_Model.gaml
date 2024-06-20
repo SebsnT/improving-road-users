@@ -1,16 +1,14 @@
 /**
 * Name: TrafficModel
-* Based on the internal empty template. 
 * Author: Sebastian
 * Tags: 
 */
 model TrafficModel
 
-import "./models/city/Footway.gaml"
+import "./utils/variables/global_vars.gaml"
 import "./models/city/Building.gaml"
 import "./models/Vehicles.gaml"
 import "./models/Pedestrian.gaml"
-import "./utils/variables/global_vars.gaml"
 
 global {
 	int num_cars;
@@ -22,6 +20,7 @@ global {
 	graph road_network;
 	graph footway_network;
 	list<intersection> non_deadend_nodes;
+	bool drive_random;
 
 	// for speed charts 
 	// multiply with 3.6 to convert to km/h
@@ -64,6 +63,18 @@ global {
 		create bicycle number: num_bicycles with: (location: one_of(road).location);
 		write "Creating Pedestrians";
 		create pedestrian number: num_pedestrians with: (location: one_of(footway).location);
+		
+		ask intersection {
+			do setup_env();
+		}
+		
+		ask road {
+			do setup_roads();
+		}
+
+		ask footway {
+			do setup_edges();
+		}
 	} }
 
 experiment city type: gui {

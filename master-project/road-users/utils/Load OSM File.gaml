@@ -2,10 +2,10 @@ model OSMdata_to_shapefile
 
 global {
 // set to false to only render view
-	bool save_results <- true;
+	bool save_results_in_files <- false;
 
 	// name of OSM file
-	string osm_file_name <- "graz2";
+	string osm_file_name <- "wien";
 
 	// OSM file to read from
 	string read_file <- "./includes/osm/" + osm_file_name + ".osm";
@@ -57,7 +57,7 @@ global {
 	}
 
 	action save_results {
-		if (save_results) {
+		if (save_results_in_files) {
 			save road to: write_roads_file attributes: ["lanes"::self.lanes, "maxspeed"::maxspeed, "oneway"::oneway];
 			save intersection to: write_nodes_file attributes: ["type"::type, "crossing"::crossing];
 			save footway to: write_footways_file attributes: ["type"::type, "footway"::footway];
@@ -128,7 +128,7 @@ global {
 
 experiment fromOSMtoShapefiles type: gui {
 	output {
-		display map type: 3d {
+		display map type: 2d {
 			graphics "world" {
 				draw world.shape.contour;
 			}

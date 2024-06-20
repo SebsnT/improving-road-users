@@ -1,6 +1,5 @@
 /**
 * Name: global_vars
-* Based on the internal empty template. 
 * Author: Sebastian
 * Tags: 
 */
@@ -22,8 +21,9 @@ global {
 	bool show_footway_nodes <- false;
 	
 	// environment and simulation
-	float step <- 0.2#s;
+	float step <- 1#s;
 	float size_environment <- 1#km;
+	
 	
 	// declare name of shape file here
 	string CITY <- "graz2";

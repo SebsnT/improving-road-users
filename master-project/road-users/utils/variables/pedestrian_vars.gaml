@@ -1,6 +1,5 @@
 /**
-* Name: pedestrianvars
-* Based on the internal empty template. 
+* Name: pedestrian_vars
 * Author: Sebastian
 * Tags: 
 */

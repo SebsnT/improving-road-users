@@ -30,9 +30,10 @@ species road skills: [road_skill] {
 	string number;
 	bool leads_to_prioriy_node <- false;
 	bool leads_from_prioriy_node <- false;
-	float traffic_density;
+	float traffic_density_percentage;
 	float traffic_density_per_km;
 	float all_segments_length;
+	float all_agents_length;
 
 	init {
 		number <- string(number_of_road);
@@ -40,13 +41,18 @@ species road skills: [road_skill] {
 	}
 
 	action calculate_road_occupied (list vehicles) {
-		float occupied;
+		do calculate_all_agents_length(vehicles);
+		traffic_density_per_km <- length(vehicles) / (sum(road collect (each.all_segments_length)) / 1000);
+		traffic_density_percentage <- all_agents_length / all_segments_length;
+	}
+
+	action calculate_all_agents_length (list vehicles) {
+		float road_occupied;
 		loop v over: vehicles {
-			occupied <- occupied + base_vehicle(v).vehicle_length;
+			road_occupied <- road_occupied + base_vehicle(v).vehicle_length;
 		}
 
-		traffic_density_per_km <- length(vehicles) / (all_segments_length / 1000);
-		traffic_density <- occupied / all_segments_length;
+		all_agents_length <- road_occupied;
 	}
 
 	action set_leads_from_prioriy_node {
@@ -81,7 +87,7 @@ species road skills: [road_skill] {
 	}
 
 	reflex reset_traffic_density when: all_agents = [] {
-		traffic_density <- 0.0;
+		traffic_density_percentage <- 0.0;
 	}
 
 	aspect base {
@@ -244,6 +250,21 @@ species intersection skills: [intersection_skill] {
 	// Setters
 	// Actions related to setting up the environment
 	// --------------------------------------------------------
+	
+		// Setting up the environemnt for interactions
+	action setup_env {
+		do set_connected_intersections();
+		do set_connected_street_signs();
+		do set_connected_street_signs_roads();
+		do set_connected_to_traffic_signals();
+		do set_priority_nodes();
+		do set_priority_roads();
+		do set_traffic_signal_connected_crossings();
+		do set_road_affected_by_traffic_signal();
+		do set_roads_blocked_when_pedestrian_cross();
+		do initialize_traffic_signals();
+	}
+	
 	action set_roads_blocked_when_pedestrian_cross {
 		loop i over: roads_in {
 			if not (roads_blocked_when_red contains i) {
@@ -372,7 +393,7 @@ species intersection skills: [intersection_skill] {
 		if (connected_street_signs != [] and traffic_signal_type != "stop" and traffic_signal_type != "give_way" and traffic_signal_type != "crossing" and traffic_signal_type !=
 		"traffic_signals") {
 			loop r over: roads_in + roads_out {
-				if not (roads_to_street_signs contains road(r)) {
+				if not (roads_to_street_signs contains road(r) or roads_from_street_signs contains road(r)) {
 					priority_roads <- priority_roads + road(r);
 				}
 
@@ -444,19 +465,7 @@ species intersection skills: [intersection_skill] {
 
 	}
 
-	// Setting up the environemnt for interactions
-	action setup_env {
-		do set_connected_intersections();
-		do set_connected_street_signs();
-		do set_connected_street_signs_roads();
-		do set_connected_to_traffic_signals();
-		do set_priority_nodes();
-		do set_priority_roads();
-		do set_traffic_signal_connected_crossings();
-		do set_road_affected_by_traffic_signal();
-		do set_roads_blocked_when_pedestrian_cross();
-		do initialize_traffic_signals();
-	}
+
 
 	// Declare where vehicles spawn and despawn
 	action declare_end_nodes (list<intersection> nodes) {

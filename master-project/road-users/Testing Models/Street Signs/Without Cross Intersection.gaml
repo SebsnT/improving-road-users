@@ -4,7 +4,7 @@
 * Author: Sebastian
 * Tags: 
 */
-model CrossIntersection
+model WithoutCrossIntersection
 
 import "../../utils/variables/global_vars_testing.gaml"
 import "../../Simple_Model/Simple_Vehicles.gaml"
@@ -30,10 +30,10 @@ global {
 		create intersection with: (location: {x_middle, y_bottom_border}, traffic_signal_type: "");
 
 		// Intersections around crossing streets
-		create intersection with: (location: {x_middle - 5, y_middle}, traffic_signal_type: "stop");
-		create intersection with: (location: {x_middle + 5, y_middle}, traffic_signal_type: "stop");
-		create intersection with: (location: {x_middle, y_middle - 5}, traffic_signal_type: "stop");
-		create intersection with: (location: {x_middle, y_middle + 5}, traffic_signal_type: "stop");
+		create intersection with: (location: {x_middle - 5, y_middle}, traffic_signal_type: "");
+		create intersection with: (location: {x_middle + 5, y_middle}, traffic_signal_type: "");
+		create intersection with: (location: {x_middle, y_middle - 5}, traffic_signal_type: "");
+		create intersection with: (location: {x_middle, y_middle + 5}, traffic_signal_type: "");
 
 		// roads
 		// horizontal drive

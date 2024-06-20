@@ -12,7 +12,7 @@ import "./Simple_Road.gaml"
 global {
 	graph pedestrian_network;
 	bool show_footway_nodes;
-	bool show_footway_edges;
+	bool show_footway_edges_numbers;
 	int number_of_footway <- 0;
 	int number_of_footway_edges <- 0;
 
@@ -188,7 +188,7 @@ species footway_edge skills: [pedestrian_road] parent: base_edge {
 		if (agents_on != []) {
 			is_occupied <- true;
 			if (intersects_with_crossing != nil) {
-				ask intersection {
+				ask intersection closest_to (self){
 					do wait_to_cross();
 				}
 
@@ -197,8 +197,8 @@ species footway_edge skills: [pedestrian_road] parent: base_edge {
 		} else {
 			is_occupied <- false;
 			if (intersects_with_crossing != nil) {
-				ask intersection {
-					//do unblock_road();
+				ask intersection closest_to (self){
+					do unblock_road();
 				}
 
 			}
@@ -214,7 +214,7 @@ species footway_edge skills: [pedestrian_road] parent: base_edge {
 			draw shape color: color;
 		}
 
-		if (show_footway_edges) {
+		if (show_footway_edges_numbers) {
 			draw number color: label_color;
 		}
 

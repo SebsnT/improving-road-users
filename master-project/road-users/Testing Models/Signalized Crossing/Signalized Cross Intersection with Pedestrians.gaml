@@ -94,14 +94,13 @@ experiment singalized_cross_intersection type: gui {
 			species footway_node aspect: base;
 			species footway_edge aspect: base;
 		}
-		/* 
 		display car_speed_chart type: 2d {
-      		chart "Average speed" type: series size: {1, 1} position: {0, 0} x_label: "Cycle" y_label: "Average speed km/h" {
+      		chart "Average speed" type: series size: {1, 1} position: {0, 0} x_label: "Seconds" y_label: "Average speed km/h" {
         	data "Car" value: car_avg_speed color: #red;
         	data "Pedestrian" value: pedestrian_avg_speed color: #green;
       		}
     	}
-		*/
+		
 	}
 
 }

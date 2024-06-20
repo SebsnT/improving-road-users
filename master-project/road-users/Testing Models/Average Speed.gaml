@@ -76,7 +76,7 @@ experiment straight_road type: gui {
 				write time color: #red;
 			}
 
-			chart "Average speed" type: series size: {1, 1} position: {0, 0} x_label: "Cycle" y_label: "Average speed km/h" {
+			chart "Average speed" type: series size: {1, 1} position: {0, 0} x_label: "Seconds" y_label: "Average speed km/h" {
 				data "Car" value: car_avg_speed color: #red;
 				data "Truck" value: truck_avg_speed color: #blue;
 				data "Bicycle" value: bicycle_avg_speed color: #yellow;

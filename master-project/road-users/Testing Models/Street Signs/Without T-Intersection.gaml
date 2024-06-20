@@ -1,10 +1,10 @@
 /**
-* Name: Stop_Sign
+* Name: Giveway
 * Based on the internal empty template. 
 * Author: Sebastian
 * Tags: 
 */
-model Stop_Sign
+model TIntersection
 
 import "../../utils/variables/global_vars_testing.gaml"
 import "../../Simple_Model/Simple_Vehicles.gaml"
@@ -14,7 +14,7 @@ global {
 	int num_cars;
 	float car_avg_speed -> {mean(car collect (each.speed * 3.6))}; // average speed stats
 	float traffic_density_per_km -> {sum(road collect (each.traffic_density_per_km))};
-	float traffic_flow_car -> traffic_density_per_km * car_avg_speed; // measure density of the road
+	float traffic_flow_car -> traffic_density_per_km * car_avg_speed;
 	bool measure_density <- true;
 
 	init {
@@ -23,7 +23,7 @@ global {
 		create intersection with: (location: {x_left_border, y_middle}, traffic_signal_type: "");
 		create intersection with: (location: {x_middle, y_middle}, traffic_signal_type: "");
 		create intersection with: (location: {x_right_border, y_middle}, traffic_signal_type: "");
-		create intersection with: (location: {x_middle, y_middle + 5}, is_traffic_signal: true, traffic_signal_type: "stop");
+		create intersection with: (location: {x_middle, y_middle + 5}, is_traffic_signal: true, traffic_signal_type: "");
 		create intersection with: (location: {x_middle, y_middle + 100}, traffic_signal_type: "");
 
 		// roads
@@ -48,10 +48,10 @@ global {
 		create car number: num_cars with: (location: one_of(spawn_nodes).location);
 	} }
 
-experiment stop_sign type: gui {
+experiment without_street_sign type: gui {
 
 	action _init_ {
-		create simulation with: [num_cars::15];
+		create simulation with: [num_cars::10];
 		save [time, car_avg_speed] to: "../output/testing/" + self.name + ".csv" format: "csv" rewrite: true;
 	}
 
@@ -92,4 +92,5 @@ experiment stop_sign type: gui {
 	}
 
 }
+
 
