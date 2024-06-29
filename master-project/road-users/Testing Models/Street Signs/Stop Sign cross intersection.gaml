@@ -9,10 +9,11 @@ model Stop_Sign_Intersection
 import "../../utils/variables/global_vars_testing.gaml"
 import "../../Simple_Model/Simple_Vehicles.gaml"
 import "../../Simple_Model/Simple_Pedestrians.gaml"
+import "../Base Testing Model.gaml"
 
 global {
-	int num_cars;
-	float car_avg_speed -> {mean(car collect (each.speed * 3.6))}; // average speed stats
+	string experiment_name <- "street_signs_stop_sign_cross_intersection";
+
 	init {
 
 	// intersections
@@ -46,32 +47,11 @@ global {
 			do setup_env();
 		}
 
+		ask road {
+			do setup_roads();
+		}
+
 		create car number: num_cars with: (location: one_of(spawn_nodes).location);
 	} }
-
-experiment stop_sign_cross_intersection type: gui {
-
-	action _init_ {
-		create simulation with: [num_cars::20];
-	}
-
-	output synchronized: true {
-		display city type: 2d background: #grey axes: false {
-			species road aspect: base;
-			species intersection aspect: simple;
-			species car aspect: base;
-			species footway_node aspect: base;
-			species footway_edge aspect: base;
-		}
-		/* 
-		display car_speed_chart type: 2d {
-      		chart "Average speed" type: series size: {1, 1} position: {0, 0} x_label: "Cycle" y_label: "Average speed km/h" {
-        	data "Car" value: car_avg_speed color: #red;
-      		}
-    	}
-    	*/
-	}
-
-}
 
 

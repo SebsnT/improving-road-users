@@ -4,7 +4,7 @@
 * Author: Sebastian
 * Tags: 
 */
-model CrossIntersection
+model WithoutCrossIntersection
 
 import "../../utils/variables/global_vars_testing.gaml"
 import "../../Simple_Model/Simple_Vehicles.gaml"
@@ -12,10 +12,9 @@ import "../../Simple_Model/Simple_Pedestrians.gaml"
 import "../Base Testing Model.gaml"
 
 global {
-	string experiment_name <- "street_signs_all_way_stop";
+	string experiment_name <- "street_signs_all_way_stop_without_signals";
 
 	init {
-
 		// Middle Intersections
 		create intersection with: (location: {x_left_border, y_middle}, traffic_signal_type: "");
 		create intersection with: (location: {x_middle, y_middle}, is_traffic_signal: true, traffic_signal_type: "");
@@ -26,10 +25,10 @@ global {
 		create intersection with: (location: {x_middle, y_bottom_border}, traffic_signal_type: "");
 
 		// Intersections around crossing streets
-		create intersection with: (location: {x_middle - 5, y_middle}, traffic_signal_type: "stop");
-		create intersection with: (location: {x_middle + 5, y_middle}, traffic_signal_type: "stop");
-		create intersection with: (location: {x_middle, y_middle - 5}, traffic_signal_type: "stop");
-		create intersection with: (location: {x_middle, y_middle + 5}, traffic_signal_type: "stop");
+		create intersection with: (location: {x_middle - 5, y_middle}, traffic_signal_type: "");
+		create intersection with: (location: {x_middle + 5, y_middle}, traffic_signal_type: "");
+		create intersection with: (location: {x_middle, y_middle - 5}, traffic_signal_type: "");
+		create intersection with: (location: {x_middle, y_middle + 5}, traffic_signal_type: "");
 
 		// horizontal drive
 		create road with: (num_lanes: 1, maxspeed: 50 #km / #h, shape: line([intersection[0], intersection[5]]));
@@ -48,8 +47,6 @@ global {
 		create road with: (num_lanes: 1, maxspeed: 50 #km / #h, shape: line([intersection[7], intersection[3]]));
 		create road with: (num_lanes: 1, maxspeed: 50 #km / #h, shape: line([intersection[8], intersection[1]]));
 		create road with: (num_lanes: 1, maxspeed: 50 #km / #h, shape: line([intersection[8], intersection[4]]));
-
-		// vertical drive
 
 		//build the graph from the roads and intersections
 		graph road_network <- as_driving_graph(road, intersection);
