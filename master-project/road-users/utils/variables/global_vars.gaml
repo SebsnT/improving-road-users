@@ -21,16 +21,15 @@ global {
 	bool show_footway_nodes <- false;
 	
 	// environment and simulation
-	float step <- 1#s;
+	float step <- 0.5#s;
 	float size_environment <- 1#km;
 	
-	
 	// declare name of shape file here
-	string CITY <- "graz2";
+	string CITY <- "map";
 	
 	// shape file names
-	shape_file NODES_SHAPE_FILE <- shape_file("../includes/" + CITY + "/" + "nodes.shp");
-	shape_file ROADS_SHAPE_FILE <- shape_file("../includes/" + CITY + "/" + "roads.shp");
+	shape_file NODES_SHAPE_FILE <- shape_file("../includes/"  + CITY + "/" + "nodes.shp");
+	shape_file ROADS_SHAPE_FILE <- shape_file("../includes/"  + CITY + "/" + "roads.shp");
 	shape_file FOOTWAY_SHAPE_FILE <- shape_file("../includes/" + CITY + "/" + "footways.shp");
 	shape_file BUILDING_SHAPE_FILE <- shape_file("../includes/" + CITY + "/" + "buildings.shp");
 	

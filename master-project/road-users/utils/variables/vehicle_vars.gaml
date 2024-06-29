@@ -12,10 +12,12 @@ import "./vehicle/truck_vars.gaml"
 global {
 
 // Number of agents used 
-	int NUM_CARS <- 10;
+	int NUM_CARS <- 100;
 	int NUM_TRUCKS <- 10;
 	int NUM_BICYCLES <- 10;
 	int NUM_PEDESTRIANS <- 10;
+	
+	int NUM_CARS_TESTING <- 20;
 
 	// right or left side driving
 	bool RIGHT_SIDE_DRIVING <- true;
@@ -36,7 +38,10 @@ global {
 	float TIME_HEADWAY <- 3 #s;
 
 	// Percentage that drivers are willing to drive over the speed limit (1.1 means 10 percent)
-	float SPEED_COEFF <- 1.10;
+	float MAX_SPEED_COEFF <- 1.10;
+	float MIN_SPEED_COEFF <- 0.90;
+	
+	bool DRIVE_RANDOM <- false;
 	
 }
 	
