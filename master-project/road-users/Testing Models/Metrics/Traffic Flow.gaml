@@ -16,11 +16,11 @@ global {
 	float car_avg_speed -> {mean(car collect (each.speed)) * 3.6}; // average speed stats
 	float truck_avg_speed -> {mean(truck collect (each.speed)) * 3.6}; // average speed stats
 	float bicycle_avg_speed -> {mean(bicycle collect (each.speed)) * 3.6}; // average speed stats
-	float all_avg_speed -> mean([car_avg_speed,truck_avg_speed,bicycle_avg_speed]);
-	float traffic_density_per_km ->  {sum(road collect (each.traffic_density_per_km))};
-	float traffic_flow -> traffic_density_per_km * all_avg_speed; 
+	float all_avg_speed -> mean([car_avg_speed, truck_avg_speed, bicycle_avg_speed]);
+	float traffic_density_per_km -> {sum(road collect (each.traffic_density_per_km))};
+	float traffic_flow -> traffic_density_per_km * all_avg_speed;
 	float size_environment <- 360 #m;
-	
+
 	// measure density of the road
 	bool measure_density <- true;
 
@@ -58,7 +58,6 @@ global {
 		create car number: num_cars with: (location: intersection[0].location);
 		create truck number: num_trucks with: (location: intersection[2].location);
 		create bicycle number: num_bicycles with: (location: intersection[4].location);
-		save [] to: "../data/testing/average_speed_test.csv" format: "csv" rewrite: true;
 	} }
 
 experiment straight_road type: gui {
@@ -78,28 +77,17 @@ experiment straight_road type: gui {
 			species footway_node aspect: base;
 			species footway_edge aspect: base;
 		}
-		
-		
 
 		display car_speed_chart type: 2d {
-
 			chart "Average speed" type: series size: {1, 1} position: {0, 0} x_label: "Seconds" y_label: "Average speed km/h" {
 				data "Car" value: car_avg_speed color: #red;
 				data "Truck" value: truck_avg_speed color: #blue;
 				data "Bicycle" value: bicycle_avg_speed color: #yellow;
 				data "All Average Speed" value: all_avg_speed color: #orange;
-				
 			}
 
 		}
-		
-		display density_per_km type: 2d {
-			chart "Traffic Density Per Km" type: series size: {1, 1} position: {0, 0} x_label: "Time in Seconds" y_label: "Density per km" {
-				data "Traffic Density Per Km" value: traffic_density_per_km color: #blue;
-			}
 
-		}
-		
 		display traffic_flow type: 2d {
 			chart "Traffic Flow" type: series size: {1, 1} position: {0, 0} x_label: "Time in Seconds" y_label: "Vehicles per Hour" {
 				data "Vehicles per Hour" value: traffic_flow color: #blue;
@@ -107,10 +95,6 @@ experiment straight_road type: gui {
 
 		}
 
-	}
-
-	reflex save_result {
-		save [time, car_avg_speed, truck_avg_speed, bicycle_avg_speed] to: "../output/testing/average_speed_test.csv" format: "csv" rewrite: false;
 	}
 
 }

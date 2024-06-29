@@ -49,7 +49,6 @@ global {
 		create car number: num_cars with: (location: intersection[0].location);
 		create truck number: num_trucks with: (location: intersection[2].location);
 		create bicycle number: num_bicycles with: (location: intersection[4].location);
-		
 		save [] to: "../output/testing/average_speed_test.csv" format: "csv" rewrite: true;
 	} }
 
@@ -84,10 +83,6 @@ experiment straight_road type: gui {
 
 		}
 
-	}
-
-	reflex save_result {
-		save [time, car_avg_speed, truck_avg_speed, bicycle_avg_speed] to: "../output/testing/average_speed_test.csv" format: "csv" rewrite: false;
 	}
 
 }
