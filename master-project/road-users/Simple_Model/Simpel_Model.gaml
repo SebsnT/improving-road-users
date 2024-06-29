@@ -6,9 +6,9 @@
 */
 model SimpleModel
 
-import "Simple_Vehicles.gaml"
-import "Simple_Pedestrians.gaml"
 import "../utils/variables/global_vars_testing.gaml"
+import "../models/Vehicles.gaml"
+import "../models/Pedestrian.gaml"
 
 global {
 	int num_cars;

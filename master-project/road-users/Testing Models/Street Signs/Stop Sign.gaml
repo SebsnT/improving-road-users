@@ -6,9 +6,6 @@
 */
 model Stop_Sign
 
-import "../../utils/variables/global_vars_testing.gaml"
-import "../../Simple_Model/Simple_Vehicles.gaml"
-import "../../Simple_Model/Simple_Pedestrians.gaml"
 import "../Base Testing Model.gaml"
 
 global {
@@ -16,7 +13,7 @@ global {
 
 	init {
 
-	// intersections
+		// intersections
 		create intersection with: (location: {x_left_border, y_middle}, traffic_signal_type: "");
 		create intersection with: (location: {x_middle, y_middle}, traffic_signal_type: "");
 		create intersection with: (location: {x_right_border, y_middle}, traffic_signal_type: "");

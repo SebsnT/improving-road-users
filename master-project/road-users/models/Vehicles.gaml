@@ -16,7 +16,7 @@ global {
 
 species base_vehicle skills: [driving] {
 	intersection target;
-	int lane_width <- LANE_WIDTH;
+	int lane_width;
 	rgb color;
 	bool is_stopping <- false;
 	float counter <- 5 #sec;
@@ -27,15 +27,19 @@ species base_vehicle skills: [driving] {
 
 	init {
 		map edge_weights <- road as_map (each::each.shape.perimeter);
+		lane_width <- LANE_WIDTH;
+		road_network <- as_driving_graph(road, intersection) with_weights edge_weights;
+		right_side_driving <- RIGHT_SIDE_DRIVING;
+		min_safety_distance <- MIN_SAFETY_DISTANCE;
+		min_security_distance <- MIN_SECURITY_DISTANCE;
+		proba_respect_priorities <- PROBA_RESPECT_PRIORITIES;
+		proba_respect_stops <- PROBA_RESPECT_STOPS;
+		time_headway <- TIME_HEADWAY;
+		politeness_factor <- POLITENESS_FACTOR;
 	}
 
 	reflex select_next_path when: current_path = nil {
-		if not (drive_random){
-			do compute_path graph: road_network target: one_of(end_nodes);
-		} else {
-			do compute_path graph: road_network target: one_of(intersection);
-		}
-		
+		do compute_path graph: road_network target: one_of(end_nodes);
 	}
 
 	reflex commute when: current_path != nil {
@@ -71,7 +75,7 @@ species base_vehicle skills: [driving] {
 		} }
 
 	reflex stop_at_stop_sign when: current_target != nil and intersection(current_target).traffic_signal_type != nil and intersection(current_target).traffic_signal_type = "stop" {
-		if (distance_to_current_target <= 2) {
+		if (distance_to_current_target <= 3) {
 			ask intersection closest_to (self) {
 				do block_roads_to_traffic_sign(roads_affected_by_traffic_signal);
 				myself.speed <- 0.0;
@@ -129,7 +133,7 @@ species bicycle parent: base_vehicle {
 	init {
 		num_lanes_occupied <- BICYCLES_LANE_OCCUPIED;
 		vehicle_length <- rnd(BICYCLE_MIN_LENGTH, BICYCLE_MAX_LENGTH, 0.1);
-		max_speed <- rnd(BICYCLE_MIN_SPEED, BICYCLE_MAX_SPEED, 1.0);
+		max_speed <- rnd(BICYCLE_MIN_SPEED, BICYCLE_MAX_SPEED, 1.0 );
 		max_acceleration <- rnd(BICYCLE_MIN_ACCLERATION, BICYCLE_MAX_ACCLERATION, 0.1);
 		max_deceleration <- rnd(BICYCLE_MIN_DECELERATION, BICYCLE_MAX_DECELERATION, 0.1);
 	}

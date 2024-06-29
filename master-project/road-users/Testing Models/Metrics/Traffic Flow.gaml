@@ -1,14 +1,13 @@
 /**
-* Name: StraightRoad
-* Based on the internal empty template. 
-* Author: Sebastian
+* Name: TrafficFlow
+* Author: PC
 * Tags: 
 */
-model StraightRoad
+model TrafficFlow
 
-import "../utils/variables/global_vars_testing.gaml"
-import "../Simple_Model/Simple_Vehicles.gaml"
-import "../Simple_Model/Simple_Pedestrians.gaml"
+import "../../utils/variables/global_vars_testing.gaml"
+import "../../models/Vehicles.gaml"
+import "../../models/Pedestrian.gaml"
 
 global {
 	int num_cars;
@@ -17,7 +16,13 @@ global {
 	float car_avg_speed -> {mean(car collect (each.speed)) * 3.6}; // average speed stats
 	float truck_avg_speed -> {mean(truck collect (each.speed)) * 3.6}; // average speed stats
 	float bicycle_avg_speed -> {mean(bicycle collect (each.speed)) * 3.6}; // average speed stats
-	float size_environment <- 500 #m;
+	float all_avg_speed -> mean([car_avg_speed,truck_avg_speed,bicycle_avg_speed]);
+	float traffic_density_per_km ->  {sum(road collect (each.traffic_density_per_km))};
+	float traffic_flow -> traffic_density_per_km * all_avg_speed; 
+	float size_environment <- 360 #m;
+	
+	// measure density of the road
+	bool measure_density <- true;
 
 	reflex stop_simulation when: length(car) = 0 and length(truck) = 0 and length(bicycle) = 0 {
 		do pause;
@@ -25,7 +30,7 @@ global {
 
 	init {
 
-		// intersections
+	// intersections
 		create intersection with: (location: {x_left_border, y_middle}, traffic_signal_type: "");
 		create intersection with: (location: {size_environment - 10, y_middle}, traffic_signal_type: "");
 		create intersection with: (location: {x_left_border, y_middle + 10}, traffic_signal_type: "");
@@ -46,11 +51,14 @@ global {
 			do setup_env();
 		}
 
+		ask road {
+			do setup_roads();
+		}
+
 		create car number: num_cars with: (location: intersection[0].location);
 		create truck number: num_trucks with: (location: intersection[2].location);
 		create bicycle number: num_bicycles with: (location: intersection[4].location);
-		
-		save [] to: "../output/testing/average_speed_test.csv" format: "csv" rewrite: true;
+		save [] to: "../data/testing/average_speed_test.csv" format: "csv" rewrite: true;
 	} }
 
 experiment straight_road type: gui {
@@ -70,16 +78,31 @@ experiment straight_road type: gui {
 			species footway_node aspect: base;
 			species footway_edge aspect: base;
 		}
+		
+		
 
 		display car_speed_chart type: 2d {
-			graphics "my new layer" {
-				write time color: #red;
-			}
 
 			chart "Average speed" type: series size: {1, 1} position: {0, 0} x_label: "Seconds" y_label: "Average speed km/h" {
 				data "Car" value: car_avg_speed color: #red;
 				data "Truck" value: truck_avg_speed color: #blue;
 				data "Bicycle" value: bicycle_avg_speed color: #yellow;
+				data "All Average Speed" value: all_avg_speed color: #orange;
+				
+			}
+
+		}
+		
+		display density_per_km type: 2d {
+			chart "Traffic Density Per Km" type: series size: {1, 1} position: {0, 0} x_label: "Time in Seconds" y_label: "Density per km" {
+				data "Traffic Density Per Km" value: traffic_density_per_km color: #blue;
+			}
+
+		}
+		
+		display traffic_flow type: 2d {
+			chart "Traffic Flow" type: series size: {1, 1} position: {0, 0} x_label: "Time in Seconds" y_label: "Vehicles per Hour" {
+				data "Vehicles per Hour" value: traffic_flow color: #blue;
 			}
 
 		}

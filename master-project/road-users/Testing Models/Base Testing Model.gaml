@@ -7,8 +7,7 @@
 model BaseTestingModel
 
 import "../utils/variables/global_vars_testing.gaml"
-import "../Simple_Model/Simple_Vehicles.gaml"
-import "../Simple_Model/Simple_Pedestrians.gaml"
+import "../models/Pedestrian.gaml"
 
 global {
 	int num_cars;
@@ -38,10 +37,10 @@ global {
 
 experiment testing_experiment type: gui {
 	parameter "Number of Cars" var: num_cars <- NUM_CARS_TESTING;
-	parameter "Number of Pedestrians" var:num_pedestrians <- num_pedestrians;
+	parameter "Number of Pedestrians" var: num_pedestrians <- num_pedestrians;
 
 	action _init_ {
-		create simulation with: [num_cars::NUM_CARS, num_pedestrians::num_pedestrians ];
+		create simulation with: [num_cars::NUM_CARS, num_pedestrians::num_pedestrians];
 		save [time, car_avg_speed, traffic_density_per_km, traffic_flow_car] to: "../../output/testing/" + experiment_name + ".csv" format: "csv" rewrite: true;
 	}
 

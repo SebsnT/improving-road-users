@@ -6,13 +6,11 @@
 */
 model SignalizedCrossIntersectionWithoutSignals
 
-import "../../utils/variables/global_vars_testing.gaml"
-import "../../Simple_Model/Simple_Vehicles.gaml"
-import "../../Simple_Model/Simple_Pedestrians.gaml"
 import "../Base Testing Model.gaml"
 
 global {
 	string experiment_name <- "signalized_cross_intersection_without_signals";
+
 	init {
 
 	// intersections
