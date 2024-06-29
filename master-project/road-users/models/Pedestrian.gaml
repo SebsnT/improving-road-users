@@ -13,6 +13,13 @@ species pedestrian skills: [moving] {
 	rgb color <- #green;
 	point target;
 	int staying_counter;
+	bool is_crossing;
+	bool is_waiting;
+	bool waits_for_green;
+	float waiting_time <- rnd(MIN_CROSSING_WAITING_TIME, MAX_CROSSING_WAITING_TIME, 0.1) #s;
+	float waiting_counter <- 0 #s;
+	float walking_speed <- gauss(4, 1) #km / #h;
+	float crossing_speed <- walking_speed * 1.1;
 
 	reflex new_target when: target = nil {
 		target <- point(one_of(building));

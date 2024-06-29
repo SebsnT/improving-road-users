@@ -184,11 +184,11 @@ species footway_edge skills: [pedestrian_road] parent: base_edge {
 	}
 
 	// TODO handle car driving left or right at intersection
-	reflex block_node when: !intersects_traffic_signal_crossing{
+	reflex block_node when: !intersects_traffic_signal_crossing {
 		if (agents_on != []) {
 			is_occupied <- true;
 			if (intersects_with_crossing != nil) {
-				ask intersection closest_to (self){
+				ask intersection closest_to (self) {
 					do wait_to_cross();
 				}
 
@@ -197,8 +197,11 @@ species footway_edge skills: [pedestrian_road] parent: base_edge {
 		} else {
 			is_occupied <- false;
 			if (intersects_with_crossing != nil) {
-				ask intersection closest_to (self){
-					do unblock_road();
+				ask intersection closest_to (self) {
+					if (stop != []) {
+						do unblock_road();
+					}
+
 				}
 
 			}

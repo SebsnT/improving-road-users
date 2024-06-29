@@ -16,11 +16,11 @@ global {
 	int num_bicycles;
 	int num_pedestrians;
 	float size_environment <- 1 #km;
-	geometry shape <- square(1000);
-	graph road_network;
+	geometry shape <- square(size_environment);
 
 	// measure density of the road
 	bool measure_density <- true;
+	bool despawn_vehicles <- false;
 
 	// for speed charts 
 	// calculate average speed
@@ -61,9 +61,9 @@ global {
 	// Create Intersections
 	//----------------------------------------------------------------------
 
-	// Middle line
+		// Middle line
 
-	// left border
+		// left border
 		create intersection with: (location: {left_border, y_middle_road}, traffic_signal_type: "");
 
 		// left traffic light
@@ -213,55 +213,71 @@ global {
 		// Node 23
 		create road with: (num_lanes: NUM_LANES, maxspeed: 50 #km / #h, shape: line([intersection[23], intersection[20]]));
 
-		//build the graph from the roads and intersections
-		road_network <- as_driving_graph(road, intersection);
-
 		//----------------------------------------------------------------------
 		// Create and Connect Foootways
 		//----------------------------------------------------------------------
 
-		// Top nodes
-		create footway_node with: (location: {x_left_intersection - 5, upper_border}, list_connected_index: [6]);
-		create footway_node with: (location: {x_left_intersection + 5, upper_border}, list_connected_index: [8]);
-		create footway_node with: (location: {size_environment / 2 - 5, upper_border}, list_connected_index: [10]);
-		create footway_node with: (location: {size_environment / 2 + 5, upper_border}, list_connected_index: [12]);
+		// left border
+		create footway_node with: (location: {left_border, y_above_middle_road}, list_connected_index: [2]);
+		create footway_node with: (location: {left_border, y_under_middle_road}, list_connected_index: [3]);
 
-		// Middle nodes
-		create footway_node with: (location: {left_border, y_above_middle_road}, list_connected_index: [6]);
-		create footway_node with: (location: {left_border, y_under_middle_road}, list_connected_index: [7]);
-		create footway_node with: (location: {x_left_intersection - 5, y_above_middle_road}, list_connected_index: [0, 4, 7, 8]);
-		create footway_node with: (location: {x_left_intersection - 5, y_under_middle_road}, list_connected_index: [5, 6, 9, 28]);
-		create footway_node with: (location: {x_left_intersection + 5, y_above_middle_road}, list_connected_index: [1, 6, 9, 10]);
-		create footway_node with: (location: {x_left_intersection + 5, y_under_middle_road}, list_connected_index: [7, 8, 11, 29]);
-		create footway_node with: (location: {x_right_intersection - 5, y_above_middle_road}, list_connected_index: [2, 8, 11, 12]);
-		create footway_node with: (location: {x_right_intersection - 5, y_under_middle_road}, list_connected_index: [9, 10, 13, 20]);
-		create footway_node with: (location: {x_right_intersection + 5, y_above_middle_road}, list_connected_index: [3, 10, 13, 14]);
-		create footway_node with: (location: {x_right_intersection + 5, y_under_middle_road}, list_connected_index: [11, 12, 15, 22]);
-		create footway_node with: (location: {right_border, y_above_middle_road}, list_connected_index: [12]);
-		create footway_node with: (location: {right_border, y_under_middle_road}, list_connected_index: [13]);
+		// left intersection
+		create footway_node with: (location: {x_left_intersection - 5, y_above_middle_road}, list_connected_index: [0, 3, 4, 6]);
+		create footway_node with: (location: {x_left_intersection - 5, y_under_middle_road}, list_connected_index: [1, 2, 5, 16]);
+		create footway_node with: (location: {x_left_intersection + 5, y_above_middle_road}, list_connected_index: [2, 5, 7, 8]);
+		create footway_node with: (location: {x_left_intersection + 5, y_under_middle_road}, list_connected_index: [3, 4, 9, 17]);
+
+		// left upper
+		create footway_node with: (location: {x_left_intersection - 5, upper_border}, list_connected_index: [2]);
+		create footway_node with: (location: {x_left_intersection + 5, upper_border}, list_connected_index: [4]);
+
+		// right intersection
+		create footway_node with: (location: {x_right_intersection - 5, y_above_middle_road}, list_connected_index: [4, 9, 10, 12]);
+		create footway_node with: (location: {x_right_intersection - 5, y_under_middle_road}, list_connected_index: [5, 8, 11, 22]);
+		create footway_node with: (location: {x_right_intersection + 5, y_above_middle_road}, list_connected_index: [8, 11, 13, 14]);
+		create footway_node with: (location: {x_right_intersection + 5, y_under_middle_road}, list_connected_index: [9, 10, 15, 24]);
+
+		// right upper
+		create footway_node with: (location: {size_environment / 2 - 5, upper_border}, list_connected_index: [8]);
+		create footway_node with: (location: {size_environment / 2 + 5, upper_border}, list_connected_index: [10]);
+
+		// right border
+		create footway_node with: (location: {right_border, y_above_middle_road}, list_connected_index: [10]);
+		create footway_node with: (location: {right_border, y_under_middle_road}, list_connected_index: [11]);
+
+		// middle of the road
+		create footway_node with: (location: {x_left_intersection - 5, y_middle_road + 100}, list_connected_index: [3, 17, 18]);
+		create footway_node with: (location: {x_left_intersection + 5, y_middle_road + 100}, list_connected_index: [5, 16, 20]);
 
 		// Lower Nodes
-		create footway_node with: (location: {x_left_intersection - 5, y_above_lower_road}, list_connected_index: [7, 17, 17, 18]);
-		create footway_node with: (location: {x_left_intersection - 5, y_under_lower_road}, list_connected_index: [16, 19, 24]);
-		create footway_node with: (location: {x_left_intersection + 5, y_above_lower_road}, list_connected_index: [9, 16, 19, 20]);
-		create footway_node with: (location: {x_left_intersection + 5, y_under_lower_road}, list_connected_index: [17, 18, 21, 25]);
-		create footway_node with: (location: {x_right_intersection - 5, y_above_lower_road}, list_connected_index: [11, 18, 21, 22]);
-		create footway_node with: (location: {x_right_intersection - 5, y_under_lower_road}, list_connected_index: [19, 20, 23, 26]);
-		create footway_node with: (location: {x_right_intersection + 5, y_above_lower_road}, list_connected_index: [13, 20, 23]);
-		create footway_node with: (location: {x_right_intersection + 5, y_under_lower_road}, list_connected_index: [21, 22, 27]);
 
-		// Lowest nodes
-		create footway_node with: (location: {x_left_intersection - 5, lower_border}, list_connected_index: [17]);
-		create footway_node with: (location: {x_left_intersection + 5, lower_border}, list_connected_index: [19]);
-		create footway_node with: (location: {x_right_intersection - 5, lower_border}, list_connected_index: [21]);
-		create footway_node with: (location: {x_right_intersection + 5, lower_border}, list_connected_index: [23]);
-		create footway_node with: (location: {x_left_intersection - 5, y_middle_road + 100}, list_connected_index: [7, 16, 29]);
-		create footway_node with: (location: {x_left_intersection + 5, y_middle_road + 100}, list_connected_index: [9, 18, 28]);
+		// lower left intersection
+		create footway_node with: (location: {x_left_intersection - 5, y_above_lower_road}, list_connected_index: [16, 19, 20]);
+		create footway_node with: (location: {x_left_intersection - 5, y_under_lower_road}, list_connected_index: [18, 21, 26]);
+		create footway_node with: (location: {x_left_intersection + 5, y_above_lower_road}, list_connected_index: [17, 18, 21, 22]);
+		create footway_node with: (location: {x_left_intersection + 5, y_under_lower_road}, list_connected_index: [19, 20, 23, 27]);
+
+		// lower right intersection
+		create footway_node with: (location: {x_right_intersection - 5, y_above_lower_road}, list_connected_index: [9, 20, 23, 24]);
+		create footway_node with: (location: {x_right_intersection - 5, y_under_lower_road}, list_connected_index: [21, 22, 25, 28]);
+		create footway_node with: (location: {x_right_intersection + 5, y_above_lower_road}, list_connected_index: [11, 22, 25]);
+		create footway_node with: (location: {x_right_intersection + 5, y_under_lower_road}, list_connected_index: [23, 24, 29]);
+
+		// bottom left
+		create footway_node with: (location: {x_left_intersection - 5, lower_border}, list_connected_index: [19]);
+		create footway_node with: (location: {x_left_intersection + 5, lower_border}, list_connected_index: [21]);
+
+		// bottom right
+		create footway_node with: (location: {x_right_intersection - 5, lower_border}, list_connected_index: [23]);
+		create footway_node with: (location: {x_right_intersection + 5, lower_border}, list_connected_index: [25]);
+
+		//build the graph from the roads and intersections
+		graph road_network <- as_driving_graph(road, intersection);
 
 		//for traffic light, initialize their counter value (synchronization of traffic lights)
 		ask intersection {
-			do declare_spawn_nodes([intersection[0], intersection[12], intersection[13]]);
-			do declare_end_nodes([intersection[11], intersection[22], intersection[23]]);
+			do declare_spawn_nodes([intersection[0],intersection[11], intersection[12], intersection[13],intersection[22],intersection[23]]);
+			do declare_end_nodes(spawn_nodes);
 			do setup_env();
 		}
 

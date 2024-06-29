@@ -27,7 +27,6 @@ species road skills: [road_skill] {
 	float all_segments_length;
 	float all_agents_length;
 
-
 	action calculate_road_occupied (list vehicles) {
 		do calculate_all_agents_length(vehicles);
 		traffic_density_per_km <- length(vehicles) / (sum(road collect (each.all_segments_length)) / 1000);
@@ -161,7 +160,10 @@ species intersection skills: [intersection_skill] {
 
 	// Actions and reflexes related to crossing the road
 	action wait_to_cross {
-		stop <- stop + roads_in;
+		if not (stop contains roads_in) {
+			stop <- stop + roads_in;
+		}
+
 		intersection_blocked <- true;
 	}
 

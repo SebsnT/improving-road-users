@@ -15,7 +15,7 @@ global {
 
 species base_vehicle skills: [driving] {
 	intersection target;
-	int lane_width <- LANE_WIDTH;
+	int lane_width;
 	rgb color;
 	bool is_stopping <- false;
 	float counter <- 5 #sec;
@@ -26,13 +26,13 @@ species base_vehicle skills: [driving] {
 
 	init {
 		map edge_weights <- road as_map (each::each.shape.perimeter);
+		lane_width <- LANE_WIDTH;
 		road_network <- as_driving_graph(road, intersection) with_weights edge_weights;
 		right_side_driving <- RIGHT_SIDE_DRIVING;
 		min_safety_distance <- MIN_SAFETY_DISTANCE;
 		min_security_distance <- MIN_SECURITY_DISTANCE;
 		proba_respect_priorities <- PROBA_RESPECT_PRIORITIES;
 		proba_respect_stops <- PROBA_RESPECT_STOPS;
-		speed_coeff <- SPEED_COEFF;
 		time_headway <- TIME_HEADWAY;
 		politeness_factor <- POLITENESS_FACTOR;
 	}
@@ -97,13 +97,12 @@ species car parent: base_vehicle {
 	rgb color <- #red;
 
 	init {
-		lane_width <- LANE_WIDTH;
 		num_lanes_occupied <- CAR_LANE_OCCUPIED;
 		vehicle_length <- rnd(CAR_MIN_LENGTH, CAR_MAX_LENGTH, 0.1);
 		max_speed <- CAR_MAXSPEED;
 		max_acceleration <- CAR_ACCELERATION_RATE;
 		max_deceleration <- CAR_DECELERATION_RATE;
-		speed_coeff <- SPEED_COEFF;
+		speed_coeff <- rnd(MIN_SPEED_COEFF,MAX_SPEED_COEFF, 0.1);
 		proba_lane_change_up <- gauss(0.5, 0.5);
 		proba_lane_change_up <- gauss(0.5, 0.5);
 		proba_use_linked_road <- 0.5;
@@ -115,13 +114,11 @@ species truck parent: base_vehicle {
 	rgb color <- #blue;
 
 	init {
-		lane_width <- LANE_WIDTH;
 		num_lanes_occupied <- TRUCK_LANE_OCCUPIED;
 		vehicle_length <- one_of(TRUCK_POWER_DRIVE_LENGTH, TRUCK_POWER_HEAVY_TRAILER);
 		max_speed <- TRUCK_MAXSPEED;
 		max_acceleration <- TRUCK_ACCELERATION_RATE;
 		max_deceleration <- TRUCK_DECELERATION_RATE;
-		speed_coeff <- SPEED_COEFF;
 		proba_lane_change_up <- gauss(0.5, 0.5);
 		proba_lane_change_up <- gauss(0.5, 0.5);
 		proba_use_linked_road <- 0.5;

@@ -184,7 +184,10 @@ species intersection skills: [intersection_skill] {
 
 	// Actions and reflexes related to crossing the road
 	action wait_to_cross {
-		stop <- stop + roads_in;
+		if not (stop contains roads_in) {
+			stop <- stop + roads_in;
+		}
+
 		intersection_blocked <- true;
 	}
 
@@ -250,8 +253,8 @@ species intersection skills: [intersection_skill] {
 	// Setters
 	// Actions related to setting up the environment
 	// --------------------------------------------------------
-	
-		// Setting up the environemnt for interactions
+
+	// Setting up the environemnt for interactions
 	action setup_env {
 		do set_connected_intersections();
 		do set_connected_street_signs();
@@ -264,7 +267,7 @@ species intersection skills: [intersection_skill] {
 		do set_roads_blocked_when_pedestrian_cross();
 		do initialize_traffic_signals();
 	}
-	
+
 	action set_roads_blocked_when_pedestrian_cross {
 		loop i over: roads_in {
 			if not (roads_blocked_when_red contains i) {
@@ -464,8 +467,6 @@ species intersection skills: [intersection_skill] {
 		}
 
 	}
-
-
 
 	// Declare where vehicles spawn and despawn
 	action declare_end_nodes (list<intersection> nodes) {
