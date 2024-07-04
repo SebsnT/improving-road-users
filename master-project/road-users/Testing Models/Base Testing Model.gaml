@@ -12,14 +12,21 @@ import "../models/Pedestrian.gaml"
 global {
 	int num_cars;
 	int num_pedestrians;
-	float car_avg_speed -> {mean(car collect (each.speed * 3.6))}; // average speed stats
- 	float traffic_density_per_km -> {sum(road collect (each.traffic_density_per_km))};
+	// average speed stats
+	float car_avg_speed -> {mean(car collect (each.speed * 3.6))};
+	float traffic_density_per_km -> {sum(road collect (each.traffic_density_per_km))};
 	float traffic_flow_car -> traffic_density_per_km * car_avg_speed;
 	bool measure_density <- true;
 	string experiment_name <- "";
+	bool is_batch;
+	int experiment_num <- 0;
 
 	reflex stop when: cycle = 1000 {
-		do pause;
+		do die;
+	}
+
+	reflex batch_save when: is_batch {
+		save [cycle, car_avg_speed, traffic_density_per_km, traffic_flow_car] to: "../../output/testing/batch/" + experiment_name + ".csv" format: "csv" rewrite: false;
 	}
 
 	init {
@@ -35,12 +42,11 @@ global {
 
 }
 
-experiment testing_experiment type: gui {
-	parameter "Number of Cars" var: num_cars <- NUM_CARS_TESTING;
-	parameter "Number of Pedestrians" var: num_pedestrians <- num_pedestrians;
+experiment gui type: gui {
 
 	action _init_ {
-		create simulation with: [num_cars::NUM_CARS, num_pedestrians::num_pedestrians];
+		is_batch <- false;
+		create simulation with: [num_cars::NUM_CARS_TESTING, num_pedestrians::NUM_PEDESTRIANS];
 		save [time, car_avg_speed, traffic_density_per_km, traffic_flow_car] to: "../../output/testing/" + experiment_name + ".csv" format: "csv" rewrite: true;
 	}
 
@@ -81,4 +87,10 @@ experiment testing_experiment type: gui {
 
 	}
 
+}
+
+experiment batch autorun: true type: batch repeat: 20 parallel: false until: cycle >= 1000 {
+	parameter "Number of Cars" var: num_cars <- NUM_CARS_TESTING;
+	parameter "Number of Pedestrians" var: num_pedestrians <- num_pedestrians;
+	parameter "Is Batch" var: is_batch <- true;
 }

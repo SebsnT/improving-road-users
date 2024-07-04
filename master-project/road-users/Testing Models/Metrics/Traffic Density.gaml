@@ -62,7 +62,6 @@ experiment traffic_density_experiment type: gui {
 
 	action _init_ {
 		create simulation with: [num_cars::200];
-		save [time, traffic_densiy_percentage] to: "../output/testing/traffic_density_test.csv" format: "csv" rewrite: true;
 	}
 
 	output synchronized: true {

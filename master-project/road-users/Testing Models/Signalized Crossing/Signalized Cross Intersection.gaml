@@ -10,8 +10,8 @@ import "../Base Testing Model.gaml"
 
 global {
 	string experiment_name <- "signalized_cross_intersection";
+
 	init {
-	// intersections
 
 	// Middle Intersections
 		create intersection with: (location: {x_left_border, y_middle}, traffic_signal_type: "");

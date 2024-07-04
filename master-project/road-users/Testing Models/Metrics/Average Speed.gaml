@@ -17,6 +17,7 @@ global {
 	float car_avg_speed -> {mean(car collect (each.speed)) * 3.6}; // average speed stats
 	float truck_avg_speed -> {mean(truck collect (each.speed)) * 3.6}; // average speed stats
 	float bicycle_avg_speed -> {mean(bicycle collect (each.speed)) * 3.6}; // average speed stats
+	float all_avg_speed -> mean([car_avg_speed, truck_avg_speed, bicycle_avg_speed]);
 	float size_environment <- 500 #m;
 
 	reflex stop_simulation when: length(car) = 0 and length(truck) = 0 and length(bicycle) = 0 {
@@ -49,13 +50,17 @@ global {
 		create car number: num_cars with: (location: intersection[0].location);
 		create truck number: num_trucks with: (location: intersection[2].location);
 		create bicycle number: num_bicycles with: (location: intersection[4].location);
-		save [] to: "../output/testing/average_speed_test.csv" format: "csv" rewrite: true;
+		save [] to: "../../output/metrics/average_speed_test.csv" format: "csv" rewrite: true;
 	} }
 
 experiment straight_road type: gui {
 
 	action _init_ {
 		create simulation with: [num_cars::1, num_trucks::1, num_bicycles::1];
+	}
+	
+	reflex save {
+		save [cycle, car_avg_speed, truck_avg_speed, bicycle_avg_speed, all_avg_speed] to: "../../output/metrics/average_speed_test.csv" format: "csv" rewrite: false;
 	}
 
 	output synchronized: true {
@@ -79,6 +84,7 @@ experiment straight_road type: gui {
 				data "Car" value: car_avg_speed color: #red;
 				data "Truck" value: truck_avg_speed color: #blue;
 				data "Bicycle" value: bicycle_avg_speed color: #yellow;
+				data "OVerall" value: all_avg_speed color: #yellow;
 			}
 
 		}
