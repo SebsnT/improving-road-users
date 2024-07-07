@@ -6,37 +6,11 @@
 */
 model SimpleModel
 
-import "../utils/variables/global_vars_testing.gaml"
-import "../models/Vehicles.gaml"
-import "../models/Pedestrian.gaml"
+import "./Simple Experiment Model.gaml"
 
 global {
-	int num_cars;
-	int num_trucks;
-	int num_bicycles;
-	int num_pedestrians;
 	float size_environment <- 1 #km;
 	geometry shape <- square(size_environment);
-
-	// measure density of the road
-	bool measure_density <- true;
-	bool despawn_vehicles <- false;
-
-	// for speed charts 
-	// calculate average speed
-	// multiply with 3.6 to convert to km/h
-	float car_avg_speed -> {mean(car collect (each.speed * 3.6))}; // average speed stats
-	float truck_avg_speed -> {mean(truck collect (each.speed * 3.6))}; // average speed stats
-	float bicycle_avg_speed -> {mean(bicycle collect (each.speed * 3.6))}; // average speed stats
-	float pedestrian_avg_speed -> {mean(pedestrian collect (each.speed * 3.6))}; // average speed stats
-	float car_truck_avg_speed -> mean([car_avg_speed, truck_avg_speed]);
-	float all_avg_speed -> mean([car_avg_speed, truck_avg_speed, bicycle_avg_speed]);
-	float traffic_densiy_percentage -> {mean(road collect (each.traffic_density_percentage))}; // average traffic density
-	float traffic_density_per_km -> {sum(road collect (each.traffic_density_per_km))};
-	float traffic_flow_car -> traffic_density_per_km * car_avg_speed;
-	float traffic_flow_car_truck -> traffic_density_per_km * car_truck_avg_speed;
-	float traffic_flow_all -> traffic_density_per_km * all_avg_speed;
-
 	// constants for road creation
 	int left_border <- 50;
 	float right_border <- size_environment / 2 + 300;
@@ -50,10 +24,6 @@ global {
 	float y_under_lower_road <- y_lower_road + 5;
 	float x_left_intersection <- size_environment / 2 - 300;
 	float x_right_intersection <- size_environment / 2;
-
-	reflex stop when: cycle = 1000 {
-		do pause;
-	}
 
 	init {
 
