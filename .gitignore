@@ -1,6 +1,5 @@
-
-master-project/.built_in_models_1701520045530
-
 master-project/.metadata
 master-project/road-users/.settings/org.eclipse.core.resources.prefs
 master-project/.rebuild
+/.metadata/
+.built_in_models_*
