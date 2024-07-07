@@ -1,15 +1,15 @@
 /**
-* Name: Stop_Sign_Intersection
+* Name: Giveway
 * Based on the internal empty template. 
 * Author: Sebastian
 * Tags: 
 */
-model Stop_Sign_Intersection
+model Giveway
 
 import "../Base Testing Model.gaml"
 
 global {
-	string experiment_name <- "street_signs_stop_sign_cross_intersection";
+	string experiment_name <- "street_signs_cross_intersection_without_signals";
 
 	init {
 
@@ -17,9 +17,9 @@ global {
 		create intersection with: (location: {x_left_border, y_middle}, traffic_signal_type: "");
 		create intersection with: (location: {x_middle, y_middle}, traffic_signal_type: "");
 		create intersection with: (location: {x_right_border, y_middle}, traffic_signal_type: "");
-		create intersection with: (location: {x_middle, y_middle + 5}, is_traffic_signal: true, traffic_signal_type: "stop");
+		create intersection with: (location: {x_middle, y_middle + 5}, is_traffic_signal: true, traffic_signal_type: "give_way");
 		create intersection with: (location: {x_middle, y_middle + 100}, traffic_signal_type: "");
-		create intersection with: (location: {x_middle, y_middle - 5}, is_traffic_signal: true, traffic_signal_type: "stop");
+		create intersection with: (location: {x_middle, y_middle - 5}, is_traffic_signal: true, traffic_signal_type: "give_way");
 		create intersection with: (location: {x_middle, y_middle - 100}, traffic_signal_type: "");
 
 		// roads

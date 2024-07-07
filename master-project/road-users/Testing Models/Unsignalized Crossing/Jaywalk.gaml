@@ -10,9 +10,9 @@ model Jaywalk
 
 import "../../utils/variables/global_vars_testing.gaml"
 
-import "../../Simpel Model/Simple_Vehicles.gaml"
+import "../../Simple_Model/Simple_Vehicles.gaml"
 
-import "../../Simpel Model/Simple_Pedestrians.gaml"
+import "../../Simple_Model/Simple_Pedestrians.gaml"
 
 global {
 	
@@ -45,10 +45,10 @@ global {
 		graph road_network <- as_driving_graph(road,intersection);
 		
 		//for traffic light, initialize their counter value (synchronization of traffic lights)
-		ask intersection where each.is_traffic_signal {
-			do initialize;
+		ask intersection {
 			do declare_spawn_nodes([intersection[0]]);
 			do declare_end_nodes([intersection[2]]);
+			do setup_env();
 		}
 			
 		create car number: num_cars with: (location: one_of(spawn_nodes).location);

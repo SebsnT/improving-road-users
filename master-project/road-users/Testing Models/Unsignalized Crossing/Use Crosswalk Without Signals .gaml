@@ -4,19 +4,17 @@
 * Author: Sebastian
 * Tags: 
 */
-model Crosswalk
+model WithoutCrosswalk
 
 import "../Base Testing Model.gaml"
 
 global {
-	string experiment_name <- "use_crosswalk";
-	int num_pedestrians <- 20;
+	string experiment_name <- "use_crosswalk_without_signals";
 
 	init {
-
-	// intersections
+		// intersections
 		create intersection with: (location: {x_left_border, y_middle}, traffic_signal_type: "");
-		create intersection with: (location: {x_middle, y_middle}, is_traffic_signal: true, traffic_signal_type: "crossing");
+		create intersection with: (location: {x_middle, y_middle}, is_traffic_signal: true, traffic_signal_type: "");
 		create intersection with: (location: {x_right_border, y_middle}, traffic_signal_type: "");
 
 		// roads
@@ -50,6 +48,4 @@ global {
 		}
 
 		create car number: num_cars with: (location: one_of(spawn_nodes).location);
-		create pedestrian number: num_pedestrians with: (location: one_of(footway_edge[0], footway_edge[1], footway_edge[3], footway_edge[4]).location);
 	} }
-
