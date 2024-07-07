@@ -8,11 +8,7 @@
 model Jaywalk
 
 
-import "../../utils/variables/global_vars_testing.gaml"
-
-import "../../Simple_Model/Simple_Vehicles.gaml"
-
-import "../../Simple_Model/Simple_Pedestrians.gaml"
+import "../Base Testing Model.gaml"
 
 global {
 	
