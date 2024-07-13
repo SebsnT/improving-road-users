@@ -11,14 +11,6 @@ import "./vehicle/truck_vars.gaml"
 
 global {
 
-// Number of agents used 
-	int NUM_CARS <- 100;
-	int NUM_TRUCKS <- 10;
-	int NUM_BICYCLES <- 10;
-	int NUM_PEDESTRIANS <- 10;
-	
-	int NUM_CARS_TESTING <- 20;
-
 	// right or left side driving
 	bool RIGHT_SIDE_DRIVING <- true;
 	int LANE_WIDTH <- 1;

@@ -6,6 +6,18 @@
 model gobal_vars_testing
 
 global {
+	
+	// Number of agents used 
+	int NUM_CARS <- 100;
+	int NUM_TRUCKS <- 10;
+	int NUM_BICYCLES <- 10;
+	int NUM_PEDESTRIANS <- 10;
+	
+	int NUM_CARS_TESTING <- 30;
+	int NUM_TRUCKS_TESTING <- 30;
+	int NUM_BICYCLES_TESTING <- 30;
+	int NUM_PEDESTRIANS_TESTING <- 100;
+	
 
 	// bools for showing testing information
 	bool show_intersection_numbers <- false;
@@ -37,6 +49,7 @@ global {
 
 	// size of environment
 	geometry shape <- square(size_environment);
+
 }
 
 
