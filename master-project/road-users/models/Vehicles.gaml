@@ -12,6 +12,17 @@ import "./city/Road.gaml"
 global {
 	bool despawn_vehicles;
 	bool drive_random <- DRIVE_RANDOM;
+
+	// Vehicles enter
+	int num_cars_entering;
+	int num_trucks_entering;
+	int num_bicycles_entering;
+
+	// Vehicles exit
+	int num_cars_exiting;
+	int num_trucks_exiting;
+	int num_bicycles_exiting;
+	int num_all_exiting;
 }
 
 species base_vehicle skills: [driving] {
@@ -64,15 +75,35 @@ species base_vehicle skills: [driving] {
 	}
 
 	// testing puposes for dead ends only
-	reflex dead_end when: distance_to_goal < 2 and despawn_vehicles = true {
+	reflex dead_end when: distance_to_goal < 1 and despawn_vehicles = true {
 		if (final_target != nil and current_target = final_target and length(intersection(final_target).roads_out) <= 1) {
 			do unregister;
 			if (spawn_nodes != []) {
 				create species(self) with: (location: one_of(spawn_nodes).location);
+				do increase_vehicle_count(self);
 			}
 
 			do die;
 		} }
+
+	action increase_vehicle_count (agent vehicle) {
+		switch string(species(vehicle)) {
+			match "car" {
+				num_cars_exiting <- num_cars_exiting + 1;
+			}
+
+			match "truck" {
+				num_trucks_exiting <- num_trucks_exiting + 1;
+			}
+
+			match "bicycle" {
+				num_bicycles_exiting <- num_bicycles_exiting + 1;
+			}
+
+		}
+
+		num_all_exiting <- num_all_exiting + 1;
+	}
 
 	reflex stop_at_stop_sign when: current_target != nil and intersection(current_target).traffic_signal_type != nil and intersection(current_target).traffic_signal_type = "stop" {
 		if (distance_to_current_target <= 3) {
@@ -103,7 +134,7 @@ species car parent: base_vehicle {
 		max_speed <- CAR_MAXSPEED;
 		max_acceleration <- CAR_ACCELERATION_RATE;
 		max_deceleration <- CAR_DECELERATION_RATE;
-		speed_coeff <- rnd(MIN_SPEED_COEFF,MAX_SPEED_COEFF, 0.1);
+		speed_coeff <- rnd(MIN_SPEED_COEFF, MAX_SPEED_COEFF, 0.1);
 		proba_lane_change_up <- gauss(0.5, 0.5);
 		proba_lane_change_up <- gauss(0.5, 0.5);
 		proba_use_linked_road <- 0.5;
@@ -133,7 +164,7 @@ species bicycle parent: base_vehicle {
 	init {
 		num_lanes_occupied <- BICYCLES_LANE_OCCUPIED;
 		vehicle_length <- rnd(BICYCLE_MIN_LENGTH, BICYCLE_MAX_LENGTH, 0.1);
-		max_speed <- rnd(BICYCLE_MIN_SPEED, BICYCLE_MAX_SPEED, 1.0 );
+		max_speed <- rnd(BICYCLE_MIN_SPEED, BICYCLE_MAX_SPEED, 1.0);
 		max_acceleration <- rnd(BICYCLE_MIN_ACCLERATION, BICYCLE_MAX_ACCLERATION, 0.1);
 		max_deceleration <- rnd(BICYCLE_MIN_DECELERATION, BICYCLE_MAX_DECELERATION, 0.1);
 	}
