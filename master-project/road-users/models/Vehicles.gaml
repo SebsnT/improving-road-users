@@ -75,16 +75,20 @@ species base_vehicle skills: [driving] {
 	}
 
 	// testing puposes for dead ends only
-	reflex dead_end when: distance_to_goal < 1 and despawn_vehicles = true {
+	reflex dead_end when: distance_to_goal < 2 and despawn_vehicles = true {
 		if (final_target != nil and current_target = final_target and length(intersection(final_target).roads_out) <= 1) {
-			do unregister;
 			if (spawn_nodes != []) {
-				create species(self) with: (location: one_of(spawn_nodes).location);
+				self.location <- one_of(spawn_nodes).location;
+				do compute_path(road_network, one_of(end_nodes));
+				//create species(self) with: (location: one_of(spawn_nodes).location);
 				do increase_vehicle_count(self);
 			}
 
-			do die;
-		} }
+			//do unregister;
+			//do die;
+		}
+
+	}
 
 	action increase_vehicle_count (agent vehicle) {
 		switch string(species(vehicle)) {
@@ -123,7 +127,9 @@ species base_vehicle skills: [driving] {
 			draw triangle(lane_width * num_lanes_occupied) at: pos color: #white rotate: heading + 90 border: #black;
 		}
 
-	} }
+	}
+
+}
 
 species car parent: base_vehicle {
 	rgb color <- #red;

@@ -4,7 +4,7 @@
 * Author: Sebastian
 * Tags: 
 */
-model StraightRoad
+model AverageSpeed
 
 import "../../utils/variables/global_vars_testing.gaml"
 import "../../models/Vehicles.gaml"
@@ -70,9 +70,6 @@ experiment straight_road type: gui {
 			species car aspect: base;
 			species truck aspect: base;
 			species bicycle aspect: base;
-			species pedestrian aspect: base;
-			species footway_node aspect: base;
-			species footway_edge aspect: base;
 		}
 
 		display car_speed_chart type: 2d {

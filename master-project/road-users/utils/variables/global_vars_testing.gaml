@@ -35,11 +35,11 @@ global {
 
 	// environment and simulation
 	float step <- 0.5 #s;
-	float size_environment <- 300 #m;
+	float size_environment <- 500 #m;
 
 	// constants for building test environments
 	float x_left_border <- 50.0;
-	float x_right_border <- size_environment / 2 + 100;
+	float x_right_border <- size_environment / 2 + 200;
 	float x_middle <- size_environment / 2;
 	float y_middle <- size_environment / 2;
 	float y_above_middle <- size_environment / 2 - 5;

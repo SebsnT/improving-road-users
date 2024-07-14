@@ -22,11 +22,11 @@ global {
 	int experiment_num <- 0;
 
 	reflex stop when: cycle = 1000 {
-		do die;
+		do pause;
 	}
 
 	reflex batch_save when: is_batch {
-		save [cycle, car_avg_speed, traffic_density_per_km, traffic_flow_car] to: "../../output/testing/batch/" + experiment_name + ".csv" format: "csv" rewrite: false;
+		save [time, car_avg_speed, traffic_density_per_km, traffic_flow_car] to: "../../output/testing/batch/" + experiment_name + ".csv" format: "csv" rewrite: false;
 	}
 
 	init {
@@ -91,6 +91,6 @@ experiment gui type: gui {
 
 experiment batch autorun: true type: batch repeat: 20 parallel: false until: cycle >= 1000 {
 	parameter "Number of Cars" var: num_cars <- NUM_CARS_TESTING;
-	parameter "Number of Pedestrians" var: num_pedestrians <- num_pedestrians;
+	parameter "Number of Pedestrians" var: num_pedestrians <- NUM_PEDESTRIANS_TESTING;
 	parameter "Is Batch" var: is_batch <- true;
 }

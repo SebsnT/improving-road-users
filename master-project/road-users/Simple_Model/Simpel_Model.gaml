@@ -6,9 +6,22 @@
 */
 model SimpleModel
 
-import "./Simple Experiment Model.gaml"
+import "../utils/variables/global_vars_testing.gaml"
+import "../models/Vehicles.gaml"
+import "../models/Pedestrian.gaml"
 
 global {
+	
+	int num_cars;
+	int num_trucks;
+	int num_bicycles;
+	int num_pedestrians;
+
+	// measure density of the road
+	bool measure_density <- true;
+	bool despawn_vehicles <- true;
+	
+	
 	float size_environment <- 1 #km;
 	geometry shape <- square(size_environment);
 	// constants for road creation
