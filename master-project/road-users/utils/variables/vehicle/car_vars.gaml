@@ -6,7 +6,7 @@
 model car_vars
 
 global {
-	int CAR_LANE_OCCUPIED <- 1;
+	int CAR_LANE_OCCUPIED <- 2;
 	float CAR_MAXSPEED <- 70 #km / #h;
 
 	// length

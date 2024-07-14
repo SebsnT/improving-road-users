@@ -5,11 +5,12 @@
 * Tags: 
 */
 model Pedestrian
+
 import "../utils/variables/pedestrian_vars.gaml"
 import "./city/Building.gaml"
 import "./city/Road.gaml"
 
-global  {
+global {
 	int number_of_footway <- 0;
 	int number_of_footway_edges <- 0;
 	bool show_footway_nodes;
@@ -27,23 +28,84 @@ species pedestrian skills: [moving] {
 	float waiting_counter <- 0 #s;
 	float walking_speed <- gauss(4, 1) #km / #h;
 	float crossing_speed <- walking_speed * 1.1;
-
-	reflex new_target when: target = nil {
-		target <- point(one_of(building));
-	}
-
 	graph footway_network;
 
 	init {
-		footway_network <- as_edge_graph(footway);
+		footway_network <- as_edge_graph(footway_edge);
+		speed <- walking_speed;
+	}
+
+	reflex new_target when: target = nil {
+		target <- any_location_in(one_of(footway_edge));
+	}
+
+	// cross road with higher speed
+	reflex cross_road when: footway_edge(current_edge) != nil and footway_edge(current_edge).intersects_with_crossing != nil and is_crossing = false {
+		intersection intersecting_crossing <- footway_edge(current_edge).intersects_with_crossing;
+		if (intersecting_crossing.is_connected_to_traffic_signal) {
+			if (intersecting_crossing.connected_to_traffic_signal.is_green) {
+				waits_for_green <- true;
+			}
+
+		} else {
+			is_waiting <- true;
+			is_crossing <- true;
+			do set_speed_for_crossing();
+		}
+
+	}
+
+	reflex wait_to_cross_signalized_crossing when: footway_edge(current_edge) != nil and waits_for_green {
+		speed <- 0.0;
+		if not (footway_edge(current_edge).intersects_with_crossing.is_green) {
+			waits_for_green <- false;
+			do set_speed_for_crossing();
+		}
+
+	}
+
+	// reset speed once road is_crossed
+	reflex reset_speed when: footway_edge(current_edge) != nil and footway_edge(current_edge).intersects_with_crossing = nil and is_crossing = true {
+		is_crossing <- false;
+		do set_speed_for_walking();
+	}
+
+	reflex wait_before_crossing when: is_crossing = true and is_waiting = true {
+		speed <- 0.0 #m / #s;
+		waiting_counter <- waiting_counter + step;
+		if (waiting_counter >= waiting_time #s) {
+			waiting_counter <- 0 #s;
+			is_waiting <- false;
+			speed <- crossing_speed;
+		}
+
+	}
+
+	// setters
+	action set_speed_for_crossing {
+		speed <- crossing_speed;
+	}
+
+	action set_speed_for_walking {
+		speed <- walking_speed;
 	}
 
 	reflex move when: target != nil {
-		do goto target: target on: footway_network;
+		do wander on: footway_network;
 		if (location = target) {
 			target <- nil;
 		}
 
+	}
+
+	action jaywalk {
+	/*
+	 * get opposite edge
+	 * make target opposite edge
+	 * set heading 90 degrees
+	 * move to target
+	 * set target nil
+	 */
 	}
 
 	aspect base {

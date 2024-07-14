@@ -26,7 +26,7 @@ global {
 	}
 
 	reflex batch_save when: is_batch {
-		save [time, car_avg_speed, traffic_density_per_km, traffic_flow_car] to: "../../output/testing/batch/" + experiment_name + ".csv" format: "csv" rewrite: false;
+		save [cycle, car_avg_speed, traffic_density_per_km, traffic_flow_car] to: "../../output/testing/batch/" + experiment_name + ".csv" format: "csv" rewrite: false;
 	}
 
 	init {
@@ -46,12 +46,12 @@ experiment gui type: gui {
 
 	action _init_ {
 		is_batch <- false;
-		create simulation with: [num_cars::NUM_CARS_TESTING, num_pedestrians::NUM_PEDESTRIANS];
-		save [time, car_avg_speed, traffic_density_per_km, traffic_flow_car] to: "../../output/testing/" + experiment_name + ".csv" format: "csv" rewrite: true;
+		create simulation with: [num_cars::NUM_CARS_TESTING, num_pedestrians::NUM_PEDESTRIANS_TESTING];
+		save [cycle, car_avg_speed, traffic_density_per_km, traffic_flow_car] to: "../../output/testing/" + experiment_name + ".csv" format: "csv" rewrite: true;
 	}
 
 	reflex save_result {
-		save [time, car_avg_speed, traffic_density_per_km, traffic_flow_car] to: "../../output/testing/" + experiment_name + ".csv" format: "csv" rewrite: false;
+		save [cycle, car_avg_speed, traffic_density_per_km, traffic_flow_car] to: "../../output/testing/" + experiment_name + ".csv" format: "csv" rewrite: false;
 	}
 
 	output synchronized: true {

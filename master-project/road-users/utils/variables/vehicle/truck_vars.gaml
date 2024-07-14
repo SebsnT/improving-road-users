@@ -6,7 +6,7 @@
 model truck_vars
 
 global {
-	int TRUCK_LANE_OCCUPIED <- 1;
+	int TRUCK_LANE_OCCUPIED <- 2;
 	float TRUCK_MAXSPEED <- 100 #km / #h;
 
 	// length
