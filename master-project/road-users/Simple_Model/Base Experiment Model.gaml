@@ -62,7 +62,7 @@ global {
 
 }
 
-experiment base_experiment type: gui {
+experiment base_experiment type: gui virtual:true {
 	
 	int experiment_number <- 0;
 	output synchronized: true {
