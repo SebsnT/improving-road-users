@@ -10,7 +10,6 @@ import "../Base Testing Model.gaml"
 
 global {
 	string experiment_name <- "use_crosswalk";
-	int num_pedestrians <- 20;
 
 	init {
 
@@ -40,10 +39,11 @@ global {
 			do declare_end_nodes([intersection[2]]);
 			do setup_env();
 		}
-
+		
 		ask road {
 			do setup_roads();
 		}
+
 
 		ask footway_edge {
 			do setup_edges();

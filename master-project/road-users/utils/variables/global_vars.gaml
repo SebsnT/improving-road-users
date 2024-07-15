@@ -9,6 +9,11 @@ model global_vars
 
 global {
 	
+	int NUM_CARS <- 20;
+	int NUM_TRUCKS <- 20;
+	int NUM_BICYCLES <- 20;
+	int NUM_PEDESTRIANS <- 20;
+	
 	// show numbers of objects
 	bool show_intersection_numbers <- false;
 	bool show_road_numbers <- false;

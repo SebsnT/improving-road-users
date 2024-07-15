@@ -9,7 +9,7 @@ model SignalizedCrossIntersectionWithPedestrians
 import "../Base Testing Model.gaml"
 
 global {
-	string experiment_name <- "use_crosswalk";
+	string experiment_name <- "signalized_cross_intersection_with_pedestrians";
 	int num_pedestrians <- 20;
 
 	init {
@@ -45,10 +45,22 @@ global {
 		create road with: (num_lanes: NUM_LANES, maxspeed: 50 #km / #h, shape: line([intersection[8], intersection[4]]));
 
 		// footways
-		create footway_node with: (location: {x_middle - 5, y_above_middle}, list_connected_index: [1, 2]);
-		create footway_node with: (location: {x_middle + 5, y_above_middle}, list_connected_index: [0, 3]);
-		create footway_node with: (location: {x_middle - 5, y_below_middle}, list_connected_index: [0, 3]);
-		create footway_node with: (location: {x_middle + 5, y_below_middle}, list_connected_index: [1, 2]);
+		create footway_node with: (location: {x_left_border, y_above_middle}, list_connected_index: [1]);
+		create footway_node with: (location: {x_middle - 5, y_above_middle}, list_connected_index: [0, 2, 5, 8]);
+		create footway_node with: (location: {x_middle + 5, y_above_middle}, list_connected_index: [1, 3, 6, 9]);
+		create footway_node with: (location: {x_right_border, y_above_middle}, list_connected_index: [2]);
+		create footway_node with: (location: {x_left_border, y_below_middle}, list_connected_index: [5]);
+		create footway_node with: (location: {x_middle - 5, y_below_middle}, list_connected_index: [1, 4, 6, 10]);
+		create footway_node with: (location: {x_middle + 5, y_below_middle}, list_connected_index: [2, 5, 7, 11]);
+		create footway_node with: (location: {x_right_border, y_below_middle}, list_connected_index: [6]);
+
+		// top nodes
+		create footway_node with: (location: {x_middle - 5, y_top_border}, list_connected_index: [1]);
+		create footway_node with: (location: {x_middle + 5, y_top_border}, list_connected_index: [2]);
+
+		// bottom nodes
+		create footway_node with: (location: {x_middle - 5, y_bottom_border}, list_connected_index: [5]);
+		create footway_node with: (location: {x_middle + 5, y_bottom_border}, list_connected_index: [6]);
 
 		//build the graph from the roads and intersections
 		graph road_network <- as_driving_graph(road, intersection);

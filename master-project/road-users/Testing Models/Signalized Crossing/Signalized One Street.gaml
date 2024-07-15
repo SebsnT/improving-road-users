@@ -10,7 +10,6 @@ import "../Base Testing Model.gaml"
 
 global {
 	string experiment_name <- "signalized_one_street";
-	int num_pedestrians <- 20;
 
 	init {
 
