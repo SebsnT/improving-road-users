@@ -8,6 +8,7 @@ model Road
 
 import "../../utils/variables/road_vars.gaml"
 import "../Vehicles.gaml"
+import "../Pedestrian.gaml"
 
 global {
 	list<intersection> end_nodes;
@@ -223,7 +224,16 @@ species intersection skills: [intersection_skill] {
 	reflex wait_to_unblock when: intersection_blocked = true {
 		blocked_counter <- blocked_counter + step;
 		if (blocked_counter >= time_to_unblock) {
-			do unblock_road();
+			ask footway_edge closest_to (self) {
+				if (agents_on = []) {
+					ask myself {
+						do unblock_road();
+					}
+
+				}
+
+			}
+
 		}
 
 	}
