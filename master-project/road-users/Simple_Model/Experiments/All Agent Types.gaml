@@ -14,7 +14,7 @@ global {
 	reflex save_cars_trucks_batch when: cars_batch and trucks_batch and bicycles_batch {
 		save
 		[cycle, car_avg_speed, truck_avg_speed, bicycle_avg_speed, all_avg_speed, traffic_density_per_km, all_traffic_flow, num_cars_exiting, num_trucks_exiting, num_bicycles_exiting, num_all_exiting]
-		to: "../../output/simple_model/batch/" + cars_trucks_bicycles_experiment_name + "_batch" format: "csv" rewrite: false;
+		to: "../../output/simple_model/batch/" + cars_trucks_bicycles_experiment_name + "_batch" + ".csv" format: "csv" rewrite: false;
 	}
 
 }
@@ -25,13 +25,13 @@ experiment cars_trucks_bicycles type: gui parent: base_experiment {
 		create simulation with: [num_cars::NUM_CARS_TESTING, num_trucks::NUM_TRUCKS_TESTING, num_bicycles::NUM_BICYCLES_TESTING, num_pedestrians::NUM_PEDESTRIANS_TESTING];
 		save
 		[cycle, car_avg_speed, truck_avg_speed, bicycle_avg_speed, all_avg_speed, traffic_density_per_km, all_traffic_flow, num_cars_exiting, num_trucks_exiting, num_bicycles_exiting, num_all_exiting]
-		to: "../../output/simple_model/" + cars_trucks_bicycles_experiment_name format: "csv" rewrite: true;
+		to: "../../output/simple_model/" + cars_trucks_bicycles_experiment_name + ".csv" format: "csv" rewrite: true;
 	}
 
 	reflex save_result {
 		save
 		[cycle, car_avg_speed, truck_avg_speed, bicycle_avg_speed, all_avg_speed, traffic_density_per_km, all_traffic_flow, num_cars_exiting, num_trucks_exiting, num_bicycles_exiting, num_all_exiting]
-		to: "../../output/simple_model/" + cars_trucks_bicycles_experiment_name format: "csv" rewrite: false;
+		to: "../../output/simple_model/" + cars_trucks_bicycles_experiment_name + ".csv" format: "csv" rewrite: false;
 	}
 
 	output synchronized: true {

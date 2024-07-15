@@ -26,7 +26,8 @@ global {
 	}
 
 	reflex batch_save when: is_batch {
-		save [cycle, car_avg_speed, traffic_density_per_km, traffic_flow_car] to: "../../output/testing/batch/" + experiment_name + "_batch" format: "csv" rewrite: false;
+		save [cycle, car_avg_speed, traffic_density_per_km, traffic_flow_car, num_cars_exiting] to: "../../output/testing/batch/" + experiment_name + "_batch" + ".csv" format: "csv" rewrite:
+		false;
 	}
 
 	init {
@@ -47,11 +48,11 @@ experiment gui type: gui {
 	action _init_ {
 		is_batch <- false;
 		create simulation with: [num_cars::NUM_CARS_TESTING, num_pedestrians::NUM_PEDESTRIANS_TESTING];
-		save [cycle, car_avg_speed, traffic_density_per_km, traffic_flow_car] to: "../../output/testing/" + experiment_name format: "csv" rewrite: true;
+		save [cycle, car_avg_speed, traffic_density_per_km, traffic_flow_car, num_cars_exiting] to: "../../output/testing/" + experiment_name + ".csv" format: "csv" rewrite: true;
 	}
 
 	reflex save_result {
-		save [cycle, car_avg_speed, traffic_density_per_km, traffic_flow_car] to: "../../output/testing/" + experiment_name format: "csv" rewrite: false;
+		save [cycle, car_avg_speed, traffic_density_per_km, traffic_flow_car, num_cars_exiting] to: "../../output/testing/" + experiment_name + ".csv" format: "csv" rewrite: false;
 	}
 
 	output synchronized: true {
@@ -85,11 +86,18 @@ experiment gui type: gui {
 
 		}
 
+		display Vehicle_Exit type: 2d {
+			chart "Absolute Number of vehicles exited" type: histogram size: {1, 1} position: {0, 0} x_label: "Types of Vehicles" y_label: "Number of Vehicles exited" {
+				data "Cars" value: num_cars_exiting color: #red;
+			}
+
+		}
+
 	}
 
 }
 
-experiment batch autorun: true type: batch repeat: 20 parallel: false until: cycle >= 1000 {
+experiment batch autorun: true type: batch repeat: 50 parallel: false until: cycle >= 1000 {
 	parameter "Number of Cars" var: num_cars <- NUM_CARS_TESTING;
 	parameter "Number of Pedestrians" var: num_pedestrians <- NUM_PEDESTRIANS_TESTING;
 	parameter "Is Batch" var: is_batch <- true;
