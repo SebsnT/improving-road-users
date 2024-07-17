@@ -224,14 +224,19 @@ species intersection skills: [intersection_skill] {
 	reflex wait_to_unblock when: intersection_blocked = true {
 		blocked_counter <- blocked_counter + step;
 		if (blocked_counter >= time_to_unblock) {
-			ask footway_edge closest_to (self) {
-				if (agents_on = []) {
-					ask myself {
-						do unblock_road();
+			if (traffic_signal_type = "crossing") {
+				ask footway_edge closest_to (self) {
+					if (agents_on = []) {
+						ask myself {
+							do unblock_road();
+						}
+
 					}
 
 				}
 
+			} else {
+				do unblock_road();
 			}
 
 		}
