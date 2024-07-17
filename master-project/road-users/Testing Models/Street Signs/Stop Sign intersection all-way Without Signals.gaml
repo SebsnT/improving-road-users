@@ -9,7 +9,7 @@ model WithoutCrossIntersection
 import "../Base Testing Model.gaml"
 
 global {
-	string experiment_name <- "street_signs_all_way_stop_without_signals";
+	string experiment_name <- "street_signss_stop_sign_all_way_stop_without_signals";
 
 	init {
 		// Middle Intersections

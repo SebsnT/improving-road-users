@@ -9,7 +9,7 @@ model CrossIntersection
 import "../Base Testing Model.gaml"
 
 global {
-	string experiment_name <- "street_signs_all_way_stop";
+	string experiment_name <- "street_signs_stop_sign_all_way_stop";
 
 	init {
 
