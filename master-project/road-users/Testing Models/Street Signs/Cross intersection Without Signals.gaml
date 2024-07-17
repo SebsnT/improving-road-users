@@ -17,9 +17,9 @@ global {
 		create intersection with: (location: {x_left_border, y_middle}, traffic_signal_type: "");
 		create intersection with: (location: {x_middle, y_middle}, traffic_signal_type: "");
 		create intersection with: (location: {x_right_border, y_middle}, traffic_signal_type: "");
-		create intersection with: (location: {x_middle, y_middle + 5}, is_traffic_signal: true, traffic_signal_type: "give_way");
+		create intersection with: (location: {x_middle, y_middle + 5}, is_traffic_signal: true, traffic_signal_type: "");
 		create intersection with: (location: {x_middle, y_bottom_border}, traffic_signal_type: "");
-		create intersection with: (location: {x_middle, y_middle - 5}, is_traffic_signal: true, traffic_signal_type: "give_way");
+		create intersection with: (location: {x_middle, y_middle - 5}, is_traffic_signal: true, traffic_signal_type: "");
 		create intersection with: (location: {x_middle, y_top_border}, traffic_signal_type: "");
 
 		// roads
