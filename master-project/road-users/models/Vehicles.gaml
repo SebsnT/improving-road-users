@@ -11,7 +11,6 @@ import "./city/Road.gaml"
 
 global {
 	bool despawn_vehicles;
-	bool drive_random <- DRIVE_RANDOM;
 
 	// Vehicles enter
 	int num_cars_entering;

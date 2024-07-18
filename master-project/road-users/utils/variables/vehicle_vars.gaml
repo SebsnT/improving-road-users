@@ -32,8 +32,7 @@ global {
 	// Percentage that drivers are willing to drive over the speed limit (1.1 means 10 percent)
 	float MAX_SPEED_COEFF <- 1.10;
 	float MIN_SPEED_COEFF <- 0.90;
-	
-	bool DRIVE_RANDOM <- false;
+
 	
 }
 	
