@@ -6,10 +6,12 @@
 model gobal_vars_testing
 
 global {
-	int NUM_CARS_TESTING <- 30;
-	int NUM_TRUCKS_TESTING <- 30;
-	int NUM_BICYCLES_TESTING <- 30;
-	int NUM_PEDESTRIANS_TESTING <- 100;
+	int NUM_CARS_TESTING <- 50;
+	int NUM_TRUCKS_TESTING <- 50;
+	int NUM_BICYCLES_TESTING <- 50;
+	int NUM_PEDESTRIANS_TESTING <- 50;
+	
+	int NUM_PEDESTRIANS_SIMPLE <- 200;
 
 	// bools for showing testing information
  	bool show_intersection_numbers <- false;

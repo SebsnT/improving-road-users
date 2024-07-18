@@ -9,7 +9,8 @@ model Giveway
 import "../Base Testing Model.gaml"
 
 global {
-	string experiment_name <- "street_signs_give_way_cross_intersection";
+	string folder_name <- "street_signs";
+	string experiment_name <- folder_name + "_give_way_cross_intersection";
 
 	init {
 

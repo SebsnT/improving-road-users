@@ -22,20 +22,23 @@ global {
 	bool despawn_vehicles <- true;
 	
 	
-	float size_environment <- 1 #km;
+	float size_environment <- 5 #km;
 	geometry shape <- square(size_environment);
 	// constants for road creation
-	int left_border <- 50;
-	float right_border <- size_environment / 2 + 300;
-	float upper_border <- size_environment / 2 - 200;
-	float y_middle_road <- size_environment / 2;
-	float y_lower_road <- size_environment / 2 + 200;
-	float lower_border <- size_environment / 2 + 400;
-	float y_above_middle_road <- size_environment / 2 - 5;
-	float y_under_middle_road <- size_environment / 2 + 5;
+	float padding <- 100.0;
+	
+	float left_border <- padding;
+	float right_border <- size_environment - padding;
+	float upper_border <- padding;
+	float lower_border <- size_environment - padding;
+	float y_middle_road <- size_environment / 2 - 500;
+	float y_lower_road <- size_environment / 2 + 500;
+	float y_above_middle_road <- y_middle_road - 5;
+	float y_under_middle_road <- y_middle_road + 5;
 	float y_above_lower_road <- y_lower_road - 5;
 	float y_under_lower_road <- y_lower_road + 5;
-	float x_left_intersection <- size_environment / 2 - 300;
+	float y_between_roads <- y_middle_road + 300;
+	float x_left_intersection <- size_environment / 2 - 1000;
 	float x_right_intersection <- size_environment / 2;
 
 	init {
@@ -79,7 +82,7 @@ global {
 		create intersection with: (location: {x_right_intersection, upper_border}, traffic_signal_type: "");
 
 		// Middle of the road crossing
-		create intersection with: (location: {x_left_intersection, y_middle_road + 100}, is_traffic_signal: true, traffic_signal_type: "crossing");
+		create intersection with: (location: {x_left_intersection, y_between_roads}, is_traffic_signal: true, traffic_signal_type: "crossing");
 
 		// Lower Horizontal lines
 		create intersection with: (location: {x_left_intersection, y_lower_road}, traffic_signal_type: "");
@@ -229,8 +232,8 @@ global {
 		create footway_node with: (location: {right_border, y_under_middle_road}, list_connected_index: [11]);
 
 		// middle of the road
-		create footway_node with: (location: {x_left_intersection - 5, y_middle_road + 100}, list_connected_index: [3, 17, 18]);
-		create footway_node with: (location: {x_left_intersection + 5, y_middle_road + 100}, list_connected_index: [5, 16, 20]);
+		create footway_node with: (location: {x_left_intersection - 5, y_between_roads}, list_connected_index: [3, 17, 18]);
+		create footway_node with: (location: {x_left_intersection + 5, y_between_roads}, list_connected_index: [5, 16, 20]);
 
 		// Lower Nodes
 
@@ -272,9 +275,9 @@ global {
 			do setup_edges();
 		}
 
-		create car number: num_cars with: (location: one_of(spawn_nodes).location);
-		create truck number: num_trucks with: (location: one_of(spawn_nodes).location);
-		create bicycle number: num_bicycles with: (location: one_of(spawn_nodes).location);
+		create car number: num_cars with: (location: one_of(intersection).location);
+		create truck number: num_trucks with: (location: one_of(intersection).location);
+		create bicycle number: num_bicycles with: (location: one_of(intersection).location);
 		create pedestrian number: num_pedestrians with: (location: one_of(footway_edge).location);
 	} }
 

@@ -9,7 +9,8 @@ model TIntersection
 import "../Base Testing Model.gaml"
 
 global {
-	string experiment_name <- "street_signs_t_without_signal";
+	string folder_name <- "street_signs";
+	string experiment_name <- folder_name + "_t_without_signal";
 
 	init {
 		create intersection with: (location: {x_left_border, y_middle}, traffic_signal_type: "");

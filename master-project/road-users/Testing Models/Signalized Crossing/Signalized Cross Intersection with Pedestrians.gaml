@@ -9,8 +9,8 @@ model SignalizedCrossIntersectionWithPedestrians
 import "../Base Testing Model.gaml"
 
 global {
-	string experiment_name <- "signalized_cross_intersection_with_pedestrians";
-	int num_pedestrians <- 20;
+	string folder_name <- "signalized";
+	string experiment_name <- folder_name + "_cross_intersection_with_pedestrians";
 
 	init {
 	// Middle Intersections

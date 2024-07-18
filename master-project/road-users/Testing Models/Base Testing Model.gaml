@@ -18,6 +18,7 @@ global {
 	float traffic_flow_car -> traffic_density_per_km * car_avg_speed;
 	bool measure_density <- true;
 	string experiment_name <- "";
+	string folder_name <- "";
 	bool is_batch;
 	int experiment_num <- 0;
 
@@ -26,7 +27,7 @@ global {
 	}
 
 	reflex batch_save when: is_batch {
-		save [cycle, car_avg_speed, traffic_density_per_km, traffic_flow_car, num_cars_exiting] to: "../../output/testing/batch/" + experiment_name + "_batch" + ".csv" format: "csv" rewrite:
+		save [cycle, car_avg_speed, traffic_density_per_km, traffic_flow_car, num_cars_exiting] to: "../../output/testing/batch/" + folder_name +"/" + experiment_name + "_batch" + ".csv" format: "csv" rewrite:
 		false;
 	}
 
@@ -97,7 +98,7 @@ experiment gui type: gui {
 
 }
 
-experiment batch autorun: true type: batch repeat: 50 parallel: false until: cycle >= 1000 {
+experiment batch autorun: true type: batch repeat: 100 parallel: false until: cycle >= 1000 {
 	parameter "Number of Cars" var: num_cars <- NUM_CARS_TESTING;
 	parameter "Number of Pedestrians" var: num_pedestrians <- NUM_PEDESTRIANS_TESTING;
 	parameter "Is Batch" var: is_batch <- true;

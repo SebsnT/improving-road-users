@@ -9,7 +9,8 @@ model SignalizedOneStreetWithoutSignals
 import "../Base Testing Model.gaml"
 
 global {
-	string experiment_name <- "signalized_one_street_without_signals";
+	string folder_name <- "signalized";
+	string experiment_name <- folder_name + "_one_street_without_signals";
 
 	init {
 

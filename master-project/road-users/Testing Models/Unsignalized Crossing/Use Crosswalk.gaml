@@ -9,7 +9,9 @@ model Crosswalk
 import "../Base Testing Model.gaml"
 
 global {
-	string experiment_name <- "use_crosswalk";
+	string folder_name <- "unsignalized";
+	string experiment_name <- folder_name + "_use_crosswalk";
+	
 
 	init {
 

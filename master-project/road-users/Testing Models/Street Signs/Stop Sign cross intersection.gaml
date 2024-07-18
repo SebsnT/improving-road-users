@@ -9,7 +9,8 @@ model Stop_Sign_Intersection
 import "../Base Testing Model.gaml"
 
 global {
-	string experiment_name <- "street_signs_stop_sign_cross_intersection";
+	string folder_name <- "street_signs";
+	string experiment_name <- folder_name + "_stop_sign_cross_intersection";
 
 	init {
 

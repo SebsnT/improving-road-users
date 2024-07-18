@@ -9,11 +9,12 @@ model Stop_Sign
 import "../Base Testing Model.gaml"
 
 global {
-	string experiment_name <- "street_signs_stop_sign";
+	string folder_name <- "street_signs";
+	string experiment_name <- folder_name + "_stop_sign";
 
 	init {
 
-		// intersections
+	// intersections
 		create intersection with: (location: {x_left_border, y_middle}, traffic_signal_type: "");
 		create intersection with: (location: {x_middle, y_middle}, traffic_signal_type: "");
 		create intersection with: (location: {x_right_border, y_middle}, traffic_signal_type: "");

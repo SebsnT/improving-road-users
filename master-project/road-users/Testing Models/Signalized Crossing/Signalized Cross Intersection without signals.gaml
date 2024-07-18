@@ -9,7 +9,8 @@ model SignalizedCrossIntersectionWithoutSignals
 import "../Base Testing Model.gaml"
 
 global {
-	string experiment_name <- "signalized_cross_intersection_without_signals";
+	string folder_name <- "signalized";
+	string experiment_name <- folder_name + "_cross_intersection_without_signals";
 
 	init {
 

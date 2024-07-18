@@ -9,11 +9,12 @@ model CrossIntersection
 import "../Base Testing Model.gaml"
 
 global {
-	string experiment_name <- "street_signs_stop_sign_all_way_stop";
+	string folder_name <- "street_signs";
+	string experiment_name <- folder_name + "_stop_sign_all_way_stop";
 
 	init {
 
-		// Middle Intersections
+	// Middle Intersections
 		create intersection with: (location: {x_left_border, y_middle}, traffic_signal_type: "");
 		create intersection with: (location: {x_middle, y_middle}, is_traffic_signal: true, traffic_signal_type: "");
 		create intersection with: (location: {x_right_border, y_middle}, traffic_signal_type: "");

@@ -24,6 +24,6 @@ global {
 
 	// deceleration
 	float BICYCLE_MIN_DECELERATION <- 1.5 #m / #s;
-	float BICYCLE_MAX_DECELERATION <- 2.0 #m / #s;
+	float BICYCLE_MAX_DECELERATION <- 2.6 #m / #s;
 }
 
