@@ -74,7 +74,7 @@ species base_vehicle skills: [driving] {
 	}
 
 	// testing puposes for dead ends only
-	reflex dead_end when: distance_to_goal < 2 and despawn_vehicles = true {
+	reflex dead_end when: distance_to_goal < 50 and despawn_vehicles = true {
 		if (final_target != nil and current_target = final_target and length(intersection(final_target).roads_out) <= 1) {
 			if (spawn_nodes != []) {
 				self.location <- one_of(spawn_nodes).location;

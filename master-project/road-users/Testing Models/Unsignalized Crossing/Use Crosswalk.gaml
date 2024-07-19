@@ -22,7 +22,9 @@ global {
 
 		// roads
 		create road with: (num_lanes: NUM_LANES, maxspeed: 50 #km / #h, shape: line([intersection[0], intersection[1]]));
+		create road with: (num_lanes: NUM_LANES, maxspeed: 50 #km / #h, shape: line([intersection[1], intersection[0]]));
 		create road with: (num_lanes: NUM_LANES, maxspeed: 50 #km / #h, shape: line([intersection[1], intersection[2]]));
+		create road with: (num_lanes: NUM_LANES, maxspeed: 50 #km / #h, shape: line([intersection[2], intersection[1]]));
 
 		// footways
 		create footway_node with: (location: {x_left_border, y_above_middle}, list_connected_index: [1]);
@@ -37,8 +39,8 @@ global {
 
 		//for traffic light, initialize their counter value (synchronization of traffic lights)
 		ask intersection {
-			do declare_spawn_nodes([intersection[0]]);
-			do declare_end_nodes([intersection[2]]);
+			do declare_spawn_nodes([intersection[0],intersection[2]]);
+			do declare_end_nodes(spawn_nodes);
 			do setup_env();
 		}
 		

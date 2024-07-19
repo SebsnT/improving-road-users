@@ -37,10 +37,12 @@ global {
 		create road with: (num_lanes: NUM_LANES, maxspeed: 50 #km / #h, shape: line([intersection[2], intersection[6]]));
 		create road with: (num_lanes: NUM_LANES, maxspeed: 50 #km / #h, shape: line([intersection[3], intersection[7]]));
 		create road with: (num_lanes: NUM_LANES, maxspeed: 50 #km / #h, shape: line([intersection[4], intersection[8]]));
+		create road with: (num_lanes: NUM_LANES, maxspeed: 50 #km / #h, shape: line([intersection[5], intersection[0]]));
 		create road with: (num_lanes: NUM_LANES, maxspeed: 50 #km / #h, shape: line([intersection[5], intersection[1]]));
 		create road with: (num_lanes: NUM_LANES, maxspeed: 50 #km / #h, shape: line([intersection[6], intersection[1]]));
 		create road with: (num_lanes: NUM_LANES, maxspeed: 50 #km / #h, shape: line([intersection[6], intersection[2]]));
 		create road with: (num_lanes: NUM_LANES, maxspeed: 50 #km / #h, shape: line([intersection[7], intersection[1]]));
+		create road with: (num_lanes: NUM_LANES, maxspeed: 50 #km / #h, shape: line([intersection[7], intersection[3]]));
 		create road with: (num_lanes: NUM_LANES, maxspeed: 50 #km / #h, shape: line([intersection[8], intersection[1]]));
 		create road with: (num_lanes: NUM_LANES, maxspeed: 50 #km / #h, shape: line([intersection[8], intersection[4]]));
 
@@ -67,8 +69,8 @@ global {
 
 		// setup environment
 		ask intersection {
-			do declare_spawn_nodes([intersection[0], intersection[3]]);
-			do declare_end_nodes([intersection[2], intersection[4]]);
+			do declare_spawn_nodes([intersection[0], intersection[2], intersection[3], intersection[4]]);
+			do declare_end_nodes(spawn_nodes);
 			do setup_env();
 		}
 

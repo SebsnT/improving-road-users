@@ -275,9 +275,9 @@ global {
 			do setup_edges();
 		}
 
-		create car number: num_cars with: (location: one_of(intersection).location);
-		create truck number: num_trucks with: (location: one_of(intersection).location);
-		create bicycle number: num_bicycles with: (location: one_of(intersection).location);
+		create car number: num_cars with: (location: one_of(road).location);
+		create truck number: num_trucks with: (location: one_of(road).location);
+		create bicycle number: num_bicycles with: (location: one_of(road).location);
 		create pedestrian number: num_pedestrians with: (location: one_of(footway_edge).location);
 	} }
 
