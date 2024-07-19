@@ -23,8 +23,8 @@ global {
 	int PEDESTRIANS_URBAN_HIGH_DENSITY <- 400;
 
 	// Suburban
-	int CARS_SUBURBAN <- 100;
-	int TRUCKS_SUBURBAN <- 10;
+	int CARS_SUBURBAN <- 50;
+	int TRUCKS_SUBURBAN <- 5;
 	int BICYCLES_SUBURBAN <- 20;
 	int PEDESTRIANS_SUBURBAN <- 200;
 	string experiment_name <- "";

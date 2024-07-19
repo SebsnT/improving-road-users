@@ -24,7 +24,7 @@ global {
 	}
 
 	reflex save_biycles_batch when: bicycles_batch {
-		save [cycle, car_avg_speed, traffic_density_per_km, car_traffic_flow, num_cars_exiting] to: "../../output/simple_model/batch/" + bicycles_experiment_name + "_batch" + ".csv" format:
+		save [cycle, bicycle_avg_speed, traffic_density_per_km, bicycle_traffic_flow, num_bicycles_exiting] to: "../../output/simple_model/batch/" + bicycles_experiment_name + "_batch" + ".csv" format:
 		"csv" rewrite: false;
 	}
 
