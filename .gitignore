@@ -5,3 +5,5 @@ master-project/.rebuild
 .built_in_models_*
 /master-project/road-users/utils/includes
 *.csv
+/Master Project Data/.Rproj.user
+Master Project Data/.Rhistory
