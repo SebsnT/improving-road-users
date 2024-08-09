@@ -46,7 +46,7 @@ global {
 	// Single traffic flow
 	float car_traffic_flow -> traffic_density_per_km * car_avg_speed;
 	float truck_traffic_flow -> traffic_density_per_km * truck_avg_speed;
-	float bicycle_traffic_flow -> traffic_density_per_km * car_avg_speed;
+	float bicycle_traffic_flow -> traffic_density_per_km * bicycle_avg_speed;
 
 	// Mixed traffic flow
 	float car_truck_traffic_flow -> traffic_density_per_km * car_truck_avg_speed;

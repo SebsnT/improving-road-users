@@ -39,13 +39,14 @@ species base_vehicle skills: [driving] {
 		map edge_weights <- road as_map (each::each.shape.perimeter);
 		lane_width <- LANE_WIDTH;
 		road_network <- as_driving_graph(road, intersection) with_weights edge_weights;
+		speed_coeff <- rnd(MIN_SPEED_COEFF, MAX_SPEED_COEFF, 0.1);
 		right_side_driving <- RIGHT_SIDE_DRIVING;
 		min_safety_distance <- MIN_SAFETY_DISTANCE;
 		min_security_distance <- MIN_SECURITY_DISTANCE;
 		proba_respect_priorities <- PROBA_RESPECT_PRIORITIES;
 		proba_respect_stops <- PROBA_RESPECT_STOPS;
-		time_headway <- TIME_HEADWAY;
 		politeness_factor <- POLITENESS_FACTOR;
+		time_headway <- TIME_HEADWAY;
 	}
 
 	reflex select_next_path when: current_path = nil {
@@ -74,17 +75,14 @@ species base_vehicle skills: [driving] {
 	}
 
 	// testing puposes for dead ends only
-	reflex dead_end when: distance_to_goal < 50 and despawn_vehicles = true {
+	reflex dead_end when: distance_to_goal < 50 {
 		if (final_target != nil and current_target = final_target and length(intersection(final_target).roads_out) <= 1) {
 			if (spawn_nodes != []) {
 				self.location <- one_of(spawn_nodes).location;
 				do compute_path(road_network, one_of(end_nodes));
-				//create species(self) with: (location: one_of(spawn_nodes).location);
 				do increase_vehicle_count(self);
 			}
 
-			//do unregister;
-			//do die;
 		}
 
 	}
@@ -139,9 +137,6 @@ species car parent: base_vehicle {
 		max_speed <- CAR_MAXSPEED;
 		max_acceleration <- CAR_ACCELERATION_RATE;
 		max_deceleration <- CAR_DECELERATION_RATE;
-		speed_coeff <- rnd(MIN_SPEED_COEFF, MAX_SPEED_COEFF, 0.1);
-		proba_lane_change_up <- gauss(0.5, 0.5);
-		proba_lane_change_up <- gauss(0.5, 0.5);
 		proba_use_linked_road <- 0.5;
 	}
 
@@ -156,9 +151,6 @@ species truck parent: base_vehicle {
 		max_speed <- TRUCK_MAXSPEED;
 		max_acceleration <- TRUCK_ACCELERATION_RATE;
 		max_deceleration <- TRUCK_DECELERATION_RATE;
-		proba_lane_change_up <- gauss(0.5, 0.5);
-		proba_lane_change_up <- gauss(0.5, 0.5);
-		proba_use_linked_road <- 0.5;
 	}
 
 }
