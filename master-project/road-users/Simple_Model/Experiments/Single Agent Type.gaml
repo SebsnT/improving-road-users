@@ -12,22 +12,40 @@ global {
 	string cars_experiment_name <- "only_cars";
 	string trucks_experiment_name <- "only_trucks";
 	string bicycles_experiment_name <- "only_bicycles";
+
+	// Configure variables for testing
+	string variable_value <- "";
 	string variable <- "";
-	string folder <- "";
 
-	reflex save_cars_batch when: cars_batch {
-		save [cycle, car_avg_speed, traffic_density_per_km, car_traffic_flow, num_cars_exiting] to:
-		"../../output/simple_model/batch/" + folder + cars_experiment_name + variable + "_batch" + ".csv" format: "csv" rewrite: false;
+	reflex save_cars_batch when: cars_batch and length(variable) = 0 {
+		save [cycle, car_avg_speed, traffic_density_per_km, car_traffic_flow, num_cars_exiting] to: "../../output/simple_model/batch/" + cars_experiment_name + "_batch" + ".csv"
+		format: "csv" rewrite: false;
 	}
 
-	reflex save_trucks_batch when: trucks_batch {
+	reflex save_trucks_batch when: trucks_batch and length(variable) = 0 {
 		save [cycle, truck_avg_speed, traffic_density_per_km, truck_traffic_flow, num_trucks_exiting] to:
-		"../../output/simple_model/batch/" + folder + trucks_experiment_name + variable + "_batch" + ".csv" format: "csv" rewrite: false;
+		"../../output/simple_model/batch/" + trucks_experiment_name + "_batch" + ".csv" format: "csv" rewrite: false;
 	}
 
-	reflex save_biycles_batch when: bicycles_batch {
+	reflex save_biycles_batch when: bicycles_batch and length(variable) = 0 {
 		save [cycle, bicycle_avg_speed, traffic_density_per_km, bicycle_traffic_flow, num_bicycles_exiting] to:
-		"../../output/simple_model/batch/" + folder + bicycles_experiment_name + variable + "_batch" + ".csv" format: "csv" rewrite: false;
+		"../../output/simple_model/batch/" + bicycles_experiment_name + "_batch" + ".csv" format: "csv" rewrite: false;
+	}
+
+	// Reflexes for parameters
+	reflex save_cars_batch_parameter when: cars_batch and length(variable) > 0 {
+		save [cycle, car_avg_speed, traffic_density_per_km, car_traffic_flow, num_cars_exiting] to:
+		"../../output/simple_model/batch/" + variable + "/" + cars_experiment_name + "_" + variable + "_" + variable_value + "_batch" + ".csv" format: "csv" rewrite: false;
+	}
+
+	reflex save_trucks_batch_parameter when: trucks_batch and length(variable) > 0 {
+		save [cycle, truck_avg_speed, traffic_density_per_km, truck_traffic_flow, num_trucks_exiting] to:
+		"../../output/simple_model/batch/" + variable + "/" + trucks_experiment_name + "_" + variable + "_" + variable_value + "_batch" + ".csv" format: "csv" rewrite: false;
+	}
+
+	reflex save_biycles_batch_parameter when: bicycles_batch and length(variable) > 0 {
+		save [cycle, bicycle_avg_speed, traffic_density_per_km, bicycle_traffic_flow, num_bicycles_exiting] to:
+		"../../output/simple_model/batch/" + variable + "/" + bicycles_experiment_name + "_" + variable + "_" + variable_value + "_batch" + ".csv" format: "csv" rewrite: false;
 	}
 
 }
@@ -36,13 +54,13 @@ experiment only_cars_gui type: gui parent: base_experiment {
 
 	action _init_ {
 		create simulation with: [num_cars::NUM_CARS_TESTING, num_pedestrians::NUM_PEDESTRIANS_SIMPLE];
-		save [cycle, car_avg_speed, traffic_density_per_km, car_traffic_flow, num_cars_exiting] to: "../../output/simple_model/" + folder + cars_experiment_name + variable + ".csv"
-		format: "csv" rewrite: true;
+		save [cycle, car_avg_speed, traffic_density_per_km, car_traffic_flow, num_cars_exiting] to: "../../output/simple_model/" + cars_experiment_name + ".csv" format: "csv" rewrite:
+		true;
 	}
 
 	reflex save_result when: !cars_batch {
-		save [cycle, car_avg_speed, traffic_density_per_km, car_traffic_flow, num_cars_exiting] to: "../../output/simple_model/" + folder + cars_experiment_name + variable + ".csv"
-		format: "csv" rewrite: false;
+		save [cycle, car_avg_speed, traffic_density_per_km, car_traffic_flow, num_cars_exiting] to: "../../output/simple_model/" + cars_experiment_name + ".csv" format: "csv" rewrite:
+		false;
 	}
 
 	output synchronized: true {
@@ -68,13 +86,13 @@ experiment only_trucks_gui type: gui parent: base_experiment {
 
 	action _init_ {
 		create simulation with: [num_trucks::NUM_TRUCKS_TESTING, num_pedestrians::NUM_PEDESTRIANS_SIMPLE];
-		save [cycle, truck_avg_speed, traffic_density_per_km, truck_traffic_flow, num_trucks_exiting] to:
-		"../../output/simple_model/" + folder + trucks_experiment_name + variable + ".csv" format: "csv" rewrite: true;
+		save [cycle, truck_avg_speed, traffic_density_per_km, truck_traffic_flow, num_trucks_exiting] to: "../../output/simple_model/" + trucks_experiment_name + ".csv" format: "csv"
+		rewrite: true;
 	}
 
 	reflex save_result {
-		save [cycle, truck_avg_speed, traffic_density_per_km, truck_traffic_flow, num_trucks_exiting] to:
-		"../../output/simple_model/" + folder + trucks_experiment_name + variable + ".csv" format: "csv" rewrite: false;
+		save [cycle, truck_avg_speed, traffic_density_per_km, truck_traffic_flow, num_trucks_exiting] to: "../../output/simple_model/" + trucks_experiment_name + ".csv" format: "csv"
+		rewrite: false;
 	}
 
 	output synchronized: true {
@@ -100,13 +118,13 @@ experiment only_bicycles_gui type: gui parent: base_experiment {
 
 	action _init_ {
 		create simulation with: [num_bicycles::NUM_BICYCLES_TESTING, num_pedestrians::NUM_PEDESTRIANS_SIMPLE];
-		save [cycle, bicycle_avg_speed, traffic_density_per_km, bicycle_traffic_flow, num_bicycles_exiting] to:
-		"../../output/simple_model/" + folder + bicycles_experiment_name + variable + ".csv" format: "csv" rewrite: true;
+		save [cycle, bicycle_avg_speed, traffic_density_per_km, bicycle_traffic_flow, num_bicycles_exiting] to: "../../output/simple_model/" + bicycles_experiment_name + ".csv" format:
+		"csv" rewrite: true;
 	}
 
 	reflex save_result {
-		save [cycle, bicycle_avg_speed, traffic_density_per_km, bicycle_traffic_flow, num_bicycles_exiting] to:
-		"../../output/simple_model/" + folder + bicycles_experiment_name + variable + ".csv" format: "csv" rewrite: false;
+		save [cycle, bicycle_avg_speed, traffic_density_per_km, bicycle_traffic_flow, num_bicycles_exiting] to: "../../output/simple_model/" + bicycles_experiment_name + ".csv" format:
+		"csv" rewrite: false;
 	}
 
 	output synchronized: true {

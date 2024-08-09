@@ -10,7 +10,7 @@ import "../Base Experiment Model.gaml"
 
 global {
 
-	// Urban Basline
+// Urban Basline
 	int CARS_URBAN_BASELINE <- 200;
 	int TRUCKS_URBAN_BASELINE <- 20;
 	int BICYCLES_URBAN_BASELINE <- 40;
@@ -28,20 +28,22 @@ global {
 	int BICYCLES_SUBURBAN <- 20;
 	int PEDESTRIANS_SUBURBAN <- 200;
 	string experiment_name <- "";
-	
-	string variable_value <- "0.5";
-	string variable <- "test";
+
+	// Configure variables for testing
+	string variable_value <- "";
+	string variable <- "";
 
 	reflex save_cars_trucks_bicycles_batch when: cars_batch and trucks_batch and bicycles_batch and length(variable) = 0 {
 		save
 		[cycle, car_avg_speed, truck_avg_speed, bicycle_avg_speed, all_avg_speed, traffic_density_per_km, all_traffic_flow, num_cars_exiting, num_trucks_exiting, num_bicycles_exiting, num_all_exiting]
-		to: "../../output/simple_model/batch/" + experiment_name  + "_batch" + ".csv" format: "csv" rewrite: false;
+		to: "../../output/simple_model/batch/" + experiment_name + "_batch" + ".csv" format: "csv" rewrite: false;
 	}
-	
-	reflex save_cars_trucks_bicycles_batch when: cars_batch and trucks_batch and bicycles_batch and length(variable) > 0 {
+
+	// Reflexes for parameters
+	reflex save_cars_trucks_bicycles_batch_parameter when: cars_batch and trucks_batch and bicycles_batch and length(variable) > 0 {
 		save
 		[cycle, car_avg_speed, truck_avg_speed, bicycle_avg_speed, all_avg_speed, traffic_density_per_km, all_traffic_flow, num_cars_exiting, num_trucks_exiting, num_bicycles_exiting, num_all_exiting]
-		to: "../../output/simple_model/batch/" + variable  + "/" + experiment_name + "_" + variable + "_" + variable_value + "_batch" + ".csv" format: "csv" rewrite: false;
+		to: "../../output/simple_model/batch/" + variable + "/" + experiment_name + "_" + variable + "_" + variable_value + "_batch" + ".csv" format: "csv" rewrite: false;
 	}
 
 }
@@ -53,13 +55,13 @@ experiment all_equal type: gui parent: base_experiment {
 		create simulation with: [num_cars::NUM_CARS_TESTING, num_trucks::NUM_TRUCKS_TESTING, num_bicycles::NUM_BICYCLES_TESTING, num_pedestrians::NUM_PEDESTRIANS_SIMPLE];
 		save
 		[cycle, car_avg_speed, truck_avg_speed, bicycle_avg_speed, all_avg_speed, traffic_density_per_km, all_traffic_flow, num_cars_exiting, num_trucks_exiting, num_bicycles_exiting, num_all_exiting]
-		to: "../../output/simple_model/"  + experiment_name + ".csv" format: "csv" rewrite: true;
+		to: "../../output/simple_model/" + experiment_name + ".csv" format: "csv" rewrite: true;
 	}
 
 	reflex save_result {
 		save
 		[cycle, car_avg_speed, truck_avg_speed, bicycle_avg_speed, all_avg_speed, traffic_density_per_km, all_traffic_flow, num_cars_exiting, num_trucks_exiting, num_bicycles_exiting, num_all_exiting]
-		to: "../../output/simple_model/" + experiment_name +  ".csv" format: "csv" rewrite: false;
+		to: "../../output/simple_model/" + experiment_name + ".csv" format: "csv" rewrite: false;
 	}
 
 	output synchronized: true {
@@ -85,7 +87,7 @@ experiment all_equal type: gui parent: base_experiment {
 }
 
 experiment urban_baseline type: gui parent: base_experiment {
-		
+
 	action _init_ {
 		experiment_name <- "urban_baseline";
 		create simulation with: [num_cars::CARS_URBAN_BASELINE, num_trucks::TRUCKS_URBAN_BASELINE, num_bicycles::BICYCLES_URBAN_BASELINE, num_pedestrians::PEDESTRIANS_URBAN_BASELINE];
@@ -130,7 +132,7 @@ experiment urban_high_density type: gui parent: base_experiment {
 		[num_cars::CARS_URBAN_HIGH_DENSITY, num_trucks::TRUCKS_URBAN_HIGH_DENSITY, num_bicycles::BICYCLES_URBAN_HIGH_DENSITY, num_pedestrians::PEDESTRIANS_URBAN_HIGH_DENSITY];
 		save
 		[cycle, car_avg_speed, truck_avg_speed, bicycle_avg_speed, all_avg_speed, traffic_density_per_km, all_traffic_flow, num_cars_exiting, num_trucks_exiting, num_bicycles_exiting, num_all_exiting]
-		to: "../../output/simple_model/" +  experiment_name +  ".csv" format: "csv" rewrite: true;
+		to: "../../output/simple_model/" + experiment_name + ".csv" format: "csv" rewrite: true;
 	}
 
 	reflex save_result {
@@ -168,7 +170,7 @@ experiment suburban type: gui parent: base_experiment {
 		create simulation with: [num_cars::CARS_SUBURBAN, num_trucks::TRUCKS_SUBURBAN, num_bicycles::BICYCLES_SUBURBAN, num_pedestrians::PEDESTRIANS_SUBURBAN];
 		save
 		[cycle, car_avg_speed, truck_avg_speed, bicycle_avg_speed, all_avg_speed, traffic_density_per_km, all_traffic_flow, num_cars_exiting, num_trucks_exiting, num_bicycles_exiting, num_all_exiting]
-		to: "../../output/simple_model/" +  experiment_name + ".csv" format: "csv" rewrite: true;
+		to: "../../output/simple_model/" + experiment_name + ".csv" format: "csv" rewrite: true;
 	}
 
 	reflex save_result {
@@ -219,7 +221,6 @@ experiment urban_baseline_batch autorun: true type: batch repeat: 100 parallel: 
 	parameter "Trucks Batch" var: trucks_batch <- true;
 	parameter "Bicycle Batch" var: bicycles_batch <- true;
 	parameter "Experiment Name" var: experiment_name <- "urban_baseline";
-	
 }
 
 experiment urban_high_density_batch autorun: true type: batch repeat: 100 parallel: false until: cycle >= 1000 {
