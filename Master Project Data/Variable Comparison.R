@@ -6,15 +6,12 @@ dir_all <- "parameter_results_new"
 # load all csvs -----------------------------------------------------------
 
 load_data <- function(dir) {
-  # List all immediate subdirectories (these correspond to <parameter> directories)
-  parameter_dirs <- list.dirs(dir, full.names = TRUE, recursive = FALSE)
   
-  print(parameter_dirs)
+  parameter_dirs <- list.dirs(dir, full.names = TRUE, recursive = FALSE)
   
   all_datasets <- list()
   
   for (parameter_dir in parameter_dirs) {
-    # Now look for "one", "mixed", and "all" subdirectories within each <parameter> directory
     type_dirs <- list.dirs(parameter_dir, full.names = TRUE, recursive = FALSE)
     
     for (type_dir in type_dirs) {
@@ -82,12 +79,11 @@ compare_parameters(list(mixed_cars_truck),all_datasets[["time_headway_mixed"]],"
 
 # All agents
 ref_list <- list(all_equal,suburban,urban_baseline,urban_high_density)
-
 ref_names <- c("all_equal", "suburban", "urban_baseline", "urban_high_density")
 
 compare_parameters(ref_list,all_datasets[["min_safety_distance_all"]],"all","min_safety_distance", ref_names, min_safety_distance_values)
 compare_parameters(ref_list,all_datasets[["min_security_distance_all"]],"all","min_security_distance", ref_names,min_security_distance_values)
-compare_parameters(ref_list, all_datasets[["politeness_factor_all"]],"all","politeness_factor", ref_names, politeness_factor_values)
+compare_parameters(ref_list,all_datasets[["politeness_factor_all"]],"all","politeness_factor", ref_names, politeness_factor_values)
 compare_parameters(ref_list,all_datasets[["proba_respect_priorities_all"]],"all","proba_respect_priorities", ref_names, proba_respect_priorities_values)
 compare_parameters(ref_list,all_datasets[["proba_respect_stops_all"]],"all","proba_respect_stops", ref_names, proba_respect_stops_values)
 compare_parameters(ref_list,all_datasets[["time_headway_all"]],"all","time_headway", ref_names, time_headway_values)

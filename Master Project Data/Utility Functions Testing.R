@@ -337,7 +337,7 @@ calculate_rmse <- function(df1, df2) {
 
 # Compare Function --------------------------------------------------------
 
-compare_parameters <- function(ref_dfs, dataframes, folder, file_name, ref_names, param_names) {
+compare_parameters <- function(ref_dfs, dataframes, folder, file_name, ref_names, param_values) {
   # List to hold all results
   all_final_results <- list()
   
@@ -349,6 +349,7 @@ compare_parameters <- function(ref_dfs, dataframes, folder, file_name, ref_names
   # Loop through each reference dataframe and its corresponding pairs
   for (i in 1:length(ref_dfs)) {
     ref_df <- ref_dfs[[i]]
+    
     df1 <- dataframes[[2 * i - 1]]
     df2 <- dataframes[[2 * i]]
     
@@ -393,13 +394,9 @@ compare_parameters <- function(ref_dfs, dataframes, folder, file_name, ref_names
     final_results_1 <- Reduce(function(x, y) merge(x, y, by = "Metric", all = TRUE), Filter(Negate(is.null), all_results_1))
     final_results_2 <- Reduce(function(x, y) merge(x, y, by = "Metric", all = TRUE), Filter(Negate(is.null), all_results_2))
     
-    # Extract parameter names for naming
-    param_name_1 <- param_names[2 * i - 1]
-    param_name_2 <- param_names[2 * i]
-    
     # Add to all final results with names from ref_names
-    all_final_results[[paste0( ref_names[i], "_", file_name,"_", param_name_1)]] <- final_results_1
-    all_final_results[[paste0( ref_names[i], "_", file_name,"_", param_name_2)]] <- final_results_2
+    all_final_results[[paste0(ref_names[i], "_", file_name, "_", param_values[1])]] <- final_results_1
+    all_final_results[[paste0(ref_names[i], "_", file_name, "_", param_values[2])]] <- final_results_2
   }
   
   # Combine all final results into one data frame
