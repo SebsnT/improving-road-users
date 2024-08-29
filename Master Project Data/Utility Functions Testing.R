@@ -422,3 +422,222 @@ compare_parameters <- function(ref_dfs, dataframes, folder, file_name, ref_names
   )
 }
 
+
+# Line Plot one variable --------------------------------------------------
+
+
+# Function to create the line plot
+plot_variable <-
+  function(dfs,
+           group_names,
+           variable,
+           average_function,
+           title = "Line Plot of Variable",
+           png_name = "" ,
+           name = "") {
+    # Apply the averaging function to each dataframe
+    averaged_dfs <- lapply(dfs, average_function)
+    
+    # Combine all dataframes into one, adding a group column
+    combined_df <- bind_rows(lapply(seq_along(averaged_dfs), function(i) {
+      averaged_dfs[[i]] %>% mutate(group = group_names[i])
+    }))
+    
+    # Use a palette with high contrast colors
+    variable_plot <-
+      ggplot(combined_df, aes(x = cycle, y = .data[[variable]], color = group)) +
+      geom_line(linewidth = 0.8) +
+      scale_color_paletteer_d("ggthemes::Tableau_10") +  # High contrast, distinct colors
+      theme_minimal() +
+      labs(
+        title = title,
+        x = "Cycle",
+        y = variable,
+        color = "Scenario"
+      ) +
+      theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 14),  
+            axis.title.x = element_text(size= 16),
+            axis.title.y = element_text(size= 16),
+            legend.title = element_text(size = 18), 
+            legend.text = element_text(size = 16))
+    
+    print(variable_plot)
+    
+    if (nchar(name) == 0) {
+      
+      print("save to:")
+      print(paste0("./images/",variable,"/", "scenarios_", png_name, variable, ".png"))
+      
+      ggsave(
+        filename = 
+          paste0("./images/",variable,"/", "scenarios_", png_name, variable, ".png"),
+        plot = variable_plot,
+        width = 8,
+        height = 6,
+        bg = "white"
+      )
+    } else {
+      print("save to:")
+      print(file.path(
+        paste0("./images/parameters"),
+        paste0(png_name, "_", variable, ".png")
+      ))
+      
+      ggsave(
+        filename = file.path(
+          paste0("./images/parameters"),
+          paste0(png_name, "_", variable, ".png")
+        ),
+        plot = variable_plot,
+        width = 8,
+        height = 6,
+        bg = "white"
+      )
+    }
+    
+  }
+
+
+# Num Vehicles Bar plot ---------------------------------------------------
+
+
+plot_last_entry_num_vehicles <-
+  function(dfs,
+           group_names,
+           png_title,
+           title,
+           average_function) {
+    # Apply the averaging function to each dataframe
+    averaged_dfs <- lapply(dfs, average_function)
+    
+    # Combine all dataframes into one, adding a group column
+    combined_df <- bind_rows(lapply(seq_along(averaged_dfs), function(i) {
+      averaged_dfs[[i]] %>% mutate(group = group_names[i])
+    }))
+    
+    # Group by the 'group' column and calculate the last entry for each group
+    last_entries <- combined_df %>%
+      group_by(group) %>%
+      summarize(last_num_all_exiting = last(num_all_exiting))
+    
+    # Sort the group factor by the number of vehicles exited
+    last_entries <- last_entries %>%
+      arrange(last_num_all_exiting) %>%
+      mutate(group = factor(group, levels = group))
+    
+    # Create the plot
+    num_vehicles_plot <-
+      ggplot(last_entries,
+             aes(x = group, y = last_num_all_exiting, fill = group)) +
+      geom_bar(stat = "identity") +
+      theme_minimal() +
+      labs(
+        title = title,
+        x = "Scenario",
+        y = "Number of Vehicles Exited",
+        fill = "Scenario"
+      ) +
+      theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 14),  
+            axis.title.x = element_text(size= 16),
+            axis.title.y = element_text(size= 16),
+            legend.title = element_text(size = 18), 
+            legend.text = element_text(size = 16))  # Increase legend text size)
+    
+    # Save the plot
+    
+    print(file.path(
+      "./images/num_vehicles_last_entry",
+      paste0(png_title, ".png")
+    ))
+    ggsave(
+      filename = file.path(
+        "./images/num_vehicles_last_entry",
+        paste0(png_title, ".png")
+      ),
+      plot = num_vehicles_plot,
+      width = 8,
+      height = 6,
+      bg = "white"
+    )
+  }
+
+
+# Plot metrics with and without signals
+plot_metrics <- function(df1, df2, group1_name = "With Signals", group2_name = "Without Signals", title) {
+  
+  df1 <- average_data(df1)
+  df2 <- average_data(df2)
+  
+  df1 <- rename_columns(df1, "testing") %>% mutate(group = group1_name)
+  df2 <- rename_columns(df2, "testing") %>% mutate(group = group2_name)
+  
+  # Combine dataframes into one
+  combined_df <- bind_rows(df1, df2)
+  
+  # Extract the last entry of 'num_cars_exiting' for each group
+  last_entries <- combined_df %>%
+    group_by(group) %>%
+    summarize(last_num_vehicles_exiting = last(num_all_exiting))
+  
+  # Create the bar plot
+  num_vehicles_plot <- ggplot(last_entries, aes(x = group, y = last_num_vehicles_exiting, fill = group)) +
+    geom_bar(stat = "identity") +
+    geom_text(aes(label = round(last_num_vehicles_exiting)), vjust = -0.3, color = "black", size = 3.5) +
+    theme_minimal() +
+    labs(title = paste("Number of Vehicles Exiting for", title),
+         x = "Group",
+         y = "Number of Vehicles Exiting",
+         fill = "Group") +
+    theme(axis.text.x = element_text( size = 14),  
+          axis.title.x = element_text(size= 16),
+          axis.title.y = element_text(size= 16),
+          legend.title = element_text(size = 18), 
+          legend.text = element_text(size = 16))
+  
+  avg_speed_plot <- ggplot(combined_df, aes(x = cycle, y = avg_speed, color = group)) +
+    geom_line() +
+    theme_minimal() +
+    labs(title = paste("Average Speed Comparison of", title),
+         x = "Cycle",
+         y = "Average Speed",
+         color = "Dataframe")  +
+    theme(axis.text.x = element_text(size = 14),  
+          axis.title.x = element_text(size= 16),
+          axis.title.y = element_text(size= 16),
+          legend.title = element_text(size = 18), 
+          legend.text = element_text(size = 16))
+  
+  ggsave(filename = file.path("./images/average_speed", paste(title, "avg_speed.png")), plot = avg_speed_plot, width = 8, height = 6, bg = "white")
+  ggsave(filename = file.path("./images/num_vehicles", paste(title, "num_vehicles.png")), plot = num_vehicles_plot, width = 8, height = 6, bg = "white")
+  
+}
+
+# Plot parameter results --------------------------------------------------
+
+# Function to generate sorted group names and plot variables
+process_and_plot <-
+  function(parameter,group_names,parameter_values,dataset_key,plot_variable_name,average_data) {
+    
+    # Generate all combinations of group names and parameter values
+    combinations <-
+      expand.grid(group_names = group_names, value = parameter_values)
+    
+    # Create and sort the new group names
+    sorted_group_names <-
+      sort(paste(
+        combinations$group_names,
+        parameter,
+        combinations$value,
+        sep = "_"
+      ))
+    
+    # Plot the variable
+    plot_variable(
+      dfs = all_datasets[[dataset_key]],
+      group_names = sorted_group_names,
+      variable = plot_variable_name,
+      average_function = average_data,
+      png_name = dataset_key,
+      name = parameter
+    )
+  }

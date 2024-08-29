@@ -4,55 +4,6 @@ library(dplyr)
 library(readr)
 
 
-
-# Plot functions ----------------------------------------------------------
-
-# Plot metrics with and without signals
-plot_metrics <- function(df1, df2, group1_name = "With Signals", group2_name = "Without Signals", title) {
-  
-  df1 <- average_data(df1)
-  df2 <- average_data(df2)
-  
-  df1 <- rename_columns(df1, "testing")
-  df2 <- rename_columns(df2, "testing")
-  
-  # Add group identifiers
-  df1 <- df1 %>% mutate(group = group1_name)
-  df2 <- df2 %>% mutate(group = group2_name)
-  
-  # Combine dataframes into one
-  combined_df <- bind_rows(df1, df2)
-  
-  
-  # Extract the last entry of 'num_cars_exiting' for each group
-  last_entries <- combined_df %>%
-    group_by(group) %>%
-    summarize(last_num_vehicles_exiting = last(num_vehicles_exiting))
-  
-  # Create the bar plot
-  num_vehicles_plot <- ggplot(last_entries, aes(x = group, y = last_num_vehicles_exiting, fill = group)) +
-    geom_bar(stat = "identity") +
-    geom_text(aes(label = round(last_num_vehicles_exiting)), vjust = -0.3, color = "black", size = 3.5) +
-    theme_minimal() +
-    labs(title = paste("Number of Vehicles Exiting for", title),
-         x = "Group",
-         y = "Number of Vehicles Exiting",
-         fill = "Group")
-  
-  avg_speed_plot <- ggplot(combined_df, aes(x = cycle, y = avg_speed, color = group)) +
-    geom_line() +
-    theme_minimal() +
-    labs(title = paste("Average Speed Comparison of", title),
-         x = "Cycle",
-         y = "Average Speed",
-         color = "Dataframe")
-  
-  ggsave(filename = file.path("./images/average_speed", paste(title, "avg_speed.png")), plot = avg_speed_plot, width = 8, height = 6, bg = "white")
-  ggsave(filename = file.path("./images/num_vehicles", paste(title, "num_vehicles.png")), plot = num_vehicles_plot, width = 8, height = 6, bg = "white")
-  
-}
-
-
 # Testing Models ----------------------------------------------------------
 
 # signalized --------------------------------------------------------------
@@ -104,3 +55,4 @@ plot_metrics(street_signs_stop_sign_all_way_stop, street_signs_stop_sign_all_way
 # Crosswalk
 
 plot_metrics(unsignalized_use_crosswalk, unsignalized_use_crosswalk_without_signals, title = "Unsignalized Crosswalk" )
+

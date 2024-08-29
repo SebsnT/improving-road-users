@@ -7,3 +7,4 @@ master-project/.rebuild
 *.csv
 Master Project Data/.Rhistory
 .Rproj.user
+Master Project Data/.RData

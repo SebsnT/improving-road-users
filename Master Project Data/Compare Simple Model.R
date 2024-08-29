@@ -44,8 +44,6 @@ mixed_trucks_bicycles <- mixed_trucks_bicycles %>% rename(all_avg_speed = truck_
 
 # Single Agent ------------------------------------------------------------
 
-# compare_files(only_cars,only_trucks, disable_t_test = TRUE, disable_metrics = TRUE, folder = "simple")
-
 # all equal
 
 compare_files(all_equal,urban_baseline, folder = "simple", file_name = "equal__urban_baseline")

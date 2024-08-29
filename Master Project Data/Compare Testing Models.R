@@ -55,5 +55,3 @@ compare_files(street_signs_stop_sign_all_way_stop_without_signals,street_signs_s
 
 # Crosswalk
 compare_files(unsignalized_use_crosswalk_without_signals,unsignalized_use_crosswalk, folder = "testing", "unsignalized_use_crosswalk")
-
-

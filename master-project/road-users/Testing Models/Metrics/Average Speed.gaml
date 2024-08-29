@@ -18,7 +18,7 @@ global {
 	float truck_avg_speed -> {mean(truck collect (each.speed)) * 3.6}; // average speed stats
 	float bicycle_avg_speed -> {mean(bicycle collect (each.speed)) * 3.6}; // average speed stats
 	float all_avg_speed -> mean([car_avg_speed, truck_avg_speed, bicycle_avg_speed]);
-	float size_environment <- 500 #m;
+	float size_environment <- 1 #km;
 
 	reflex stop_simulation when: length(car) = 0 and length(truck) = 0 and length(bicycle) = 0 {
 		do pause;
@@ -77,11 +77,11 @@ experiment straight_road type: gui {
 				write time color: #red;
 			}
 
-			chart "Average speed" type: series size: {1, 1} position: {0, 0} x_label: "Seconds" y_label: "Average speed km/h" {
-				data "Car" value: car_avg_speed color: #red;
-				data "Truck" value: truck_avg_speed color: #blue;
-				data "Bicycle" value: bicycle_avg_speed color: #yellow;
-				data "OVerall" value: all_avg_speed color: #yellow;
+			chart "Average speed" type: series size: {1, 1} position: {0, 0} x_label: "Cycles" y_label: "Average speed km/h"  {
+				data "Car" value: car_avg_speed color: #red  marker: false thickness: 3;
+				data "Truck" value: truck_avg_speed color: #blue  marker: false thickness: 3;
+				data "Bicycle" value: bicycle_avg_speed color: #orange  marker: false thickness: 3;
+				//data "OVerall" value: all_avg_speed color: #orange  marker: false thickness: 3;
 			}
 
 		}
